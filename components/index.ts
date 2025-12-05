@@ -6,3 +6,7 @@ export type { ConfirmDialogProps } from "./ConfirmDialog";
 
 export { CustomSelect } from "./CustomSelect";
 export type { SelectOption, CustomSelectProps } from "./CustomSelect";
+
+export { EditContributionModal } from "./EditContributionModal";
+
+export { default as ImageCropper } from "./ImageCropper";

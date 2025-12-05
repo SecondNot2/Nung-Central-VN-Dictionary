@@ -451,3 +451,68 @@ export function smartReverseLookup(nungText: string): string {
 
   return translations.join("\n");
 }
+
+// ==================== Combined Lookup with Approved Contributions ====================
+
+import { getApprovedContributionsMap } from "./approvedVocabService";
+
+/**
+ * Combined lookup that searches both static dictionary and approved contributions
+ * Returns NungWord from either source, with approved contributions taking precedence
+ */
+export async function lookupWordCombined(
+  word: string
+): Promise<NungWord | InferredWord | null> {
+  const normalizedWord = word.toLowerCase().trim();
+
+  // 1. Try approved contributions first (async)
+  try {
+    const approvedMap = await getApprovedContributionsMap();
+    const contribution = approvedMap.get(normalizedWord);
+    if (contribution) {
+      return contribution;
+    }
+  } catch (err) {
+    console.error("Error checking approved contributions:", err);
+  }
+
+  // 2. Fall back to static dictionary
+  if (NUNG_DICTIONARY[normalizedWord]) {
+    return NUNG_DICTIONARY[normalizedWord];
+  }
+
+  // 3. Try inference
+  const inferred = inferWordFromPhrases(normalizedWord);
+  if (inferred) {
+    return inferred;
+  }
+
+  return null;
+}
+
+/**
+ * Get combined dictionary count (static + approved contributions)
+ */
+export async function getCombinedDictionaryCount(): Promise<{
+  static: number;
+  approved: number;
+  total: number;
+}> {
+  const staticCount = Object.keys(NUNG_DICTIONARY).length;
+
+  try {
+    const approvedMap = await getApprovedContributionsMap();
+    const approvedCount = approvedMap.size;
+    return {
+      static: staticCount,
+      approved: approvedCount,
+      total: staticCount + approvedCount,
+    };
+  } catch {
+    return {
+      static: staticCount,
+      approved: 0,
+      total: staticCount,
+    };
+  }
+}

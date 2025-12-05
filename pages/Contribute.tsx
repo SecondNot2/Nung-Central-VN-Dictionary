@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, useToast } from "../components";
-
-const CONTRIBUTIONS_KEY = "user_contributions";
-
-// Types
-interface Contribution {
-  id: string;
-  word: string;
-  translation: string;
-  sourceLang: string;
-  targetLang: string;
-  phonetic: string;
-  region: string;
-  example: string;
-  meaning: string;
-  timestamp: number;
-}
+import { ToastContainer, useToast, ConfirmDialog } from "../components";
+import {
+  submitContribution,
+  getContributions,
+  deleteContribution as deleteContributionService,
+} from "../services/contributionService";
+import { Contribution } from "../types";
 
 // Language Options
 const languageOptions = [
@@ -49,19 +39,26 @@ const Contribute: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Confirmation dialogs
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const { toasts, addToast, removeToast } = useToast();
 
-  // Load contributions from localStorage
+  // Load contributions from Supabase
   useEffect(() => {
-    const saved = localStorage.getItem(CONTRIBUTIONS_KEY);
-    if (saved) {
-      try {
-        setContributions(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse contributions", e);
+    const loadContributions = async () => {
+      setLoading(true);
+      const result = await getContributions();
+      if (result.success) {
+        setContributions(result.data);
       }
-    }
+      setLoading(false);
+    };
+    loadContributions();
   }, []);
 
   // Get filtered target options (exclude source language)
@@ -69,8 +66,8 @@ const Contribute: React.FC = () => {
     return languageOptions.filter((opt) => opt.value !== sourceLang);
   };
 
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form validation before showing confirm
+  const handleSubmitClick = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!word.trim() || !translation.trim()) {
@@ -78,29 +75,27 @@ const Contribute: React.FC = () => {
       return;
     }
 
+    setShowSubmitConfirm(true);
+  };
+
+  // Confirmed submission
+  const handleConfirmedSubmit = async () => {
+    setShowSubmitConfirm(false);
     setSubmitting(true);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const newContribution: Contribution = {
-        id: Date.now().toString(),
-        word: word.trim(),
-        translation: translation.trim(),
-        sourceLang,
-        targetLang,
-        phonetic: phonetic.trim(),
-        region,
-        example: example.trim(),
-        meaning: meaning.trim(),
-        timestamp: Date.now(),
-      };
+    const result = await submitContribution({
+      word: word.trim(),
+      translation: translation.trim(),
+      source_lang: sourceLang,
+      target_lang: targetLang,
+      phonetic: phonetic.trim() || undefined,
+      region: region || undefined,
+      example: example.trim() || undefined,
+      meaning: meaning.trim() || undefined,
+    });
 
-      const updatedContributions = [newContribution, ...contributions];
-      setContributions(updatedContributions);
-      localStorage.setItem(
-        CONTRIBUTIONS_KEY,
-        JSON.stringify(updatedContributions)
-      );
+    if (result.success && result.data) {
+      setContributions([result.data, ...contributions]);
 
       // Reset form
       setWord("");
@@ -109,17 +104,37 @@ const Contribute: React.FC = () => {
       setExample("");
       setMeaning("");
 
-      setSubmitting(false);
-      addToast("Cảm ơn bạn! Đóng góp đã được lưu thành công.", "success");
-    }, 800);
+      addToast(
+        result.error || "Cảm ơn bạn! Đóng góp đã được gửi thành công.",
+        result.error ? "info" : "success"
+      );
+    } else {
+      addToast("Có lỗi xảy ra. Vui lòng thử lại.", "error");
+    }
+
+    setSubmitting(false);
   };
 
-  // Delete contribution
-  const deleteContribution = (id: string) => {
-    const updated = contributions.filter((c) => c.id !== id);
-    setContributions(updated);
-    localStorage.setItem(CONTRIBUTIONS_KEY, JSON.stringify(updated));
-    addToast("Đã xóa đóng góp", "info");
+  // Show delete confirmation
+  const handleDeleteClick = (id: string) => {
+    setDeleteTargetId(id);
+    setShowDeleteConfirm(true);
+  };
+
+  // Confirmed deletion
+  const handleConfirmedDelete = async () => {
+    if (!deleteTargetId) return;
+
+    const result = await deleteContributionService(deleteTargetId);
+    if (result.success) {
+      setContributions(contributions.filter((c) => c.id !== deleteTargetId));
+      addToast("Đã xóa đóng góp", "info");
+    } else {
+      addToast(result.error || "Không thể xóa đóng góp", "error");
+    }
+
+    setShowDeleteConfirm(false);
+    setDeleteTargetId(null);
   };
 
   // Get language label
@@ -127,9 +142,60 @@ const Contribute: React.FC = () => {
     return languageOptions.find((l) => l.value === code)?.label || code;
   };
 
+  // Get status badge
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "approved":
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+            <i className="fa-solid fa-check"></i> Đã duyệt
+          </span>
+        );
+      case "rejected":
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+            <i className="fa-solid fa-xmark"></i> Từ chối
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+            <i className="fa-solid fa-clock"></i> Chờ duyệt
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
+
+      {/* Submit Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showSubmitConfirm}
+        title="Xác nhận gửi đóng góp"
+        message={`Bạn có chắc muốn gửi từ "${word}" với bản dịch "${translation}"?`}
+        confirmText="Gửi đóng góp"
+        cancelText="Hủy"
+        type="info"
+        onConfirm={handleConfirmedSubmit}
+        onCancel={() => setShowSubmitConfirm(false)}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Xóa đóng góp?"
+        message="Đóng góp này sẽ bị xóa vĩnh viễn. Bạn có chắc chắn không?"
+        confirmText="Xóa"
+        cancelText="Hủy"
+        type="danger"
+        onConfirm={handleConfirmedDelete}
+        onCancel={() => {
+          setShowDeleteConfirm(false);
+          setDeleteTargetId(null);
+        }}
+      />
 
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-earth-100">
         <div className="text-center mb-8">
@@ -144,7 +210,7 @@ const Contribute: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmitClick} className="space-y-6">
           {/* Language Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -308,26 +374,36 @@ const Contribute: React.FC = () => {
         </form>
 
         {/* Contribution History Toggle */}
-        {contributions.length > 0 && (
-          <div className="mt-8 border-t border-earth-200 pt-6">
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              className="w-full flex items-center justify-between text-earth-700 hover:text-bamboo-600 transition-colors"
-            >
-              <span className="font-medium">
-                <i className="fa-solid fa-clock-rotate-left mr-2"></i>
-                Đóng góp của bạn ({contributions.length})
-              </span>
-              <i
-                className={`fa-solid fa-chevron-down transition-transform ${
-                  showHistory ? "rotate-180" : ""
-                }`}
-              ></i>
-            </button>
+        <div className="mt-8 border-t border-earth-200 pt-6">
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="w-full flex items-center justify-between text-earth-700 hover:text-bamboo-600 transition-colors"
+          >
+            <span className="font-medium">
+              <i className="fa-solid fa-clock-rotate-left mr-2"></i>
+              Đóng góp của bạn ({contributions.length})
+            </span>
+            <i
+              className={`fa-solid fa-chevron-down transition-transform ${
+                showHistory ? "rotate-180" : ""
+              }`}
+            ></i>
+          </button>
 
-            {showHistory && (
-              <div className="mt-4 space-y-3 max-h-96 overflow-y-auto">
-                {contributions.map((c) => (
+          {showHistory && (
+            <div className="mt-4 space-y-3 max-h-96 overflow-y-auto">
+              {loading ? (
+                <div className="text-center py-8 text-earth-500">
+                  <i className="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
+                  <p>Đang tải...</p>
+                </div>
+              ) : contributions.length === 0 ? (
+                <div className="text-center py-8 text-earth-500">
+                  <i className="fa-solid fa-inbox text-3xl mb-2"></i>
+                  <p>Chưa có đóng góp nào</p>
+                </div>
+              ) : (
+                contributions.map((c) => (
                   <div
                     key={c.id}
                     className="bg-earth-50 rounded-lg p-4 border border-earth-100 group relative"
@@ -335,19 +411,22 @@ const Contribute: React.FC = () => {
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2 text-xs text-earth-500">
                         <span className="bg-earth-200 px-2 py-0.5 rounded">
-                          {getLangLabel(c.sourceLang)}
+                          {getLangLabel(c.source_lang)}
                         </span>
                         <i className="fa-solid fa-arrow-right"></i>
                         <span className="bg-bamboo-100 text-bamboo-700 px-2 py-0.5 rounded">
-                          {getLangLabel(c.targetLang)}
+                          {getLangLabel(c.target_lang)}
                         </span>
                         {c.region && (
                           <span className="text-earth-400">• {c.region}</span>
                         )}
                       </div>
-                      <span className="text-xs text-earth-400">
-                        {new Date(c.timestamp).toLocaleDateString("vi-VN")}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {getStatusBadge(c.status)}
+                        <span className="text-xs text-earth-400">
+                          {new Date(c.created_at).toLocaleDateString("vi-VN")}
+                        </span>
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -373,19 +452,27 @@ const Contribute: React.FC = () => {
                     {c.meaning && (
                       <p className="text-sm text-earth-600 mt-1">{c.meaning}</p>
                     )}
-                    <button
-                      onClick={() => deleteContribution(c.id)}
-                      className="absolute top-2 right-2 p-1.5 text-earth-300 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all"
-                      title="Xóa đóng góp"
-                    >
-                      <i className="fa-solid fa-trash-can text-sm"></i>
-                    </button>
+                    {c.status === "rejected" && c.reject_reason && (
+                      <p className="text-sm text-red-600 mt-2 bg-red-50 px-3 py-2 rounded">
+                        <i className="fa-solid fa-circle-info mr-1"></i>
+                        Lý do: {c.reject_reason}
+                      </p>
+                    )}
+                    {c.status === "pending" && (
+                      <button
+                        onClick={() => handleDeleteClick(c.id)}
+                        className="absolute top-2 right-2 p-1.5 text-earth-300 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                        title="Xóa đóng góp"
+                      >
+                        <i className="fa-solid fa-trash-can text-sm"></i>
+                      </button>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                ))
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

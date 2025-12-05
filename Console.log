@@ -1,0 +1,66 @@
+(index):64 cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
+(anonymous) @ (index):64
+(anonymous) @ (index):64
+react-dom_client.js?v=d9ad38ac:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+userManagementService.ts:417 getCurrentProfile: Starting...
+userManagementService.ts:438 getCurrentProfile: Got user from localStorage f29f0e56-af16-4a73-b4dc-0ae04426a815
+userManagementService.ts:467 getCurrentProfile: Fetching profile for user f29f0e56-af16-4a73-b4dc-0ae04426a815
+UserProfile.tsx:54 loadProfile: Already loading, skipping...
+userManagementService.ts:482 getCurrentProfile: Query result {error: null, data: {…}, count: null, status: 200, statusText: ''}
+userManagementService.ts:497 getCurrentProfile: Success
+userManagementService.ts:417 getCurrentProfile: Starting...
+userManagementService.ts:438 getCurrentProfile: Got user from localStorage f29f0e56-af16-4a73-b4dc-0ae04426a815
+userManagementService.ts:467 getCurrentProfile: Fetching profile for user f29f0e56-af16-4a73-b4dc-0ae04426a815
+UserProfile.tsx:54 loadProfile: Already loading, skipping...
+userManagementService.ts:500 Get current profile error: Error: Database query timeout
+    at userManagementService.ts:32:41
+getCurrentProfile @ userManagementService.ts:500
+await in getCurrentProfile
+loadProfile @ UserProfile.tsx:68
+(anonymous) @ UserProfile.tsx:48
+react_stack_bottom_frame @ react-dom_client.js?v=d9ad38ac:18567
+runWithFiberInDEV @ react-dom_client.js?v=d9ad38ac:997
+commitHookEffectListMount @ react-dom_client.js?v=d9ad38ac:9411
+commitHookPassiveMountEffects @ react-dom_client.js?v=d9ad38ac:9465
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11040
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=d9ad38ac:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=d9ad38ac:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=d9ad38ac:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11033
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=d9ad38ac:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11201
+recursivelyTraversePassiveMountEffects @ react-dom_client.js?v=d9ad38ac:11010
+commitPassiveMountOnFiber @ react-dom_client.js?v=d9ad38ac:11066
+flushPassiveEffects @ react-dom_client.js?v=d9ad38ac:13150
+flushPendingEffects @ react-dom_client.js?v=d9ad38ac:13088
+flushSpawnedWork @ react-dom_client.js?v=d9ad38ac:13062
+commitRoot @ react-dom_client.js?v=d9ad38ac:12804
+commitRootWhenReady @ react-dom_client.js?v=d9ad38ac:12016
+performWorkOnRoot @ react-dom_client.js?v=d9ad38ac:11950
+performSyncWorkOnRoot @ react-dom_client.js?v=d9ad38ac:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=d9ad38ac:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=d9ad38ac:13437
+(anonymous) @ react-dom_client.js?v=d9ad38ac:13531
+<UserProfile>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d9ad38ac:247
+renderContent @ App.tsx:174
+App @ App.tsx:202
+react_stack_bottom_frame @ react-dom_client.js?v=d9ad38ac:18509
+renderWithHooksAgain @ react-dom_client.js?v=d9ad38ac:5729
+renderWithHooks @ react-dom_client.js?v=d9ad38ac:5665
+updateFunctionComponent @ react-dom_client.js?v=d9ad38ac:7475
+beginWork @ react-dom_client.js?v=d9ad38ac:8525
+runWithFiberInDEV @ react-dom_client.js?v=d9ad38ac:997
+performUnitOfWork @ react-dom_client.js?v=d9ad38ac:12561
+workLoopSync @ react-dom_client.js?v=d9ad38ac:12424
+renderRootSync @ react-dom_client.js?v=d9ad38ac:12408
+performWorkOnRoot @ react-dom_client.js?v=d9ad38ac:11766
+performSyncWorkOnRoot @ react-dom_client.js?v=d9ad38ac:13517
+flushSyncWorkAcrossRoots_impl @ react-dom_client.js?v=d9ad38ac:13414
+processRootScheduleInMicrotask @ react-dom_client.js?v=d9ad38ac:13437
+(anonymous) @ react-dom_client.js?v=d9ad38ac:13531
+<App>
+exports.jsxDEV @ react_jsx-dev-runtime.js?v=d9ad38ac:247
+(anonymous) @ index.tsx:13

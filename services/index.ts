@@ -59,3 +59,63 @@ export {
 // Data exports - Dictionary data
 export type { NungWord } from "../data";
 export { NUNG_DICTIONARY } from "../data";
+
+// Supabase client
+export { supabase, isSupabaseConfigured } from "./supabaseClient";
+
+// Contribution service
+export {
+  submitContribution,
+  getContributions,
+  updateContribution,
+  approveContribution,
+  rejectContribution,
+  deleteContribution,
+  type Contribution,
+  type ContributionInput,
+  type ContributionUpdate,
+} from "./contributionService";
+
+// Dictionary display service
+export {
+  getDictionaryEntries,
+  getDictionaryStats,
+  searchDictionary,
+  type DictionaryEntry,
+} from "./dictionaryDisplayService";
+
+// Auth service
+export {
+  signIn,
+  signUp,
+  signOut,
+  getCurrentUser,
+  getCurrentSession,
+  getUserProfile,
+  onAuthStateChange,
+  signInWithGoogle,
+  type UserProfile,
+  type AuthResult,
+} from "./authService";
+
+// Dictionary service (Supabase CRUD)
+export {
+  getDictionaryEntriesFromDB,
+  addDictionaryEntry,
+  updateDictionaryEntry,
+  deleteDictionaryEntry,
+  getApprovedEntriesCount,
+  type DictionaryEntryDB,
+  type DictionaryEntryInput,
+} from "./dictionaryService";
+
+// Approved vocab service (merge contributions into lookup)
+export {
+  getApprovedContributions,
+  getApprovedContributionsMap,
+  clearApprovedContributionsCache,
+  getApprovedCacheStatus,
+} from "./approvedVocabService";
+
+// Combined lookup functions from nungVocab
+export { lookupWordCombined, getCombinedDictionaryCount } from "./nungVocab";
