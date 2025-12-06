@@ -81,4 +81,5 @@ export enum AppRoute {
   ADMIN_DASHBOARD = "admin_dashboard",
   ADMIN_USERS = "admin_users",
   PROFILE = "profile",
+  NOT_FOUND = "404",
 }

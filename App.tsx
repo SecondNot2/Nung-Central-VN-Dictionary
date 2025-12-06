@@ -12,22 +12,38 @@ import DictionaryList from "./pages/DictionaryList";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import UserProfile from "./pages/UserProfile";
+import NotFound from "./pages/NotFound";
 import { AppRoute, User } from "./types";
 import {
   onAuthStateChange,
   signOut as authSignOut,
   createProfileForOAuthUser,
 } from "./services/authService";
+import Footer from "./components/Footer";
 
 const AUTH_KEY = "auth_user";
 
 // Map route to hash for URL
 const routeToHash = (route: AppRoute): string => `#${route}`;
 const hashToRoute = (hash: string): AppRoute => {
-  const routeString = hash.replace("#", "") || "dictionary";
-  return Object.values(AppRoute).includes(routeString as AppRoute)
-    ? (routeString as AppRoute)
-    : AppRoute.DICTIONARY;
+  const routeString = hash.replace("#", "") || "";
+
+  // If no hash, check if there's an invalid pathname (for direct URL access)
+  if (!routeString) {
+    const pathname = window.location.pathname;
+    // If pathname is not root and not index.html, it's an invalid path
+    if (pathname !== "/" && pathname !== "/index.html") {
+      return AppRoute.NOT_FOUND;
+    }
+    return AppRoute.DICTIONARY;
+  }
+
+  // Check if route exists in AppRoute enum
+  if (Object.values(AppRoute).includes(routeString as AppRoute)) {
+    return routeString as AppRoute;
+  }
+
+  return AppRoute.NOT_FOUND;
 };
 
 const App: React.FC = () => {
@@ -226,16 +242,20 @@ const App: React.FC = () => {
             onLogout={handleLogout}
           />
         );
+      case AppRoute.NOT_FOUND:
+        return <NotFound setRoute={navigateTo} />;
       default:
         return <Dictionary />;
     }
   };
 
-  // Full-screen auth pages (no nav/footer)
-  const isAuthPage =
-    currentRoute === AppRoute.LOGIN || currentRoute === AppRoute.REGISTER;
+  // Full-screen pages (no nav/footer)
+  const isFullScreenPage =
+    currentRoute === AppRoute.LOGIN ||
+    currentRoute === AppRoute.REGISTER ||
+    currentRoute === AppRoute.NOT_FOUND;
 
-  if (isAuthPage) {
+  if (isFullScreenPage) {
     return renderContent();
   }
 
@@ -250,12 +270,7 @@ const App: React.FC = () => {
 
       <main className="flex-grow">{renderContent()}</main>
 
-      <footer className="bg-earth-900 text-earth-300 py-6 text-center text-sm">
-        <p>
-          © {new Date().getFullYear()} Dự án Từ điển Nùng & Miền Trung Việt Nam.
-        </p>
-        <p className="mt-1 text-earth-400">Gìn giữ Ngôn ngữ & Văn hóa.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

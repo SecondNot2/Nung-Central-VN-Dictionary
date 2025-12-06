@@ -35,6 +35,6 @@ Thumbs.db
 Desktop.ini
 
 # Project specific
-Console.log
+# Console.log
 .env
 coverage/
