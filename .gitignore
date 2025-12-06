@@ -1,6 +1,5 @@
 # Logs
 logs
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -28,5 +27,14 @@ dist-ssr
 
 .github
 .shared
-# .agent
-# migrations
+.agent
+migrations
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Project specific
+Console.log
+.env
+coverage/
