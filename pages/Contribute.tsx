@@ -5,7 +5,7 @@ import {
   getContributions,
   deleteContribution as deleteContributionService,
 } from "../services/contributionService";
-import { Contribution } from "../types";
+import { Contribution, User, AppRoute } from "../types";
 
 // Language Options
 const languageOptions = [
@@ -27,7 +27,12 @@ const regionOptions = [
   { value: "other", label: "Khác" },
 ];
 
-const Contribute: React.FC = () => {
+interface ContributeProps {
+  user: User | null;
+  setRoute: (route: AppRoute) => void;
+}
+
+const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
   const [word, setWord] = useState("");
   const [translation, setTranslation] = useState("");
   const [sourceLang, setSourceLang] = useState("vi");
@@ -45,6 +50,7 @@ const Contribute: React.FC = () => {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const { toasts, addToast, removeToast } = useToast();
 
@@ -72,6 +78,12 @@ const Contribute: React.FC = () => {
 
     if (!word.trim() || !translation.trim()) {
       addToast("Vui lòng nhập từ/cụm từ và bản dịch", "warning");
+      return;
+    }
+
+    // Check if user is logged in
+    if (!user) {
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -196,6 +208,70 @@ const Contribute: React.FC = () => {
           setDeleteTargetId(null);
         }}
       />
+
+      {/* Login Prompt Dialog */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+            onClick={() => setShowLoginPrompt(false)}
+          />
+
+          {/* Dialog */}
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all w-full max-w-md animate-fade-in">
+              <div className="p-6">
+                {/* Icon */}
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-bamboo-100 mb-4">
+                  <i className="fa-solid fa-right-to-bracket text-2xl text-bamboo-600"></i>
+                </div>
+
+                {/* Content */}
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-earth-900 mb-2">
+                    Yêu cầu đăng nhập
+                  </h3>
+                  <p className="text-earth-600">
+                    Bạn cần có tài khoản để gửi đóng góp. Vui lòng đăng nhập
+                    hoặc đăng ký để tiếp tục.
+                  </p>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="bg-earth-50 px-6 py-4 flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={() => setShowLoginPrompt(false)}
+                  className="px-5 py-2.5 rounded-xl font-medium text-earth-700 bg-white border border-earth-300 hover:bg-earth-100 transition-all order-3 sm:order-1"
+                >
+                  Để sau
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLoginPrompt(false);
+                    setRoute(AppRoute.REGISTER);
+                  }}
+                  className="px-5 py-2.5 rounded-xl font-medium text-bamboo-700 bg-bamboo-100 border border-bamboo-300 hover:bg-bamboo-200 transition-all order-2"
+                >
+                  <i className="fa-solid fa-user-plus mr-2"></i>
+                  Đăng ký
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLoginPrompt(false);
+                    setRoute(AppRoute.LOGIN);
+                  }}
+                  className="px-5 py-2.5 rounded-xl font-medium text-white bg-bamboo-600 hover:bg-bamboo-700 transition-all shadow-md hover:shadow-lg order-1 sm:order-3"
+                >
+                  <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                  Đăng nhập
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-earth-100">
         <div className="text-center mb-8">

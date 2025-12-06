@@ -23,10 +23,6 @@ const Navigation: React.FC<NavigationProps> = ({
     { id: AppRoute.DICTIONARY_LIST, label: "Tra cứu", icon: "fa-book-open" },
     { id: AppRoute.IMAGE_ANALYSIS, label: "Phân tích ảnh", icon: "fa-camera" },
     { id: AppRoute.CHAT, label: "Trò chuyện AI", icon: "fa-comments" },
-  ];
-
-  // Auth-required items
-  const authNavItems = [
     {
       id: AppRoute.CONTRIBUTE,
       label: "Đóng góp",
@@ -44,9 +40,6 @@ const Navigation: React.FC<NavigationProps> = ({
   // Combined nav items based on user role
   const getVisibleNavItems = () => {
     let items = [...mainNavItems];
-    if (user) {
-      items = [...items, ...authNavItems];
-    }
     if (isAdmin) {
       items = [...items, ...adminNavItems];
     }

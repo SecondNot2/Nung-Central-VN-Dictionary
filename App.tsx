@@ -218,7 +218,7 @@ const App: React.FC = () => {
       case AppRoute.IMAGE_ANALYSIS:
         return <ImageAnalyzer />;
       case AppRoute.CONTRIBUTE:
-        return <Contribute />;
+        return <Contribute user={user} setRoute={navigateTo} />;
       case AppRoute.ADMIN:
         return <AdminContributions setRoute={navigateTo} />;
       case AppRoute.LOGIN:

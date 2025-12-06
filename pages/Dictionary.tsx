@@ -289,7 +289,7 @@ const Dictionary: React.FC = () => {
 
       <div className="text-center mb-10">
         <h1 className="text-4xl font-serif font-bold text-earth-900 mb-2">
-          Từ điển Di sản
+          Từ điển ngôn ngữ dân tộc
         </h1>
         <p className="text-earth-700">
           Dịch tiếng Việt sang Tiếng Nùng (Lạng Sơn) và Phương ngữ Miền Trung
