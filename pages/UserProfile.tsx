@@ -16,12 +16,14 @@ interface UserProfileProps {
   user: User | null;
   setRoute: (route: AppRoute) => void;
   onProfileUpdate?: (updates: Partial<User>) => void;
+  onLogout?: () => Promise<void>;
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({
   user,
   setRoute,
   onProfileUpdate,
+  onLogout,
 }) => {
   const [profile, setProfile] = useState<ExtendedUserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -249,11 +251,20 @@ const UserProfile: React.FC<UserProfileProps> = ({
     setChangingPassword(false);
 
     if (result.success) {
-      addToast("Đã đổi mật khẩu thành công", "success");
+      addToast("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.", "success");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setShowPasswordForm(false);
+
+      // Password change invalidates the session - user must re-login
+      if (result.requiresRelogin && onLogout) {
+        // Small delay to show success message before logout
+        setTimeout(async () => {
+          await onLogout();
+          setRoute(AppRoute.LOGIN);
+        }, 1500);
+      }
     } else {
       addToast(result.error || "Lỗi đổi mật khẩu", "error");
     }

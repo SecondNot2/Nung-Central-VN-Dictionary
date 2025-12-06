@@ -3,7 +3,13 @@
  * Handles user CRUD operations for admin and profile management
  */
 
-import { supabase, isSupabaseConfigured } from "./supabaseClient";
+import {
+  supabase,
+  isSupabaseConfigured,
+  getAccessToken,
+  supabaseUrl,
+  supabaseAnonKey,
+} from "./supabaseClient";
 import type { UserProfile } from "./authService";
 
 // Extended user profile with new fields
@@ -371,25 +377,80 @@ export async function resendVerificationEmail(): Promise<{
 
 /**
  * Change password
+ * Uses direct Fetch API to avoid Supabase Client hanging issues
  */
 export async function changePassword(
   newPassword: string
-): Promise<{ success: boolean; error?: string }> {
-  if (!isSupabaseConfigured()) {
+): Promise<{ success: boolean; error?: string; requiresRelogin?: boolean }> {
+  if (!isSupabaseConfigured() || !supabaseUrl || !supabaseAnonKey) {
     return { success: false, error: "Supabase not configured" };
   }
 
   try {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
+    console.log("changePassword: Starting...");
 
-    if (error) {
-      console.error("Change password error:", error);
-      return { success: false, error: error.message };
+    // Get access token
+    let accessToken: string | null = null;
+
+    // Try getting from Supabase client first
+    const { data } = await supabase.auth.getSession();
+    accessToken = data.session?.access_token || null;
+
+    // Fallback to localStorage if client returns null/undefined
+    if (!accessToken) {
+      console.log(
+        "changePassword: No session in client, checking localStorage"
+      );
+      try {
+        const storageKey = Object.keys(localStorage).find(
+          (key) => key.startsWith("sb-") && key.endsWith("-auth-token")
+        );
+        if (storageKey) {
+          const sessionStr = localStorage.getItem(storageKey);
+          if (sessionStr) {
+            const sessionData = JSON.parse(sessionStr);
+            accessToken = sessionData.access_token;
+          }
+        }
+      } catch (e) {
+        console.warn("Error reading localStorage for token", e);
+      }
     }
 
-    return { success: true };
+    if (!accessToken) {
+      console.error("changePassword: No access token found");
+      return { success: false, error: "Phiên đăng nhập không hợp lệ" };
+    }
+
+    console.log("changePassword: Got token, calling API");
+
+    const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supabaseAnonKey,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        password: newPassword,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      console.error("Change password error:", result);
+      return {
+        success: false,
+        error: result.msg || result.message || "Lỗi đổi mật khẩu",
+      };
+    }
+
+    console.log("changePassword: Success");
+
+    // Password changed successfully - session may be invalidated
+    // Return flag indicating user should re-login for security
+    return { success: true, requiresRelogin: true };
   } catch (err) {
     console.error("Change password error:", err);
     return { success: false, error: "Lỗi đổi mật khẩu" };
@@ -398,25 +459,39 @@ export async function changePassword(
 
 /**
  * Verify current password by attempting to re-authenticate
+ * Uses direct REST API call to avoid messing with Supabase client state/session
  */
 export async function verifyCurrentPassword(
   email: string,
   password: string
 ): Promise<{ success: boolean; error?: string }> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured() || !supabaseUrl || !supabaseAnonKey) {
     return { success: false, error: "Supabase not configured" };
   }
 
   try {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    // API URL for signing in
+    const authUrl = `${supabaseUrl}/auth/v1/token?grant_type=password`;
+
+    const response = await fetch(authUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supabaseAnonKey,
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     });
 
-    if (error) {
+    if (!response.ok) {
+      // If auth fails (400 bad request usually), password is wrong
       return { success: false, error: "Mật khẩu hiện tại không đúng" };
     }
 
+    // If success (200), password is correct
+    // We just ignore the returned token info (it's just verification)
     return { success: true };
   } catch (err) {
     console.error("Verify password error:", err);
@@ -426,27 +501,32 @@ export async function verifyCurrentPassword(
 
 /**
  * Get current user's extended profile
+ * Uses direct Fetch to avoid Client hangs
  */
 export async function getCurrentProfile(): Promise<ExtendedUserProfile | null> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured() || !supabaseUrl || !supabaseAnonKey) {
     console.log("getCurrentProfile: Supabase not configured");
     return null;
   }
 
-  console.log("getCurrentProfile: Starting...");
+  console.log("getCurrentProfile: Starting... (Fetch Mode)");
 
   try {
-    // Read session directly from localStorage to avoid Supabase client lock issues
+    const token = await getAccessToken();
+    if (!token) {
+      console.log("getCurrentProfile: No token found");
+      return null;
+    }
+
+    // Attempt to get User ID from localStorage to save a request
     let userId: string | null = null;
     let userEmail: string | null = null;
     let userName: string | null = null;
 
     try {
-      // Try to get user from localStorage directly (faster, no async)
       const storageKey = Object.keys(localStorage).find(
         (key) => key.startsWith("sb-") && key.endsWith("-auth-token")
       );
-
       if (storageKey) {
         const sessionStr = localStorage.getItem(storageKey);
         if (sessionStr) {
@@ -454,55 +534,57 @@ export async function getCurrentProfile(): Promise<ExtendedUserProfile | null> {
           userId = sessionData?.user?.id;
           userEmail = sessionData?.user?.email;
           userName = sessionData?.user?.user_metadata?.display_name;
-          console.log("getCurrentProfile: Got user from localStorage", userId);
         }
       }
     } catch (e) {
-      console.log(
-        "getCurrentProfile: Failed to read localStorage, using Supabase"
-      );
+      console.warn("Error reading localStorage for UserID", e);
     }
 
-    // Fallback to Supabase getSession if localStorage failed
+    // If no ID from storage, fetch user details
     if (!userId) {
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
-
-      if (sessionError || !sessionData?.session?.user) {
-        console.log("getCurrentProfile: No session found");
-        return null;
+      try {
+        const userResp = await fetch(`${supabaseUrl}/auth/v1/user`, {
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (userResp.ok) {
+          const u = await userResp.json();
+          userId = u.id;
+          userEmail = u.email;
+          userName = u.user_metadata?.display_name;
+        }
+      } catch (e) {
+        console.error("Error fetching user details", e);
       }
-
-      userId = sessionData.session.user.id;
-      userEmail = sessionData.session.user.email || null;
-      userName = sessionData.session.user.user_metadata?.display_name || null;
     }
 
     if (!userId) {
-      console.log("getCurrentProfile: No user ID found");
+      console.log("getCurrentProfile: No user ID resolved");
       return null;
     }
 
     console.log("getCurrentProfile: Fetching profile for user", userId);
 
-    // Use timeout for database query
-    const queryResult = await withTimeout(
-      (async () => {
-        return await supabase
-          .from("user_profiles")
-          .select("*")
-          .eq("id", userId)
-          .single();
-      })(),
-      5000,
-      "Database query timeout"
+    // Fetch Profile via REST
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/user_profiles?id=eq.${userId}&select=*`,
+      {
+        method: "GET",
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.pgrst.object+json",
+        },
+      }
     );
 
-    console.log("getCurrentProfile: Query result", queryResult);
-
-    if (queryResult.error) {
-      console.error("Get profile error:", queryResult.error);
-      // Return basic profile if database query fails
+    if (!response.ok) {
+      console.warn(
+        "Fetch profile failed, returning basic profile",
+        response.status
+      );
       return {
         id: userId,
         email: userEmail || "",
@@ -513,8 +595,9 @@ export async function getCurrentProfile(): Promise<ExtendedUserProfile | null> {
       };
     }
 
+    const data = await response.json();
     console.log("getCurrentProfile: Success");
-    return queryResult.data as ExtendedUserProfile;
+    return data as ExtendedUserProfile;
   } catch (err) {
     console.error("Get current profile error:", err);
     return null;

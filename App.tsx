@@ -223,6 +223,7 @@ const App: React.FC = () => {
             user={user}
             setRoute={navigateTo}
             onProfileUpdate={handleProfileUpdate}
+            onLogout={handleLogout}
           />
         );
       default:

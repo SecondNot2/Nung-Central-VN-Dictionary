@@ -3,7 +3,13 @@
  * Handles all Supabase authentication operations
  */
 
-import { supabase, isSupabaseConfigured } from "./supabaseClient";
+import {
+  supabase,
+  isSupabaseConfigured,
+  getAccessToken,
+  supabaseUrl,
+  supabaseAnonKey,
+} from "./supabaseClient";
 import type {
   User as SupabaseUser,
   Session,
@@ -169,6 +175,26 @@ export async function signUp(
 }
 
 /**
+ * Clear all Supabase tokens from localStorage
+ * This ensures complete cleanup even when signOut fails
+ */
+function clearAllSupabaseTokens(): void {
+  try {
+    // Find and remove all Supabase auth tokens
+    const keysToRemove = Object.keys(localStorage).filter(
+      (key) => key.startsWith("sb-") && key.endsWith("-auth-token")
+    );
+
+    keysToRemove.forEach((key) => {
+      localStorage.removeItem(key);
+      console.log("Removed localStorage key:", key);
+    });
+  } catch (e) {
+    console.error("Error clearing Supabase tokens:", e);
+  }
+}
+
+/**
  * Sign out current user
  */
 export async function signOut(): Promise<{ success: boolean; error?: string }> {
@@ -176,18 +202,31 @@ export async function signOut(): Promise<{ success: boolean; error?: string }> {
   localStorage.removeItem(LOCAL_AUTH_KEY);
 
   if (!isSupabaseConfigured()) {
+    // Still clear Supabase tokens even if not configured (for cleanup)
+    clearAllSupabaseTokens();
     return { success: true };
   }
 
   try {
-    const { error } = await supabase.auth.signOut();
+    // Use scope: 'global' to sign out all sessions across all devices
+    const { error } = await supabase.auth.signOut({ scope: "global" });
+
+    // Always clear tokens from localStorage, even if signOut failed
+    // This handles cases where session is already corrupt
+    clearAllSupabaseTokens();
+
     if (error) {
-      return { success: false, error: getErrorMessage(error) };
+      console.warn("Sign out had error, but tokens cleared:", error);
+      // Return success anyway since we cleared the tokens
+      return { success: true };
     }
     return { success: true };
   } catch (err) {
     console.error("Sign out error:", err);
-    return { success: false, error: "Lỗi đăng xuất" };
+    // Still attempt to clear tokens even on exception
+    clearAllSupabaseTokens();
+    // Return success since tokens are cleared
+    return { success: true };
   }
 }
 
@@ -235,25 +274,38 @@ export async function getCurrentUser(): Promise<SupabaseUser | null> {
 /**
  * Get user profile from database
  */
+/**
+ * Get user profile from database
+ * Uses direct Fetch to avoid Client hangs on tab switch
+ */
 export async function getUserProfile(
   userId: string
 ): Promise<UserProfile | null> {
-  if (!isSupabaseConfigured()) {
+  if (!isSupabaseConfigured() || !supabaseUrl || !supabaseAnonKey) {
     return null;
   }
 
   try {
-    const { data, error } = await supabase
-      .from("user_profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
+    const token = await getAccessToken();
+    if (!token) return null;
 
-    if (error) {
-      console.error("Error fetching profile:", error);
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/user_profiles?id=eq.${userId}&select=*`,
+      {
+        method: "GET",
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.pgrst.object+json",
+        },
+      }
+    );
+
+    if (!response.ok) {
       return null;
     }
 
+    const data = await response.json();
     return data as UserProfile;
   } catch {
     return null;
