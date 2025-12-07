@@ -11,8 +11,8 @@ dist
 dist-ssr
 
 # Environment files (contains API keys)
-*.local
-.env.local
+# *.local
+# .env.local
 
 # Editor directories and files
 .vscode/*
@@ -26,9 +26,9 @@ dist-ssr
 *.sw?
 
 .github
-.shared
-.agent
-migrations
+# .shared
+# .agent
+# migrations
 
 # OS
 Thumbs.db
@@ -38,3 +38,26 @@ Desktop.ini
 # Console.log
 .env
 coverage/
+.env.local
+.agent/workflows/ui-ux-pro-max.md
+.shared/ui-ux-pro-max/data/charts.csv
+.shared/ui-ux-pro-max/data/colors.csv
+.shared/ui-ux-pro-max/data/landing.csv
+.shared/ui-ux-pro-max/data/products.csv
+.shared/ui-ux-pro-max/data/prompts.csv
+.shared/ui-ux-pro-max/data/styles.csv
+.shared/ui-ux-pro-max/data/typography.csv
+.shared/ui-ux-pro-max/data/ux-guidelines.csv
+.shared/ui-ux-pro-max/data/stacks/flutter.csv
+.shared/ui-ux-pro-max/data/stacks/html-tailwind.csv
+.shared/ui-ux-pro-max/data/stacks/nextjs.csv
+.shared/ui-ux-pro-max/data/stacks/react-native.csv
+.shared/ui-ux-pro-max/data/stacks/react.csv
+.shared/ui-ux-pro-max/data/stacks/svelte.csv
+.shared/ui-ux-pro-max/data/stacks/swiftui.csv
+.shared/ui-ux-pro-max/data/stacks/vue.csv
+.shared/ui-ux-pro-max/scripts/core.py
+.shared/ui-ux-pro-max/scripts/search.py
+.shared/ui-ux-pro-max/scripts/__pycache__/core.cpython-311.pyc
+Console.log
+new-task.md

@@ -12,6 +12,9 @@ import DictionaryList from "./pages/DictionaryList";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import UserProfile from "./pages/UserProfile";
+import MyLibrary from "./pages/MyLibrary";
+import AdminSuggestions from "./pages/AdminSuggestions";
+import AdminReports from "./pages/AdminReports";
 import NotFound from "./pages/NotFound";
 import { AppRoute, User } from "./types";
 import {
@@ -212,7 +215,7 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (currentRoute) {
       case AppRoute.DICTIONARY:
-        return <Dictionary />;
+        return <Dictionary user={user} setRoute={navigateTo} />;
       case AppRoute.CHAT:
         return <ChatBot />;
       case AppRoute.IMAGE_ANALYSIS:
@@ -242,10 +245,16 @@ const App: React.FC = () => {
             onLogout={handleLogout}
           />
         );
+      case AppRoute.MY_LIBRARY:
+        return <MyLibrary user={user} setRoute={navigateTo} />;
+      case AppRoute.ADMIN_SUGGESTIONS:
+        return <AdminSuggestions user={user} setRoute={navigateTo} />;
+      case AppRoute.ADMIN_REPORTS:
+        return <AdminReports user={user} setRoute={navigateTo} />;
       case AppRoute.NOT_FOUND:
         return <NotFound setRoute={navigateTo} />;
       default:
-        return <Dictionary />;
+        return <Dictionary user={user} setRoute={navigateTo} />;
     }
   };
 

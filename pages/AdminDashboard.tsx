@@ -2,10 +2,17 @@ import React, { useState, useEffect } from "react";
 import { AppRoute, User } from "../types";
 import { getStats, UserStats } from "../services/userManagementService";
 import { ToastContainer, useToast } from "../components";
+import { supabase, isSupabaseConfigured } from "../services/supabaseClient";
 
 interface AdminDashboardProps {
   user: User | null;
   setRoute: (route: AppRoute) => void;
+}
+
+interface PendingCounts {
+  contributions: number;
+  suggestions: number;
+  reports: number;
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
@@ -15,11 +22,17 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
     totalContributors: 0,
     recentSignups: 0,
   });
+  const [pendingCounts, setPendingCounts] = useState<PendingCounts>({
+    contributions: 0,
+    suggestions: 0,
+    reports: 0,
+  });
   const [loading, setLoading] = useState(true);
   const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     loadStats();
+    loadPendingCounts();
   }, []);
 
   const loadStats = async () => {
@@ -27,6 +40,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
     const data = await getStats();
     setStats(data);
     setLoading(false);
+  };
+
+  const loadPendingCounts = async () => {
+    if (!isSupabaseConfigured()) return;
+
+    try {
+      // Fetch pending contributions count
+      const { count: contribCount } = await supabase
+        .from("contributions")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
+      // Fetch pending suggestions count
+      const { count: suggCount } = await supabase
+        .from("translation_suggestions")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
+      // Fetch pending reports count
+      const { count: reportCount } = await supabase
+        .from("discussion_reports")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+
+      setPendingCounts({
+        contributions: contribCount || 0,
+        suggestions: suggCount || 0,
+        reports: reportCount || 0,
+      });
+    } catch (err) {
+      console.error("Error loading pending counts:", err);
+    }
   };
 
   // Check admin access
@@ -90,6 +135,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
       icon: "fa-users-gear",
       route: AppRoute.ADMIN_USERS,
       color: "text-blue-600",
+      pendingCount: 0,
     },
     {
       title: "Quản lý từ điển",
@@ -97,13 +143,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
       icon: "fa-book",
       route: AppRoute.ADMIN_DICTIONARY,
       color: "text-bamboo-600",
+      pendingCount: 0,
     },
     {
       title: "Duyệt đóng góp",
-      description: "Xem và phê duyệt đóng góp",
+      description: "Xem và phê duyệt đóng góp từ vựng",
       icon: "fa-clipboard-check",
       route: AppRoute.ADMIN,
       color: "text-purple-600",
+      pendingCount: pendingCounts.contributions,
+    },
+    {
+      title: "Quản lý đề xuất chỉnh sửa",
+      description: "Duyệt các đề xuất chỉnh sửa bản dịch",
+      icon: "fa-pen-to-square",
+      route: AppRoute.ADMIN_SUGGESTIONS,
+      color: "text-amber-600",
+      pendingCount: pendingCounts.suggestions,
+    },
+    {
+      title: "Quản lý báo cáo bình luận",
+      description: "Xử lý các bình luận bị báo cáo vi phạm",
+      icon: "fa-flag",
+      route: AppRoute.ADMIN_REPORTS,
+      color: "text-red-600",
+      pendingCount: pendingCounts.reports,
     },
   ];
 
@@ -122,7 +186,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
               <p className="text-earth-600 text-sm">Xin chào, {user.name}!</p>
             </div>
             <button
-              onClick={loadStats}
+              onClick={() => {
+                loadStats();
+                loadPendingCounts();
+              }}
               disabled={loading}
               className="flex items-center gap-2 px-4 py-2 bg-earth-100 hover:bg-earth-200 rounded-lg transition-colors text-earth-700"
             >
@@ -164,24 +231,35 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
           <h2 className="text-lg font-semibold text-earth-900 mb-4">
             Thao tác nhanh
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
               <button
                 key={index}
                 onClick={() => setRoute(action.route)}
-                className="bg-white rounded-xl p-6 border border-earth-200/50 text-left hover:border-bamboo-300 hover:shadow-lg transition-all group cursor-pointer"
+                className="bg-white rounded-xl p-6 border border-earth-200/50 text-left hover:border-bamboo-300 hover:shadow-lg transition-all group cursor-pointer relative"
               >
+                {/* Pending Badge */}
+                {action.pendingCount > 0 && (
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                    {action.pendingCount > 99 ? "99+" : action.pendingCount}
+                  </div>
+                )}
                 <div className="flex items-start gap-4">
                   <div
-                    className={`w-12 h-12 rounded-xl bg-earth-100 flex items-center justify-center group-hover:bg-bamboo-50 transition-colors`}
+                    className={`w-12 h-12 rounded-xl bg-earth-100 flex items-center justify-center group-hover:bg-bamboo-50 transition-colors relative`}
                   >
                     <i
                       className={`fa-solid ${action.icon} text-xl ${action.color}`}
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-earth-900 mb-1 group-hover:text-bamboo-700 transition-colors">
+                    <h3 className="font-semibold text-earth-900 mb-1 group-hover:text-bamboo-700 transition-colors flex items-center gap-2">
                       {action.title}
+                      {action.pendingCount > 0 && (
+                        <span className="text-xs font-normal text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                          {action.pendingCount} chờ duyệt
+                        </span>
+                      )}
                     </h3>
                     <p className="text-sm text-earth-500">
                       {action.description}

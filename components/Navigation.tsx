@@ -134,6 +134,16 @@ const Navigation: React.FC<NavigationProps> = ({
                       </div>
                       <button
                         onClick={() => {
+                          setRoute(AppRoute.MY_LIBRARY);
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-earth-700 hover:bg-earth-50 transition-colors flex items-center"
+                      >
+                        <i className="fa-solid fa-folder-open mr-2" />
+                        Thư viện của tôi
+                      </button>
+                      <button
+                        onClick={() => {
                           setRoute(AppRoute.PROFILE);
                           setIsUserMenuOpen(false);
                         }}

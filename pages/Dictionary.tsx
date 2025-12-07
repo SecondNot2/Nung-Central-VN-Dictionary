@@ -4,18 +4,37 @@ import {
   generateSpeech,
   checkSpelling,
 } from "../services/megaLlmService";
-import { TranslationResult, TranslationHistoryItem } from "../types";
+import {
+  TranslationResult,
+  TranslationHistoryItem,
+  User,
+  AppRoute,
+} from "../types";
 import {
   ToastContainer,
   useToast,
   ConfirmDialog,
   CustomSelect,
   SelectOption,
+  SaveTranslationButton,
+  DiscussionSection,
+  Pagination,
 } from "../components";
+import SuggestEditButton from "../components/SuggestEditButton";
+import {
+  getHistory,
+  addToHistory,
+  deleteHistoryItem as deleteHistoryItemService,
+  clearHistory as clearHistoryService,
+  migrateLocalHistoryToDb,
+} from "../services/translationHistoryService";
 
-const HISTORY_KEY = "translation_history";
+interface DictionaryProps {
+  user?: User | null;
+  setRoute?: (route: AppRoute) => void;
+}
 
-const Dictionary: React.FC = () => {
+const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
   const [inputText, setInputText] = useState("");
   const [sourceLang, setSourceLang] = useState("vi");
   const [targetLang, setTargetLang] = useState("nung");
@@ -141,17 +160,19 @@ const Dictionary: React.FC = () => {
     }
   }, [sourceLang]);
 
-  // Load history on mount
+  // Load history on mount and when user changes
   useEffect(() => {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    if (saved) {
-      try {
-        setHistory(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse history", e);
-      }
+    const loadHistory = async () => {
+      const items = await getHistory(user?.id);
+      setHistory(items);
+    };
+    loadHistory();
+
+    // Migrate local history to DB when user logs in
+    if (user?.id) {
+      migrateLocalHistoryToDb(user.id);
     }
-  }, []);
+  }, [user?.id]);
 
   // Debounced spell check
   useEffect(() => {
@@ -167,27 +188,38 @@ const Dictionary: React.FC = () => {
     return () => clearTimeout(timer);
   }, [inputText, sourceLang]);
 
-  const saveToHistory = (item: TranslationHistoryItem) => {
-    // Keep the most recent 50 items (increased from 5 for pagination demo)
-    const filteredHistory = history.filter(
-      (h) => h.original.toLowerCase() !== item.original.toLowerCase()
+  const saveToHistory = async (
+    item: Omit<TranslationHistoryItem, "id" | "timestamp">
+  ) => {
+    const newItem = await addToHistory(
+      {
+        original: item.original,
+        sourceLang: item.sourceLang,
+        targetLang: item.targetLang,
+        result: item.result,
+      },
+      user?.id
     );
-    const newHistory = [item, ...filteredHistory].slice(0, 50);
-    setHistory(newHistory);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
-    setCurrentPage(1); // Reset to first page on new entry
+    // Update local state
+    setHistory((prev) => {
+      const filtered = prev.filter(
+        (h) => h.original.toLowerCase() !== item.original.toLowerCase()
+      );
+      return [newItem, ...filtered].slice(0, 50);
+    });
+    setCurrentPage(1);
   };
 
-  const clearHistory = () => {
+  const handleClearHistory = () => {
     setConfirmDialog({
       isOpen: true,
       title: "Xóa toàn bộ lịch sử?",
       message:
         "Bạn có chắc chắn muốn xóa toàn bộ lịch sử tra cứu? Hành động này không thể hoàn tác.",
       type: "danger",
-      onConfirm: () => {
+      onConfirm: async () => {
+        await clearHistoryService(user?.id);
         setHistory([]);
-        localStorage.removeItem(HISTORY_KEY);
         setCurrentPage(1);
         setConfirmDialog((prev) => ({ ...prev, isOpen: false }));
         addToast("Đã xóa toàn bộ lịch sử tra cứu", "success");
@@ -195,7 +227,7 @@ const Dictionary: React.FC = () => {
     });
   };
 
-  const deleteHistoryItem = (e: React.MouseEvent, id: string) => {
+  const handleDeleteHistoryItem = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     const itemToDelete = history.find((item) => item.id === id);
     setConfirmDialog({
@@ -205,10 +237,10 @@ const Dictionary: React.FC = () => {
         (itemToDelete?.original.length || 0) > 30 ? "..." : ""
       }" khỏi lịch sử?`,
       type: "warning",
-      onConfirm: () => {
+      onConfirm: async () => {
+        await deleteHistoryItemService(id, user?.id);
         const newHistory = history.filter((item) => item.id !== id);
         setHistory(newHistory);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
 
         // Adjust page if empty
         const maxPage = Math.ceil(newHistory.length / itemsPerPage) || 1;
@@ -249,12 +281,10 @@ const Dictionary: React.FC = () => {
 
       // Save successful translation to history
       saveToHistory({
-        id: Date.now().toString(),
         original: inputText,
         sourceLang: sourceLang,
         targetLang: targetLang,
         result: data,
-        timestamp: Date.now(),
       });
       addToast("Dịch thành công!", "success");
     } catch (err: any) {
@@ -429,26 +459,63 @@ const Dictionary: React.FC = () => {
                 <h2 className="text-xl font-bold text-bamboo-900">
                   {trans.language}
                 </h2>
-                <button
-                  onClick={() => playAudio(trans.phonetic || trans.script, idx)}
-                  className="flex items-center space-x-2 text-bamboo-700 hover:text-bamboo-900 transition-colors px-3 py-1 rounded hover:bg-bamboo-100"
-                  disabled={ttsLoading !== null}
-                  title="Nghe phát âm"
-                >
-                  {ttsLoading === idx ? (
-                    <>
-                      <i className="fa-solid fa-circle-notch fa-spin"></i>
-                      <span className="text-sm font-medium">
-                        Đang tạo âm thanh...
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="fa-solid fa-volume-high text-xl"></i>
-                      <span className="text-sm font-medium">Nghe</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center gap-2">
+                  <SaveTranslationButton
+                    user={user || null}
+                    originalText={inputText}
+                    sourceLang={sourceLang}
+                    targetLang={targetLang}
+                    result={result}
+                    onSaveSuccess={() =>
+                      addToast("Đã lưu bản dịch!", "success")
+                    }
+                    onLoginRequired={() => {
+                      addToast("Vui lòng đăng nhập để lưu bản dịch", "warning");
+                      if (setRoute) setRoute(AppRoute.LOGIN);
+                    }}
+                  />
+                  <button
+                    onClick={() =>
+                      playAudio(trans.phonetic || trans.script, idx)
+                    }
+                    className="flex items-center space-x-2 text-bamboo-700 hover:text-bamboo-900 transition-colors px-3 py-1 rounded hover:bg-bamboo-100"
+                    disabled={ttsLoading !== null}
+                    title="Nghe phát âm"
+                  >
+                    {ttsLoading === idx ? (
+                      <>
+                        <i className="fa-solid fa-circle-notch fa-spin"></i>
+                        <span className="text-sm font-medium">
+                          Đang tạo âm thanh...
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-volume-high text-xl"></i>
+                        <span className="text-sm font-medium">Nghe</span>
+                      </>
+                    )}
+                  </button>
+
+                  {/* Suggest Edit Button */}
+                  <SuggestEditButton
+                    user={user || null}
+                    originalText={inputText}
+                    sourceLang={sourceLang}
+                    targetLang={targetLang}
+                    result={result}
+                    onLoginRequired={() => {
+                      addToast(
+                        "Vui lòng đăng nhập để đề xuất chỉnh sửa",
+                        "warning"
+                      );
+                      if (setRoute) setRoute(AppRoute.LOGIN);
+                    }}
+                    onSuccess={() =>
+                      addToast("Đã gửi đề xuất chỉnh sửa!", "success")
+                    }
+                  />
+                </div>
               </div>
               <div className="p-6 grid gap-6 md:grid-cols-2">
                 <div className="col-span-1">
@@ -512,6 +579,18 @@ const Dictionary: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Discussion Section */}
+          <DiscussionSection
+            originalText={inputText}
+            targetLang={targetLang}
+            user={user || null}
+            result={result}
+            onLoginRequired={() => {
+              addToast("Vui lòng đăng nhập để tham gia thảo luận", "warning");
+              if (setRoute) setRoute(AppRoute.LOGIN);
+            }}
+          />
         </div>
       )}
 
@@ -527,7 +606,7 @@ const Dictionary: React.FC = () => {
               Lịch sử tra cứu
             </h2>
             <button
-              onClick={clearHistory}
+              onClick={handleClearHistory}
               className="text-sm font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition-colors flex items-center"
             >
               <i className="fa-solid fa-trash-can mr-2"></i> Xóa tất cả
@@ -595,7 +674,7 @@ const Dictionary: React.FC = () => {
 
                   {/* Delete Button (Hover) */}
                   <button
-                    onClick={(e) => deleteHistoryItem(e, item.id)}
+                    onClick={(e) => handleDeleteHistoryItem(e, item.id)}
                     className="absolute top-2 right-2 p-2 text-earth-300 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all"
                     title="Xóa mục này"
                   >

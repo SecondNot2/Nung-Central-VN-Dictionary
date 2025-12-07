@@ -10,3 +10,13 @@ export type { SelectOption, CustomSelectProps } from "./CustomSelect";
 export { EditContributionModal } from "./EditContributionModal";
 
 export { default as ImageCropper } from "./ImageCropper";
+
+export { default as SaveTranslationButton } from "./SaveTranslationButton";
+
+export { default as Pagination } from "./Pagination";
+
+export { default as DiscussionItem } from "./DiscussionItem";
+
+export { default as DiscussionSection } from "./DiscussionSection";
+
+export { default as DiscussionModal } from "./DiscussionModal";

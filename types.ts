@@ -68,6 +68,35 @@ export interface AuthState {
   isLoading: boolean;
 }
 
+// Saved Translation type
+export interface SavedTranslation {
+  id: string;
+  userId: string;
+  originalText: string;
+  sourceLang: string;
+  targetLang: string;
+  result: TranslationResult;
+  createdAt: string;
+}
+
+// Discussion types
+export interface Discussion {
+  id: string;
+  translationKey: string;
+  userId: string | null;
+  userName?: string;
+  userAvatar?: string;
+  content: string;
+  likeCount: number;
+  isLikedByUser?: boolean;
+  parentId: string | null;
+  replies?: Discussion[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type DiscussionSortOption = "newest" | "oldest" | "most_liked";
+
 export enum AppRoute {
   DICTIONARY = "dictionary",
   IMAGE_ANALYSIS = "image_analysis",
@@ -80,6 +109,9 @@ export enum AppRoute {
   DICTIONARY_LIST = "dictionary_list",
   ADMIN_DASHBOARD = "admin_dashboard",
   ADMIN_USERS = "admin_users",
+  ADMIN_SUGGESTIONS = "admin_suggestions",
+  ADMIN_REPORTS = "admin_reports",
   PROFILE = "profile",
+  MY_LIBRARY = "my_library",
   NOT_FOUND = "404",
 }
