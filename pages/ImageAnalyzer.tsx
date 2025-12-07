@@ -101,6 +101,9 @@ const ImageAnalyzer: React.FC = () => {
         <h1 className="text-3xl font-serif font-bold text-earth-900 mb-2">
           Dịch qua Hình ảnh
         </h1>
+        <p className="text-sm text-earth-500 mb-4 text-green-700">
+          (Tính năng đang được phát triển)
+        </p>
         <p className="text-earth-700">
           Tải lên hình ảnh văn bản, đồ vật hoặc cảnh vật để hiểu ý nghĩa.
         </p>
@@ -195,4 +198,3 @@ const ImageAnalyzer: React.FC = () => {
 };
 
 export default ImageAnalyzer;
-

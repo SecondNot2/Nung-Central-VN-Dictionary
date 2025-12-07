@@ -19,9 +19,9 @@ const ChatBot: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -81,6 +81,9 @@ const ChatBot: React.FC = () => {
             <p className="text-xs text-earth-500">Hỗ trợ bởi AI</p>
           </div>
         </div>
+        <p className="text-sm text-earth-500 mb-4 text-green-700">
+          (Tính năng đang được phát triển)
+        </p>
       </div>
 
       <div className="flex-1 overflow-y-auto bg-earth-50 p-4 space-y-4 shadow-inner">
@@ -148,4 +151,3 @@ const ChatBot: React.FC = () => {
 };
 
 export default ChatBot;
-
