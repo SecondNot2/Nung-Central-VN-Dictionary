@@ -95,6 +95,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     {
       id: "bug" as FeedbackType,
       label: "Báo lỗi",
+      shortLabel: "Lỗi",
       icon: "fa-bug",
       color: "text-red-500",
       bgColor: "bg-red-50",
@@ -102,6 +103,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     {
       id: "feature" as FeedbackType,
       label: "Yêu cầu tính năng",
+      shortLabel: "Tính năng",
       icon: "fa-lightbulb",
       color: "text-amber-500",
       bgColor: "bg-amber-50",
@@ -109,6 +111,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     {
       id: "suggestion" as FeedbackType,
       label: "Góp ý khác",
+      shortLabel: "Góp ý",
       icon: "fa-comment",
       color: "text-blue-500",
       bgColor: "bg-blue-50",
@@ -175,12 +178,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-1 mt-4 -mb-4 -mx-6 px-6">
+          <div className="flex gap-1 mt-4 -mb-4 -mx-6 px-4 sm:px-6 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-t-lg font-medium text-sm transition-colors ${
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-t-lg font-medium text-xs sm:text-sm transition-colors whitespace-nowrap flex-shrink-0 ${
                   activeTab === tab.id
                     ? "bg-white text-earth-900 shadow-sm"
                     : "text-earth-600 hover:bg-white/50"
@@ -191,6 +194,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     activeTab === tab.id ? tab.color : ""
                   }`}
                 />
+                <span className="sm:hidden">{tab.shortLabel}</span>
                 <span className="hidden sm:inline">{tab.label}</span>
               </button>
             ))}
