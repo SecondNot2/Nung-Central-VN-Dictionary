@@ -33,12 +33,6 @@ dist-ssr
 # OS
 Thumbs.db
 Desktop.ini
-
-# Project specific
-# Console.log
-.env
-coverage/
-.env.local
 .agent/workflows/ui-ux-pro-max.md
 .shared/ui-ux-pro-max/data/charts.csv
 .shared/ui-ux-pro-max/data/colors.csv
@@ -59,5 +53,6 @@ coverage/
 .shared/ui-ux-pro-max/scripts/core.py
 .shared/ui-ux-pro-max/scripts/search.py
 .shared/ui-ux-pro-max/scripts/__pycache__/core.cpython-311.pyc
+.env.local
 Console.log
 new-task.md
