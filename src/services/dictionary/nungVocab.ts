@@ -192,17 +192,50 @@ export function smartLookup(text: string): {
   const processedIndices = new Set<number>();
 
   const lowerText = text.toLowerCase();
+  // Tokenize input text once
+  const textTokens = lowerText.split(/\s+/).filter((w) => w.length > 0);
+
   for (const phrase of sortedPhrases) {
-    if (lowerText.includes(phrase)) {
-      directMatches.push({
-        word: phrase,
-        entry: NUNG_DICTIONARY[phrase],
-      });
-      // Đánh dấu các từ trong cụm từ đã được xử lý
-      const phraseWords = phrase.split(/\s+/);
-      for (const pw of phraseWords) {
-        const idx = words.indexOf(pw);
-        if (idx !== -1) processedIndices.add(idx);
+    // Optimization: simple check first
+    if (!lowerText.includes(phrase)) continue;
+
+    const phraseTokens = phrase
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((w) => w.length > 0);
+
+    // Find all occurrences of phrase tokens sequence in text tokens
+    for (let i = 0; i <= textTokens.length - phraseTokens.length; i++) {
+      // Check if any token in this target range is already processed
+      let alreadyProcessed = false;
+      for (let k = 0; k < phraseTokens.length; k++) {
+        if (processedIndices.has(i + k)) {
+          alreadyProcessed = true;
+          break;
+        }
+      }
+      if (alreadyProcessed) continue;
+
+      let match = true;
+      for (let j = 0; j < phraseTokens.length; j++) {
+        // Compare tokens exactly
+        if (textTokens[i + j] !== phraseTokens[j]) {
+          match = false;
+          break;
+        }
+      }
+
+      if (match) {
+        directMatches.push({
+          word: phrase,
+          entry: NUNG_DICTIONARY[phrase],
+        });
+        // Đánh dấu các từ trong cụm từ đã được xử lý
+        for (let k = 0; k < phraseTokens.length; k++) {
+          processedIndices.add(i + k);
+        }
+        // Nhảy qua các token đã xử lý
+        i += phraseTokens.length - 1;
       }
     }
   }

@@ -126,3 +126,29 @@ export {
   lookupWordCombined,
   getCombinedDictionaryCount,
 } from "./dictionary/nungVocab";
+
+// Activity service
+export {
+  getRecentActivities,
+  formatRelativeTime,
+  activityConfig,
+  actionConfig,
+  type ActivityItem,
+  type ActivityType,
+  type ActivityAction,
+} from "./api/activityService";
+
+// Tiered Translation Service (Optimized 3-tier lookup)
+export {
+  smartTranslateText,
+  canTranslateLocally,
+  getTranslationPreview,
+  type TieredTranslationResult,
+  type WordBreakdown,
+} from "./dictionary/tieredTranslationService";
+
+// MegaLLM AI service - additional exports for tiered translation
+export {
+  translateMissingWords,
+  saveApiDiscoveredWord,
+} from "./ai/megaLlmService";

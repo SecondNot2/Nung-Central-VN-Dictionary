@@ -24,7 +24,7 @@ export interface LLMCallOptions {
 const DEFAULT_MEGA_LLM_CONFIG: LLMConfig = {
   apiKey: import.meta.env.VITE_MEGA_LLM_API_KEY || "",
   baseUrl: "https://ai.megallm.io/v1",
-  model: "moonshotai/kimi-k2-instruct-0905",
+  model: "deepseek-ai/deepseek-v3.1",
 };
 
 /**

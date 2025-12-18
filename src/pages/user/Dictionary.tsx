@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { generateSpeech } from "../../services/ai/megaLlmService";
 import {
-  translateText,
-  generateSpeech,
-  checkSpelling,
-} from "../../services/ai/megaLlmService";
+  smartTranslateText,
+  type TieredTranslationResult,
+} from "../../services/dictionary/tieredTranslationService";
 import {
   TranslationResult,
   TranslationHistoryItem,
@@ -174,19 +174,12 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
     }
   }, [user?.id]);
 
-  // Debounced spell check
+  // Spell check disabled to avoid excessive API calls
+  // The tiered translation system handles local lookup first
   useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (inputText.trim().length > 5 && sourceLang === "vi") {
-        const suggestion = await checkSpelling(inputText);
-        setSpellingSuggestion(suggestion);
-      } else {
-        setSpellingSuggestion(null);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [inputText, sourceLang]);
+    // Clear any previous suggestion when input changes
+    setSpellingSuggestion(null);
+  }, [inputText]);
 
   const saveToHistory = async (
     item: Omit<TranslationHistoryItem, "id" | "timestamp">
@@ -275,8 +268,40 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
     setLoading(true);
     setError(null);
     setResult(null); // Clear previous results while loading
+
     try {
-      const data = await translateText(inputText, targetLang, sourceLang);
+      // Use tiered translation (local -> DB -> API fallback)
+      const tieredResult = await smartTranslateText(inputText, targetLang);
+
+      console.log("[Dictionary] Tiered translation result:", {
+        timeTaken: tieredResult.timeTaken,
+        stats: tieredResult.stats,
+        apiCalled: tieredResult.apiCalled,
+      });
+
+      // Convert TieredTranslationResult to TranslationResult format
+      const data: TranslationResult = {
+        original: tieredResult.original,
+        translations: [
+          {
+            language:
+              targetLang === "nung" ? "Tiếng Nùng (Lạng Sơn)" : "Phương ngữ",
+            script: tieredResult.translation,
+            phonetic: tieredResult.translation, // Use same for now
+          },
+        ],
+        definitions: tieredResult.breakdown
+          .filter((b) => b.notes)
+          .map((b) => ({
+            word: b.word,
+            definition: b.translation,
+            example: b.notes || "",
+          })),
+        culturalNote: tieredResult.apiCalled
+          ? `Đã sử dụng ${tieredResult.stats.localHits} từ local, ${tieredResult.stats.inferred} suy luận, ${tieredResult.stats.apiCalls} từ API. Thời gian: ${tieredResult.timeTaken}ms`
+          : `Dịch hoàn toàn từ local dictionary. Thời gian: ${tieredResult.timeTaken}ms`,
+      };
+
       setResult(data);
 
       // Save successful translation to history
@@ -286,7 +311,16 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         targetLang: targetLang,
         result: data,
       });
-      addToast("Dịch thành công!", "success");
+
+      // Show appropriate toast based on source
+      if (tieredResult.stats.unknown > 0) {
+        addToast(
+          `Dịch xong! ${tieredResult.stats.unknown} từ chưa tìm thấy.`,
+          "warning"
+        );
+      } else {
+        addToast(`Dịch thành công! (${tieredResult.timeTaken}ms)`, "success");
+      }
     } catch (err: any) {
       setError(err.message || "Đã xảy ra lỗi không xác định.");
       addToast("Dịch thất bại. Vui lòng thử lại.", "error");
@@ -319,7 +353,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
       <div className="text-center mb-10">
         <h1 className="text-4xl font-serif font-bold text-earth-900 mb-2">
-          Từ điển ngôn ngữ dân tộc
+          Từ điển ngôn ngữ dân tộc - vùng miền
         </h1>
         <p className="text-earth-700">
           Dịch tiếng Việt sang Tiếng Nùng (Lạng Sơn) và Phương ngữ Miền Trung

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { AppRoute, User } from "../../types";
 import { getStats, UserStats } from "../../services/api/userManagementService";
-import { ToastContainer, useToast } from "../../components";
+import { ToastContainer, useToast, RecentActivityList } from "../../components";
 import {
   supabase,
   isSupabaseConfigured,
 } from "../../services/api/supabaseClient";
+import {
+  getRecentActivities,
+  ActivityItem,
+} from "../../services/api/activityService";
 
 interface AdminDashboardProps {
   user: User | null;
@@ -32,12 +36,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
     reports: 0,
     feedback: 0,
   });
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activitiesLoading, setActivitiesLoading] = useState(true);
   const { toasts, addToast, removeToast } = useToast();
 
   useEffect(() => {
     loadStats();
     loadPendingCounts();
+    loadActivities();
   }, []);
 
   const loadStats = async () => {
@@ -84,6 +91,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
     } catch (err) {
       console.error("Error loading pending counts:", err);
     }
+  };
+
+  const loadActivities = async () => {
+    setActivitiesLoading(true);
+    try {
+      const data = await getRecentActivities(15);
+      setActivities(data);
+    } catch (err) {
+      console.error("Error loading activities:", err);
+      addToast("Không thể tải hoạt động gần đây", "error");
+    }
+    setActivitiesLoading(false);
+  };
+
+  const handleRefresh = () => {
+    loadStats();
+    loadPendingCounts();
+    loadActivities();
   };
 
   // Check admin access
@@ -206,14 +231,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
               <p className="text-earth-600 text-sm">Xin chào, {user.name}!</p>
             </div>
             <button
-              onClick={() => {
-                loadStats();
-                loadPendingCounts();
-              }}
-              disabled={loading}
+              onClick={handleRefresh}
+              disabled={loading || activitiesLoading}
               className="flex items-center gap-2 px-4 py-2 bg-earth-100 hover:bg-earth-200 rounded-lg transition-colors text-earth-700"
             >
-              <i className={`fa-solid fa-rotate ${loading ? "fa-spin" : ""}`} />
+              <i
+                className={`fa-solid fa-rotate ${
+                  loading || activitiesLoading ? "fa-spin" : ""
+                }`}
+              />
               Làm mới
             </button>
           </div>
@@ -292,15 +318,49 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user, setRoute }) => {
           </div>
         </div>
 
-        {/* Recent Activity Placeholder */}
-        <div className="bg-white rounded-2xl p-6 border border-earth-200/50">
-          <h2 className="text-lg font-semibold text-earth-900 mb-4">
-            Hoạt động gần đây
-          </h2>
-          <div className="text-center py-8 text-earth-400">
-            <i className="fa-solid fa-clock-rotate-left text-4xl mb-3" />
-            <p>Chức năng đang được phát triển</p>
+        {/* Recent Activity */}
+        <div className="bg-white rounded-2xl border border-earth-200/50 overflow-hidden">
+          <div className="px-6 py-4 border-b border-earth-100 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-bamboo-500 to-bamboo-600 flex items-center justify-center">
+                <i className="fa-solid fa-clock-rotate-left text-white" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-earth-900">
+                  Hoạt động gần đây
+                </h2>
+                <p className="text-xs text-earth-500">
+                  Cập nhật mới nhất từ hệ thống
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={loadActivities}
+              disabled={activitiesLoading}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-earth-600 hover:text-bamboo-600 hover:bg-bamboo-50 rounded-lg transition-colors"
+            >
+              <i
+                className={`fa-solid fa-arrows-rotate ${
+                  activitiesLoading ? "fa-spin" : ""
+                }`}
+              />
+              Làm mới
+            </button>
           </div>
+          <div className="p-4">
+            <RecentActivityList
+              activities={activities}
+              loading={activitiesLoading}
+              setRoute={setRoute}
+            />
+          </div>
+          {activities.length > 0 && (
+            <div className="px-6 py-3 bg-earth-50/50 border-t border-earth-100 text-center">
+              <p className="text-xs text-earth-500">
+                Hiển thị {activities.length} hoạt động gần nhất
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

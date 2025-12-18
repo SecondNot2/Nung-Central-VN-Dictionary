@@ -1,5 +1,9 @@
 import { TranslationResult } from "../../types";
-import { callMegaLLM, cleanJsonResponse, type LLMMessage } from "../ai/llmClient";
+import {
+  callMegaLLM,
+  cleanJsonResponse,
+  type LLMMessage,
+} from "../ai/llmClient";
 import {
   getLanguageDescription,
   getTranslationRules,
@@ -160,5 +164,141 @@ export const sendChatMessage = async (
   } catch (error) {
     console.error("Chat Error:", error);
     return "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại.";
+  }
+};
+
+// ==================== Tiered Translation Support ====================
+
+import { supabase, isSupabaseConfigured } from "../api/supabaseClient";
+
+/**
+ * Translate an array of individual words (not full sentences)
+ * Used by tieredTranslationService for words not found in local/DB
+ * @param words Array of Vietnamese words to translate
+ * @param targetCode Target language code (e.g., "nung")
+ * @returns Map of word -> translation
+ */
+export const translateMissingWords = async (
+  words: string[],
+  targetCode: string
+): Promise<Map<string, string>> => {
+  if (words.length === 0) {
+    return new Map();
+  }
+
+  const { targetLangDesc } = getTranslationRules("", "vi", targetCode);
+  const wordListStr = words.join(", ");
+
+  const prompt = `
+Bạn là chuyên gia ngôn ngữ Tày-Nùng. Nhiệm vụ: Dịch từng TỪ TIẾNG VIỆT sau sang ${targetLangDesc}.
+
+DANH SÁCH TỪ CẦN DỊCH: ${wordListStr}
+
+YÊU CẦU:
+1. Dịch TỪNG TỪ RIÊNG LẺ, không phải cả câu
+2. Nếu không biết từ nào, ghi "[không rõ]"
+3. Ưu tiên phương ngữ Lạng Sơn nếu có nhiều biến thể
+
+OUTPUT: Trả về JSON object với format:
+{
+  "translations": {
+    "từ_tiếng_việt_1": "bản_dịch_1",
+    "từ_tiếng_việt_2": "bản_dịch_2"
+  }
+}
+
+Chỉ trả về JSON, không giải thích.
+  `;
+
+  try {
+    const responseText = await callMegaLLM(
+      [
+        { role: "system", content: SYSTEM_PROMPT_TRANSLATION },
+        { role: "user", content: prompt },
+      ],
+      { temperature: 0.3 }
+    );
+
+    const cleanJson = cleanJsonResponse(responseText);
+    const data = JSON.parse(cleanJson);
+
+    const result = new Map<string, string>();
+
+    if (data.translations && typeof data.translations === "object") {
+      for (const [word, translation] of Object.entries(data.translations)) {
+        if (typeof translation === "string" && translation !== "[không rõ]") {
+          result.set(word.toLowerCase(), translation);
+        }
+      }
+    }
+
+    console.log(
+      `[translateMissingWords] Translated ${result.size}/${words.length} words via MegaLLM`
+    );
+    return result;
+  } catch (error) {
+    console.error("[translateMissingWords] Error:", error);
+    return new Map();
+  }
+};
+
+/**
+ * Save a word discovered via API translation to the contributions table
+ * Status is set to "pending" for admin review
+ * @param word Vietnamese word
+ * @param translation Translation from API
+ * @param targetLang Target language code
+ */
+export const saveApiDiscoveredWord = async (
+  word: string,
+  translation: string,
+  targetLang: string
+): Promise<void> => {
+  if (!isSupabaseConfigured()) {
+    console.log(
+      "[saveApiDiscoveredWord] Supabase not configured, skipping save"
+    );
+    return;
+  }
+
+  try {
+    // Check if word already exists
+    const { data: existing } = await supabase
+      .from("contributions")
+      .select("id")
+      .eq("word", word.toLowerCase())
+      .eq("target_lang", targetLang)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      console.log(
+        `[saveApiDiscoveredWord] Word "${word}" already exists, skipping`
+      );
+      return;
+    }
+
+    // Insert new contribution with pending status
+    const { error } = await supabase.from("contributions").insert({
+      word: word.toLowerCase(),
+      translation,
+      source_lang: "vi",
+      target_lang: targetLang,
+      phonetic: null,
+      region: "API Discovery",
+      example: null,
+      meaning: `Tự động phát hiện qua API - cần xác nhận`,
+      status: "pending",
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(
+      `[saveApiDiscoveredWord] Saved "${word}" -> "${translation}" for review`
+    );
+  } catch (err) {
+    console.error("[saveApiDiscoveredWord] Error saving word:", err);
+    throw err;
   }
 };

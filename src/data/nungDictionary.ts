@@ -3386,15 +3386,23 @@ export const NUNG_DICTIONARY: Record<string, NungWord> = {
     phonetic: "",
     notes: "",
   },
+  ái: {
+    script: "ái",
+    phonetic: "",
+    notes:
+      "Sự cảm mến, ưng bụng. Thường dùng trong lời hỏi thăm, trêu chọc hoặc thú nhận nhẹ nhàng. Ví dụ: Mưng 'ái' vằng Sơn chừ mí? (Mày thích thằng Sơn phải không?).",
+  },
   thích: {
     script: "nắt",
     phonetic: "",
-    notes: "",
+    notes:
+      "Sự say mê, thổ lộ. Sắc thái mạnh hơn 'ái', là 'từ khóa vàng' để tỏ tình (Chài nắt noọng).",
   },
-  yêu: {
+  "yêu / thương": {
     script: "điếp",
     phonetic: "",
-    notes: "",
+    notes:
+      "Tình thương sâu nặng (cấp độ cao nhất). Bao hàm cả sự gắn bó, hy sinh và thề nguyện. Ví dụ: 'Điếp noọng mí kin ngài kin piầu' (Thương em đến mức không ăn sáng, chẳng ăn cơm).",
   },
   "yêu nhau": {
     script: "điếp căn",
@@ -4480,5 +4488,173 @@ export const NUNG_DICTIONARY: Record<string, NungWord> = {
     script: "pẻng kinh",
     phonetic: "",
     notes: "",
+  },
+
+  // ===== ĐẠI TỪ NHÂN XƯNG VÀ CÁCH XƯNG HÔ =====
+  /**
+   * LƯU Ý VĂN HÓA: Tránh dùng các cặp đại từ (Ngồ-Nì, Cau-Mưng) với người lớn tuổi (ông bà, chú bác).
+   * Trong văn hóa Tày - Nùng Lạng Sơn, xưng hô với người trên bằng các từ này bị coi là thiếu lễ phép.
+   * Với người trên, phải dùng danh từ chỉ thứ bậc (như Lục, Noọng, Lan...).
+   */
+
+  // --- Ngôi thứ 1 (Tôi, Tao) ---
+  tôi: {
+    script: "ngồ / ngò / khỏi",
+    phonetic: "",
+    notes:
+      "Ngồ/Ngò (thân mật, phổ biến vùng biên giới); Khỏi (lịch sự). Tránh dùng Cau/Câu (có thể mang sắc thái giận dữ).",
+  },
+  tao: {
+    script: "ngồ / cau / câu / khảu",
+    phonetic: "",
+    notes:
+      "Ngồ (bình thường); Cau/Câu/Khảu (Truyền thống, nhưng ở Lạng Sơn thường dùng khi cãi vã, tức giận).",
+  },
+  tớ: {
+    script: "ngỏ / ngồ",
+    phonetic: "",
+    notes: "Thân mật. Ngỏ (bạn bè, tình cảm); Ngồ (suồng sã hơn).",
+  },
+
+  // --- Ngôi thứ 2 (Bạn, Mày) ---
+  bạn: {
+    script: "nì / nỉ / mưng / mờng",
+    phonetic: "",
+    notes:
+      "Nì/Nỉ (đi với Ngồ, thân mật); Mưng/Mờng (đi với Cau, truyền thống hoặc khi cãi vã).",
+  },
+  mày: {
+    script: "nì / nỉ / mưng / mờng",
+    phonetic: "",
+    notes:
+      "Nì/Nỉ (thân mật); Mưng/Mờng (thường dùng khi tức giận hoặc rất thân).",
+  },
+  cậu: {
+    script: "nì / nỉ",
+    phonetic: "",
+    notes: "Thân mật, dùng trong cặp Ngồ-Nì hoặc Ngỏ-Nỉ.",
+  },
+  "nó (hắn, y)": {
+    script: "te",
+    phonetic: "",
+    notes: "Ngôi 3 số ít. Chỉ người/vật được nhắc đến.",
+  },
+  "nó (biến thể vùng khác)": {
+    script: "mền",
+    phonetic: "",
+    notes: "Ngôi 3 số ít. Tùy vùng, mức độ dùng ít hơn 'te'.",
+  },
+  "chúng tôi": {
+    script: "boong ngồ",
+    phonetic: "",
+    notes:
+      "Ngôi 1 số nhiều (không bao gồm người nghe). 'Boong' là từ chỉ tập hợp + 'ngồ'.",
+  },
+  "chúng tao / bọn tao": {
+    script: "boong cau / boong ngồ",
+    phonetic: "",
+    notes: "Ngôi 1 số nhiều. Sắc thái tùy thuộc vào việc dùng 'cau' hay 'ngồ'.",
+  },
+  "chúng mày / các bạn (thân mật)": {
+    script: "boong mưng / boong nì",
+    phonetic: "",
+    notes: "Ngôi 2 số nhiều. Dùng với nhóm ngang hàng hoặc dưới.",
+  },
+  "các cậu / các bạn (thân, lịch sự hơn)": {
+    script: "boong nỉ",
+    phonetic: "",
+    notes: "Ngôi 2 số nhiều. Thân mật, ít thô hơn 'boong mầư'.",
+  },
+  "chúng nó / bọn họ": {
+    script: "boong te",
+    phonetic: "",
+    notes: "Ngôi 3 số nhiều. Chỉ nhóm người/vật được nhắc đến.",
+  },
+  "ta / chúng mình (bao gồm người nghe)": {
+    script: "hâu / hây / rầu",
+    phonetic: "",
+    notes:
+      "Ngôi 1 bao hàm (người nói + người nghe). Sắc thái gần gũi, cộng đồng: 'chúng ta, chúng mình'.",
+  },
+  "bố (đại từ xưng hô)": {
+    script: "pò",
+    phonetic: "",
+    notes:
+      "Dùng làm xưng hô thay cho đại từ ngôi 1 hoặc ngôi 2 trong gia đình (bố – con).",
+  },
+  "mẹ (đại từ xưng hô)": {
+    script: "mé / mè / mê",
+    phonetic: "",
+    notes:
+      "Dùng xưng hô mẹ – con. Một số vùng dùng 'mé' chỉ bà nội, cần phân biệt theo ngữ cảnh.",
+  },
+  "ông nội (đại từ xưng hô)": {
+    script: "pú",
+    phonetic: "",
+    notes: "Dùng xưng hô ông – cháu hoặc gọi/nhắc đến ông.",
+  },
+  "bà nội (đại từ xưng hô)": {
+    script: "yả",
+    phonetic: "",
+    notes: "Dùng xưng hô bà – cháu hoặc gọi/nhắc đến bà.",
+  },
+  "ông ngoại (đại từ xưng hô)": {
+    script: "ta",
+    phonetic: "",
+    notes: "Danh xưng cho ông ngoại, có thể dùng làm đại từ xưng hô.",
+  },
+  "bà ngoại (đại từ xưng hô)": {
+    script: "tái",
+    phonetic: "",
+    notes: "Danh xưng cho bà ngoại, có thể dùng làm đại từ xưng hô.",
+  },
+  "anh/chị (người hơn tuổi)": {
+    script: "pỉ",
+    phonetic: "",
+    notes:
+      "Dùng gọi chung người hơn tuổi (anh/chị), cũng hay dùng trong xưng hô thân mật ngoài gia đình.",
+  },
+  "anh trai (xưng hô)": {
+    script: "chài",
+    phonetic: "",
+    notes:
+      "Danh xưng cho anh trai; cũng có thể dùng trong xưng hô xã hội (anh – em).",
+  },
+  "chị gái (xưng hô)": {
+    script: "ché / chế",
+    phonetic: "",
+    notes: "Danh xưng cho chị gái; hay dùng anh/chị – em trong giao tiếp.",
+  },
+  em: {
+    script: "noọng",
+    phonetic: "",
+    notes:
+      "Chỉ người ít tuổi hơn; dùng trong gia đình, bạn bè, và xưng hô tình cảm (anh – em).",
+  },
+  "con (xưng hô)": {
+    script: "lúc / lục",
+    phonetic: "",
+    notes: "Con (của bố mẹ). Dùng xưng 'con' với bố mẹ, ông bà.",
+  },
+  "cháu (xưng hô)": {
+    script: "lan",
+    phonetic: "",
+    notes: "Cháu – dùng xưng với ông bà, cô bác lớn tuổi.",
+  },
+  "bác gái (xưng hô)": {
+    script: "bả / pả",
+    phonetic: "",
+    notes: "Danh xưng cho bác gái; dùng gọi hoặc xưng thay đại từ nhân xưng.",
+  },
+  "bác trai (xưng hô)": {
+    script: "lúng",
+    phonetic: "",
+    notes: "Danh xưng cho bác trai; dùng trong xưng hô vai trên.",
+  },
+  "cô/thím": {
+    script: "a / á",
+    phonetic: "",
+    notes:
+      "Dùng gọi cô, thím hoặc phụ nữ vai dưới/bằng anh chị bố mẹ, tùy vùng.",
   },
 };

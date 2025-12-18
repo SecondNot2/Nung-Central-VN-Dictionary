@@ -21,3 +21,6 @@ export { default as DiscussionItem } from "./discussion/DiscussionItem";
 export { default as DiscussionSection } from "./discussion/DiscussionSection";
 
 export { default as DiscussionModal } from "./discussion/DiscussionModal";
+
+// Admin components
+export { RecentActivityList } from "./admin";
