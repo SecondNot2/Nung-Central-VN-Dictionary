@@ -24,6 +24,7 @@
 - **Dịch song ngữ**: Hỗ trợ dịch Việt ↔ Nùng với AI (MegaLLM/Gemini API)
 - **Engine dịch thuật thông minh**: Tự động ưu tiên khớp cụm từ dài nhất, ngăn chặn lặp từ và khớp sai chuỗi con
 - **Suy luận từ vựng (Inference)**: Tự động suy luận nghĩa từ đơn từ các cụm từ có sẵn khi không tìm thấy kết quả trực tiếp
+- **Từ điển chuẩn hóa (Enhanced Data)**: Dữ liệu được tái cấu trúc định kỳ để đảm bảo tính nhất quán (Chuẩn hóa phát âm/script, bóc tách loại từ, tích hợp ví dụ minh họa)
 - **Tra cứu offline**: Từ điển có sẵn với hơn 1000+ từ vựng được hiệu chỉnh theo sắc thái Lạng Sơn
 - **Phát âm**: Hỗ trợ text-to-speech cho cả hai ngôn ngữ
 - **Lịch sử dịch**: Lưu trữ các bản dịch để tra cứu lại (đồng bộ cloud cho user đăng nhập)

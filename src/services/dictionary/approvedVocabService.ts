@@ -103,6 +103,8 @@ function convertToContributedWord(
 ): ContributedWord {
   return {
     script: contribution.translation,
+    category: "noun", // Default for contributions
+    isRoot: true,
     phonetic: contribution.phonetic || "",
     notes: contribution.example || undefined,
     // Extended fields for contributions

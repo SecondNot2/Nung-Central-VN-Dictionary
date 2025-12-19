@@ -4,6 +4,16 @@ export interface WordDefinition {
   example: string;
 }
 
+export interface NungWord {
+  script: string; // Từ đơn hoặc cụm từ gốc
+  category: "noun" | "verb" | "adjective" | "pronoun" | "classifier" | "phrase";
+  topic?: string; // Ví dụ: 'animals', 'body_parts', 'commerce'
+  isRoot: boolean; // True nếu là từ đơn nòng cốt
+  phonetic: string;
+  notes?: string;
+  examples?: string[];
+}
+
 export interface TranslationDetail {
   language: string; // e.g., "Tiếng Nùng"
   script: string; // Original transcription / Written form

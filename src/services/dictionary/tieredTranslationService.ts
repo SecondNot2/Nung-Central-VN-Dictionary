@@ -30,6 +30,7 @@ export interface WordBreakdown {
   source: "local" | "db" | "api" | "inferred" | "unknown";
   confidence?: "high" | "medium" | "low";
   notes?: string;
+  category?: string; // category from NungWord
 }
 
 export interface TieredTranslationResult {
@@ -97,6 +98,7 @@ export async function smartTranslateText(
       source: "local",
       confidence: "high",
       notes: match.entry.notes,
+      category: match.entry.category,
     });
     localHits++;
   }
@@ -126,6 +128,7 @@ export async function smartTranslateText(
         source: "db",
         confidence: "high",
         notes: dbEntry.notes,
+        category: dbEntry.category,
       });
       dbHits++;
     } else {
@@ -189,7 +192,11 @@ export async function smartTranslateText(
   }
 
   // ===== BƯỚC 6: Sắp xếp breakdown theo thứ tự xuất hiện trong văn bản gốc =====
-  const sortedBreakdown = sortBreakdownByOriginalOrder(text, breakdown);
+  let sortedBreakdown = sortBreakdownByOriginalOrder(text, breakdown);
+
+  // ===== BƯỚC 6.5: Áp dụng quy tắc ghép từ (Composition Rules) =====
+  // Ví dụ: [classifier] + [noun] -> "tua" + "ma" = "tua ma"
+  sortedBreakdown = composeBreakdown(sortedBreakdown);
 
   // ===== BƯỚC 7: Ghép kết quả =====
   const translation = sortedBreakdown.map((item) => item.translation).join(" ");
@@ -241,6 +248,47 @@ function sortBreakdownByOriginalOrder(
     const indexB = lowerText.indexOf(b.word.toLowerCase());
     return indexA - indexB;
   });
+}
+
+/**
+ * Ghép các từ đơn lẻ thành cụm từ theo quy tắc ngữ pháp Nùng
+ * Hiện tại hỗ trợ: Classifier + Noun (ví dụ: con + chó -> tua ma)
+ */
+function composeBreakdown(items: WordBreakdown[]): WordBreakdown[] {
+  if (items.length < 2) return items;
+
+  const result: WordBreakdown[] = [];
+
+  for (let i = 0; i < items.length; i++) {
+    const current = items[i];
+    const next = items[i + 1];
+
+    // Quy tắc 1: Classifier + Noun (con + chó, cái + bàn, ...)
+    if (
+      next &&
+      current.category === "classifier" &&
+      (next.category === "noun" || !next.category)
+    ) {
+      result.push({
+        word: `${current.word} ${next.word}`,
+        translation: `${current.translation} ${next.translation}`,
+        source:
+          current.source === "local" && next.source === "local"
+            ? "local"
+            : "inferred",
+        confidence: "high",
+        category: "noun",
+        notes: `Ghép từ tự động: ${current.category} + ${
+          next.category || "unknown"
+        }`,
+      });
+      i++; // Bỏ qua từ tiếp theo vì đã ghép
+    } else {
+      result.push(current);
+    }
+  }
+
+  return result;
 }
 
 /**

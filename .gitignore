@@ -26,11 +26,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# .github
-# .shared
-# .agent
-localhost.log
 .env.local
+Troubleshooting_Tips.md
 .shared/ui-ux-pro-max/data/charts.csv
 .shared/ui-ux-pro-max/data/colors.csv
 .shared/ui-ux-pro-max/data/landing.csv
@@ -51,5 +48,5 @@ localhost.log
 .shared/ui-ux-pro-max/scripts/search.py
 .shared/ui-ux-pro-max/scripts/__pycache__/core.cpython-311.pyc
 .agent/workflows/ui-ux-pro-max.md
-Troubleshooting_Tips.md
+docs/feature-dictionary-refactor.md
 docs/feature-smart-translation.md
