@@ -9,9 +9,24 @@ import { Contribution, User, AppRoute } from "../../types";
 
 // Language Options
 const languageOptions = [
-  { value: "vi", label: "Tiếng Việt", icon: "fa-flag" },
-  { value: "nung", label: "Tiếng Nùng (Lạng Sơn)", icon: "fa-mountain" },
-  { value: "central", label: "Tiếng Nghệ An / Hà Tĩnh", icon: "fa-wheat-awn" },
+  {
+    value: "vi",
+    label: "Tiếng phổ thông",
+    shortLabel: "Phổ thông",
+    icon: "fa-flag",
+  },
+  {
+    value: "nung",
+    label: "Tiếng Nùng (Lạng Sơn)",
+    shortLabel: "Nùng",
+    icon: "fa-mountain",
+  },
+  {
+    value: "central",
+    label: "Phương ngữ miền Trung",
+    shortLabel: "Miền Trung",
+    icon: "fa-wheat-awn",
+  },
 ];
 
 const regionOptions = [

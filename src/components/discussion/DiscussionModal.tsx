@@ -12,7 +12,10 @@ import { createReport } from "../../services/api/reportService";
 import DiscussionItem from "../discussion/DiscussionItem";
 import Pagination from "../common/Pagination";
 import { User, TranslationResult } from "../../types";
-import { supabase, isSupabaseConfigured } from "../../services/api/supabaseClient";
+import {
+  supabase,
+  isSupabaseConfigured,
+} from "../../services/api/supabaseClient";
 
 interface DiscussionModalProps {
   isOpen: boolean;
@@ -215,59 +218,62 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
         onClick={onClose}
       />
 
-      {/* Modal Content */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      {/* Modal Content (Lite) */}
+      <div className="relative bg-white border-2 border-black shadow-brutal w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-earth-200">
-          <h2 className="text-xl font-bold text-earth-900">
-            Thảo luận về bản dịch
+        <div className="flex items-center justify-between px-6 py-4 bg-black text-white border-b-2 border-black">
+          <h2 className="text-xl font-black uppercase tracking-tight">
+            Thảo luận bản dịch
           </h2>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full hover:bg-earth-100 flex items-center justify-center transition-colors"
+            className="w-10 h-10 border-2 border-white bg-white text-black flex items-center justify-center hover:bg-nung-red hover:text-white transition-colors"
           >
-            <i className="fa-solid fa-xmark text-earth-600 text-xl" />
+            <i className="fa-solid fa-xmark" />
           </button>
         </div>
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
-          {/* Translation Result Summary */}
+          {/* Translation Result Summary (Lite) */}
           {result && (
-            <div className="px-6 py-4 bg-earth-50 border-b border-earth-200">
-              {result.translations.map((trans, idx) => (
-                <div key={idx} className="mb-3 last:mb-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium text-earth-500 uppercase">
+            <div className="px-6 py-6 bg-gray-50 border-b-2 border-black">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {result.translations.map((trans, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-white border-2 border-black shadow-brutal-sm"
+                  >
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">
                       {trans.language}
                     </span>
+                    <p className="text-xl font-black text-black leading-tight">
+                      {trans.script}
+                    </p>
+                    <p className="text-sm text-nung-red italic font-bold mt-1">
+                      {trans.phonetic || "Chưa có phiên âm"}
+                    </p>
                   </div>
-                  <p className="text-lg font-bold text-earth-900">
-                    {trans.script}
-                  </p>
-                  <p className="text-sm text-bamboo-600 italic">
-                    {trans.phonetic}
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
 
               {/* Definitions preview */}
               {result.definitions && result.definitions.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-earth-200">
-                  <p className="text-xs font-medium text-earth-500 uppercase mb-2">
-                    Từ vựng
+                <div className="mt-6 pt-4 border-t-2 border-black/10">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                    Từ vựng liên quan
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {result.definitions.slice(0, 3).map((def, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-white rounded-full text-sm text-earth-700 border border-earth-200"
+                        className="px-3 py-1 bg-white border-2 border-black text-xs font-bold"
                       >
                         {def.word}
                       </span>
                     ))}
                     {result.definitions.length > 3 && (
-                      <span className="px-2 py-1 text-sm text-earth-500">
+                      <span className="px-2 py-1 text-[10px] font-black uppercase text-gray-400">
                         +{result.definitions.length - 3} từ khác
                       </span>
                     )}
@@ -277,10 +283,10 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
             </div>
           )}
 
-          {/* Comment Input */}
-          <div className="px-6 py-4 border-b border-earth-100 bg-earth-50/50">
-            <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-bamboo-400 to-bamboo-600 flex items-center justify-center flex-shrink-0 overflow-hidden">
+          {/* Comment Input (Lite) */}
+          <div className="px-6 py-6 border-b-2 border-black bg-white">
+            <div className="flex gap-4">
+              <div className="w-12 h-12 border-2 border-black bg-gray-100 flex items-center justify-center flex-shrink-0 shadow-brutal-sm">
                 {user?.avatar ? (
                   <img
                     src={user.avatar}
@@ -288,10 +294,10 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <i className="fa-solid fa-user text-white text-sm" />
+                  <i className="fa-solid fa-user text-black text-lg" />
                 )}
               </div>
-              <div className="flex-1 flex items-center bg-earth-100 rounded-full px-4 py-2">
+              <div className="flex-1 flex items-center border-2 border-black bg-white px-4 py-3 shadow-brutal-sm">
                 <input
                   type="text"
                   value={newComment}
@@ -306,27 +312,27 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
                     user ? "Viết bình luận..." : "Đăng nhập để bình luận"
                   }
                   disabled={!user}
-                  className="flex-1 bg-transparent outline-none text-earth-800 placeholder-earth-400 disabled:cursor-not-allowed"
+                  className="flex-1 bg-transparent outline-none text-black font-medium placeholder-gray-400 disabled:cursor-not-allowed"
                 />
                 <button
                   onClick={handleSubmitComment}
                   disabled={!user || !newComment.trim() || submitting}
-                  className="ml-2 text-bamboo-600 hover:text-bamboo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="ml-3 text-black hover:text-nung-red disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
                   {submitting ? (
-                    <i className="fa-solid fa-circle-notch fa-spin" />
+                    <i className="fa-solid fa-circle-notch fa-spin text-xl" />
                   ) : (
-                    <i className="fa-solid fa-paper-plane" />
+                    <i className="fa-solid fa-paper-plane text-xl" />
                   )}
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Sort & Count */}
+          {/* Sort & Count (Lite) */}
           {totalCount > 0 && (
-            <div className="flex items-center justify-between px-6 py-3 border-b border-earth-100">
-              <span className="text-sm text-earth-600">
+            <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-gray-50">
+              <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
                 {totalCount} bình luận
               </span>
               <select
@@ -335,11 +341,11 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
                   setSortBy(e.target.value as SortOption);
                   setCurrentPage(1);
                 }}
-                className="px-3 py-1.5 border border-earth-200 rounded-lg text-sm bg-white focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none"
+                className="px-4 py-2 border-2 border-black bg-white text-[10px] font-black uppercase tracking-widest outline-none shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                    SẮP XẾP: {opt.label.toUpperCase()}
                   </option>
                 ))}
               </select>
@@ -401,32 +407,34 @@ const DiscussionModal: React.FC<DiscussionModalProps> = ({
         </div>
       </div>
 
-      {/* Toast Notification */}
+      {/* Toast Notification (Lite) */}
       {toast && (
         <div
-          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in ${
+          className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 border-2 border-black shadow-brutal animate-in slide-in-from-bottom-4 flex items-center gap-3 ${
             toast.type === "success"
-              ? "bg-green-500 text-white"
+              ? "bg-green-50 text-green-800"
               : toast.type === "error"
-              ? "bg-red-500 text-white"
+              ? "bg-red-50 text-red-800"
               : toast.type === "warning"
-              ? "bg-amber-500 text-white"
-              : "bg-blue-500 text-white"
+              ? "bg-amber-50 text-amber-800"
+              : "bg-blue-50 text-blue-800"
           }`}
-          onAnimationEnd={() => setTimeout(() => setToast(null), 2000)}
+          onAnimationEnd={() => setTimeout(() => setToast(null), 3000)}
         >
           <i
             className={`fa-solid ${
               toast.type === "success"
-                ? "fa-check-circle"
+                ? "fa-circle-check"
                 : toast.type === "error"
-                ? "fa-times-circle"
+                ? "fa-circle-xmark"
                 : toast.type === "warning"
-                ? "fa-exclamation-triangle"
-                : "fa-info-circle"
-            }`}
+                ? "fa-triangle-exclamation"
+                : "fa-circle-info"
+            } text-lg`}
           />
-          <span className="text-sm font-medium">{toast.message}</span>
+          <span className="text-sm font-black uppercase tracking-widest leading-none mt-0.5">
+            {toast.message}
+          </span>
         </div>
       )}
     </div>

@@ -74,19 +74,22 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
   const sourceLanguageOptions: SelectOption[] = [
     {
       value: "vi",
-      label: "Tiếng Việt",
+      label: "Tiếng phổ thông",
+      shortLabel: "Phổ thông",
       icon: "fa-flag",
       description: "Ngôn ngữ phổ thông",
     },
     {
       value: "nung",
       label: "Tiếng Nùng (Lạng Sơn)",
+      shortLabel: "Nùng",
       icon: "fa-mountain",
       description: "Dân tộc Nùng",
     },
     {
       value: "central",
-      label: "Tiếng Nghệ An / Hà Tĩnh",
+      label: "Phương ngữ miền Trung",
+      shortLabel: "Miền Trung",
       icon: "fa-wheat-awn",
       description: "Phương ngữ miền Trung",
     },
@@ -96,24 +99,28 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
     {
       value: "nung",
       label: "Tiếng Nùng (Lạng Sơn)",
+      shortLabel: "Nùng",
       icon: "fa-mountain",
       description: "Dân tộc Nùng",
     },
     {
       value: "central",
-      label: "Tiếng Nghệ An / Hà Tĩnh",
+      label: "Phương ngữ miền Trung",
+      shortLabel: "Miền Trung",
       icon: "fa-wheat-awn",
       description: "Phương ngữ miền Trung",
     },
     {
       value: "vi",
-      label: "Tiếng Việt",
+      label: "Tiếng phổ thông",
+      shortLabel: "Phổ thông",
       icon: "fa-flag",
       description: "Ngôn ngữ phổ thông",
     },
     {
       value: "all",
       label: "Cả hai (Nùng & MT)",
+      shortLabel: "Tất cả",
       icon: "fa-layer-group",
       description: "Dịch sang tất cả",
     },
@@ -351,16 +358,16 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       {/* Toast Container */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      <div className="text-center mb-12 relative">
+      <div className="text-center mb-10 relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-12 bg-nung-sand/40 -rotate-1 skew-x-12 blur-xl -z-10"></div>
-        <h1 className="text-4xl md:text-6xl font-display font-bold text-nung-dark mb-2 text-outline-light">
+        <h1 className="text-3xl md:text-6xl font-bold text-black mb-2 tracking-tight">
           Từ điển{" "}
           <span className="bg-nung-red text-white px-3 py-0.5 border-2 border-black inline-block transform rotate-1 shadow-brutal-sm ">
             Nùng
           </span>{" "}
           & Miền Trung
         </h1>
-        <p className="text-nung-blue font-serif font-bold text-lg uppercase tracking-widest mt-6">
+        <p className="text-gray-400 font-bold text-xs md:text-lg uppercase tracking-[0.2em] mt-4 md:mt-6">
           Gìn giữ ngôn ngữ - Kết nối cội nguồn
         </p>
       </div>
@@ -379,48 +386,93 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         cancelText="Hủy"
       />
 
-      {/* Input Section */}
-      <div className="bg-white border-4 border-black shadow-brutal-lg p-8 mb-12 relative overflow-hidden group">
+      {/* Input Section (Lite) */}
+      <div className="bg-white border-2 border-black shadow-brutal-sm p-4 md:p-8 mb-8 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-16 h-16 bg-nung-red/5 -mr-8 -mt-8 transform rotate-45"></div>
 
-        <div className="flex flex-col md:flex-row gap-6 mb-8">
-          <div className="flex-1">
-            <CustomSelect
-              value={sourceLang}
-              onChange={setSourceLang}
-              options={sourceLanguageOptions}
-              label="Ngôn ngữ nguồn"
-            />
+        {/* Global Language Selection Container */}
+        <div className="mb-6">
+          {/* Desktop Layout (Standard) */}
+          <div className="hidden md:flex flex-row gap-6 items-end">
+            <div className="flex-1">
+              <CustomSelect
+                value={sourceLang}
+                onChange={setSourceLang}
+                options={sourceLanguageOptions}
+                label="Ngôn ngữ nguồn"
+              />
+            </div>
+            <div className="pb-2">
+              <button
+                type="button"
+                onClick={handleSwapLanguages}
+                disabled={targetLang === "all"}
+                className={`w-12 h-12 border-2 border-black flex items-center justify-center transition-all shadow-brutal-sm ${
+                  targetLang === "all"
+                    ? "bg-gray-100 text-gray-300 cursor-not-allowed"
+                    : "bg-white text-black hover:bg-black hover:text-white"
+                }`}
+                title="Hoán đổi ngôn ngữ"
+              >
+                <i className="fa-solid fa-right-left"></i>
+              </button>
+            </div>
+            <div className="flex-1">
+              <CustomSelect
+                value={targetLang}
+                onChange={setTargetLang}
+                options={getFilteredTargetOptions()}
+                label="Ngôn ngữ đích"
+              />
+            </div>
           </div>
-          <div className="flex items-end justify-center pb-2">
-            <button
-              type="button"
-              onClick={handleSwapLanguages}
-              disabled={targetLang === "all"}
-              className={`w-12 h-12 border-2 border-black flex items-center justify-center transition-all shadow-brutal-sm ${
-                targetLang === "all"
-                  ? "bg-gray-100 text-gray-300 cursor-not-allowed opacity-50"
-                  : "bg-white text-nung-red hover:bg-nung-red hover:text-white hover:shadow-none hover:translate-x-1 hover:translate-y-1"
-              }`}
-              title="Hoán đổi ngôn ngữ"
-            >
-              <i className="fa-solid fa-arrow-right-arrow-left hidden md:block"></i>
-              <i className="fa-solid fa-arrow-down-arrow-up md:hidden"></i>
-            </button>
-          </div>
-          <div className="flex-1">
-            <CustomSelect
-              value={targetLang}
-              onChange={setTargetLang}
-              options={getFilteredTargetOptions()}
-              label="Ngôn ngữ đích"
-            />
+
+          {/* Mobile Layout (Compact) */}
+          <div className="flex md:hidden flex-col gap-2">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                Nguồn
+              </span>
+              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">
+                Đích
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CustomSelect
+                value={sourceLang}
+                onChange={setSourceLang}
+                options={sourceLanguageOptions}
+                label="Nguồn"
+                hideLabel
+                isCompact
+              />
+              <button
+                type="button"
+                onClick={handleSwapLanguages}
+                disabled={targetLang === "all"}
+                className={`w-10 h-10 border-2 border-black flex items-center justify-center shrink-0 transition-all shadow-brutal-sm ${
+                  targetLang === "all"
+                    ? "bg-gray-100 text-gray-300 cursor-not-allowed shadow-none"
+                    : "bg-white text-black active:bg-black active:text-white"
+                }`}
+              >
+                <i className="fa-solid fa-repeat text-sm"></i>
+              </button>
+              <CustomSelect
+                value={targetLang}
+                onChange={setTargetLang}
+                options={getFilteredTargetOptions()}
+                label="Đích"
+                hideLabel
+                isCompact
+              />
+            </div>
           </div>
         </div>
 
         <div className="relative">
           <textarea
-            className="w-full p-6 border-4 border-black font-body text-xl font-medium outline-none transition-all min-h-[160px] bg-nung-sand/10 text-nung-dark placeholder-gray-400 focus:bg-white"
+            className="w-full p-4 md:p-6 border-2 border-black font-medium text-lg md:text-xl outline-none transition-all min-h-[140px] md:min-h-[160px] bg-gray-50 text-black placeholder-gray-400 focus:bg-white"
             placeholder="Nhập nội dung cần tra cứu..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -429,11 +481,13 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
           {/* Spell Check Suggestion */}
           {spellingSuggestion && (
-            <div className="absolute bottom-6 left-6 z-10 bg-white border-2 border-black px-4 py-2 shadow-brutal-sm animate-fade-in flex items-center gap-3">
-              <span className="text-gray-500 text-sm font-bold">Gợi ý:</span>
+            <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10 bg-white border-2 border-black px-3 py-1.5 md:px-4 md:py-2 shadow-brutal-sm animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-2 md:gap-3">
+              <span className="text-gray-400 text-[10px] md:text-sm font-black uppercase tracking-widest">
+                Gợi ý:
+              </span>
               <button
                 onClick={applySuggestion}
-                className="text-nung-red font-bold hover:underline"
+                className="text-nung-red font-bold hover:underline transition-all text-sm md:text-base"
               >
                 {spellingSuggestion}
               </button>
@@ -444,10 +498,10 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
             <button
               onClick={handleTranslate}
               disabled={loading || !inputText.trim()}
-              className={`group flex items-center gap-3 px-8 py-4 border-2 border-black font-serif font-black text-xl uppercase tracking-wider transition-all shadow-brutal ${
+              className={`group flex items-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 border-2 border-black font-black text-sm md:text-xl uppercase tracking-widest transition-all shadow-brutal-sm ${
                 loading
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none translate-x-1 translate-y-1"
-                  : "bg-nung-red text-white hover:bg-white hover:text-nung-red hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
+                  : "bg-black text-white hover:bg-nung-red hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5"
               }`}
             >
               {loading ? (
@@ -466,36 +520,33 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         </div>
       </div>
 
-      {/* Error Alert */}
+      {/* Error Alert (Lite) */}
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-r shadow-sm flex items-start">
+        <div className="bg-red-50 border-2 border-black text-red-700 p-4 mb-8 shadow-brutal-sm flex items-start animate-in slide-in-from-top-2">
           <i className="fa-solid fa-triangle-exclamation mt-1 mr-3"></i>
           <div>
-            <p className="font-bold">Đã xảy ra lỗi</p>
-            <p>{error}</p>
+            <p className="font-black uppercase text-xs tracking-widest mb-1">
+              Đã xảy ra lỗi
+            </p>
+            <p className="font-medium text-sm italic">{error}</p>
           </div>
         </div>
       )}
 
-      {/* Loading Skeleton */}
+      {/* Loading Skeleton (Lite) */}
       {loading && !result && (
         <div className="space-y-8 animate-pulse">
-          <div className="bg-white border-4 border-black shadow-brutal p-8">
-            <div className="h-8 bg-gray-200 border-2 border-black w-1/4 mb-6"></div>
+          <div className="bg-white border-2 border-black shadow-brutal-sm p-8">
+            <div className="h-8 bg-gray-100 border-2 border-black w-1/4 mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="h-20 bg-gray-100 border-2 border-black"></div>
-              <div className="h-20 bg-gray-100 border-2 border-black"></div>
+              <div className="h-20 bg-gray-50 border-2 border-black"></div>
+              <div className="h-20 bg-gray-50 border-2 border-black"></div>
             </div>
-          </div>
-          <div className="bg-white border-4 border-black shadow-brutal p-8">
-            <div className="h-8 bg-gray-200 border-2 border-black w-1/3 mb-6"></div>
-            <div className="h-4 bg-gray-100 border-2 border-black w-full mb-4"></div>
-            <div className="h-4 bg-gray-100 border-2 border-black w-2/3"></div>
           </div>
         </div>
       )}
 
-      {/* Results Section */}
+      {/* Results Section (Lite) */}
       {result && !loading && (
         <div className="space-y-12 mb-20">
           {/* Translation Cards */}
@@ -503,16 +554,15 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
             {result.translations.map((trans, idx) => (
               <div
                 key={idx}
-                className="bg-white border-4 border-black shadow-brutal-lg overflow-hidden relative group animate-fade-in"
+                className="bg-white border-2 border-black shadow-brutal-sm relative group animate-in fade-in zoom-in duration-300"
               >
-                <div className="bg-nung-sand border-b-4 border-black px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div className="bg-gray-50 border-b-2 border-black px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                   <div>
-                    <h2 className="text-3xl font-display font-bold text-nung-dark uppercase tracking-tight">
+                    <h2 className="text-xl font-black uppercase tracking-tight">
                       {trans.language}
                     </h2>
-                    <div className="h-1 w-20 bg-nung-red mt-1"></div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <SaveTranslationButton
                       user={user || null}
                       originalText={inputText}
@@ -534,7 +584,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                       onClick={() =>
                         playAudio(trans.phonetic || trans.script, idx)
                       }
-                      className="bg-black text-white px-6 py-2 border-2 border-black font-bold flex items-center gap-3 shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+                      className="bg-white text-black px-4 py-2 border-2 border-black font-bold uppercase text-[10px] tracking-widest flex items-center gap-2 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                       disabled={ttsLoading !== null}
                       title="Nghe phát âm"
                     >
@@ -566,21 +616,21 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                   </div>
                 </div>
 
-                <div className="p-8 grid gap-8 md:grid-cols-2 bg-paper">
-                  <div className="col-span-1 p-6 bg-white border-2 border-black shadow-brutal-sm rotate-1 transition-transform group-hover:rotate-0">
-                    <label className="text-xs font-black text-nung-red uppercase tracking-widest mb-3 block">
+                <div className="p-8 grid gap-8 md:grid-cols-2">
+                  <div className="col-span-1 p-6 bg-white border-2 border-black shadow-brutal-sm">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">
                       Văn bản gốc / Chữ viết
                     </label>
-                    <p className="text-4xl text-nung-dark font-display font-black break-words leading-tight">
+                    <p className="text-3xl font-black break-words leading-tight">
                       {trans.script}
                     </p>
                   </div>
-                  <div className="col-span-1 p-6 bg-nung-blue/5 border-2 border-black shadow-brutal-sm -rotate-1 transition-transform group-hover:rotate-0">
-                    <label className="text-xs font-black text-nung-blue uppercase tracking-widest mb-3 block">
+                  <div className="col-span-1 p-6 bg-gray-50 border-2 border-black shadow-brutal-sm">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">
                       Phiên âm / Cách đọc
                     </label>
-                    <p className="text-2xl text-nung-blue italic font-bold break-words">
-                      {trans.phonetic || "N/A"}
+                    <p className="text-xl text-nung-red italic font-bold break-words">
+                      {trans.phonetic || "Chưa có phiên âm"}
                     </p>
                   </div>
                 </div>
@@ -592,24 +642,20 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Definitions */}
             {result.definitions && result.definitions.length > 0 && (
-              <div className="bg-white border-4 border-black p-8 shadow-brutal relative">
-                <div className="absolute top-4 right-4 text-nung-red/20 opacity-20">
-                  <i className="fa-solid fa-book-open text-6xl"></i>
-                </div>
-                <h3 className="text-2xl font-display font-bold text-nung-dark mb-6 border-b-2 border-black pb-3">
-                  📖 Từ vựng & Định nghĩa
+              <div className="bg-white border-2 border-black p-8 shadow-brutal-sm relative">
+                <h3 className="text-xl font-black uppercase tracking-tight mb-6 border-b-2 border-black pb-3">
+                  📖 Định nghĩa
                 </h3>
                 <ul className="space-y-6">
                   {result.definitions.map((def, idx) => (
                     <li key={idx} className="group">
-                      <span className="font-display font-bold text-nung-red text-2xl block mb-1 group-hover:translate-x-1 transition-transform">
+                      <span className="font-bold text-nung-red text-xl block mb-1 group-hover:translate-x-1 transition-transform">
                         {def.word}
                       </span>
-                      <p className="text-nung-dark font-medium mb-3">
+                      <p className="text-black font-medium mb-3 italic">
                         {def.definition}
                       </p>
-                      <div className="bg-nung-sand/20 p-4 border-l-4 border-black border-2 text-sm italic font-medium text-gray-700 relative">
-                        <i className="fa-solid fa-quote-left mr-2 text-nung-blue/30"></i>
+                      <div className="bg-gray-50 p-4 border-2 border-black text-sm italic font-medium text-gray-600">
                         {def.example}
                       </div>
                     </li>
@@ -653,24 +699,26 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         </div>
       )}
 
-      {/* History Section */}
+      {/* History Section (Lite) */}
       {history.length > 0 && (
         <div
           ref={historySectionRef}
-          className="mt-20 pt-12 border-t-4 border-black animate-fade-in mb-12"
+          className="mt-20 pt-12 border-t-2 border-black mb-12"
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
             <div>
-              <div className="inline-block bg-nung-red text-white font-display font-bold text-2xl px-6 py-2 border-2 border-black shadow-brutal transform -rotate-1 mb-2">
-                🕒 Lịch sử tra cứu
+              <div className="bg-black text-white px-6 py-2 border-2 border-black shadow-brutal-sm mb-4 inline-block">
+                <h2 className="text-xl font-black uppercase tracking-tight">
+                  🕒 Lịch sử tra cứu
+                </h2>
               </div>
-              <p className="text-gray-600 font-serif font-bold text-sm ml-2">
+              <p className="text-gray-400 font-bold text-[10px] uppercase tracking-widest ml-1">
                 Các nội dung bạn đã tìm kiếm gần đây
               </p>
             </div>
             <button
               onClick={handleClearHistory}
-              className="bg-white text-red-500 border-2 border-black px-4 py-2 font-bold hover:bg-red-500 hover:text-white hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all shadow-brutal-sm flex items-center gap-2"
+              className="bg-white text-red-500 border-2 border-black px-4 py-2 font-black uppercase text-[10px] tracking-widest shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center gap-2"
             >
               <i className="fa-solid fa-trash-can"></i> Xóa tất cả
             </button>
@@ -686,35 +734,35 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                 <div
                   key={item.id}
                   onClick={() => restoreHistoryItem(item)}
-                  className="bg-white border border-earth-200 rounded-lg shadow-sm hover:shadow-md hover:border-bamboo-400 cursor-pointer transition-all group relative overflow-hidden"
+                  className="bg-white border-2 border-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none cursor-pointer transition-all group relative overflow-hidden"
                 >
-                  <div className="flex flex-col md:flex-row">
+                  <div className="flex flex-col md:flex-row h-full">
                     {/* Source Side */}
-                    <div className="flex-1 p-4 border-b md:border-b-0 md:border-r border-earth-100 bg-earth-50/30">
+                    <div className="flex-1 p-4 border-b-2 md:border-b-0 md:border-r-2 border-black bg-gray-50/50">
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-xs font-bold text-earth-400 uppercase tracking-wider">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                           {item.sourceLang === "vi"
                             ? "Tiếng Việt"
                             : item.sourceLang === "nung"
                             ? "Tiếng Nùng"
                             : "Nghệ An/Hà Tĩnh"}
                         </span>
-                        <span className="text-xs text-earth-300">
+                        <span className="text-[10px] font-bold text-gray-400">
                           {new Date(item.timestamp).toLocaleTimeString(
                             "vi-VN",
                             { hour: "2-digit", minute: "2-digit" }
                           )}
                         </span>
                       </div>
-                      <p className="text-earth-900 font-medium text-lg break-words">
+                      <p className="text-black font-bold break-words">
                         {item.original}
                       </p>
                     </div>
 
                     {/* Target Side */}
-                    <div className="flex-1 p-4 bg-white">
+                    <div className="flex-1 p-4 bg-white pr-12">
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-xs font-bold text-bamboo-600 uppercase tracking-wider">
+                        <span className="text-[10px] font-black text-nung-red uppercase tracking-widest">
                           {item.targetLang === "nung"
                             ? "Tiếng Nùng"
                             : item.targetLang === "central"
@@ -724,21 +772,16 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                             : "Tất cả"}
                         </span>
                       </div>
-                      <p className="text-earth-800 text-lg break-words">
+                      <p className="text-black break-words">
                         {item.result.translations[0]?.script}
                       </p>
-                      {item.result.translations[0]?.phonetic && (
-                        <p className="text-sm text-earth-500 italic mt-1">
-                          {item.result.translations[0].phonetic}
-                        </p>
-                      )}
                     </div>
                   </div>
 
                   {/* Delete Button (Hover) */}
                   <button
                     onClick={(e) => handleDeleteHistoryItem(e, item.id)}
-                    className="absolute top-2 right-2 p-2 text-earth-300 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                    className="absolute top-1/2 -translate-y-1/2 right-4 p-2 text-gray-300 hover:text-nung-red transition-all md:opacity-0 group-hover:opacity-100"
                     title="Xóa mục này"
                   >
                     <i className="fa-solid fa-xmark text-lg"></i>
@@ -747,9 +790,9 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
               ))}
           </div>
 
-          {/* Pagination Controls */}
+          {/* Pagination Controls (Lite) */}
           {history.length > itemsPerPage && (
-            <div className="flex justify-center items-center mt-8 space-x-2">
+            <div className="flex justify-center items-center mt-10 space-x-4">
               <button
                 onClick={() => {
                   setCurrentPage((p) => Math.max(1, p - 1));
@@ -758,16 +801,16 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                   });
                 }}
                 disabled={currentPage === 1}
-                className={`w-10 h-10 rounded-full flex items-center justify-center border ${
+                className={`w-10 h-10 border-2 border-black flex items-center justify-center transition-all ${
                   currentPage === 1
-                    ? "border-earth-200 text-earth-300 cursor-not-allowed"
-                    : "border-earth-300 text-earth-600 hover:bg-earth-50 hover:border-earth-400"
+                    ? "bg-gray-100 text-gray-300 cursor-not-allowed"
+                    : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                 }`}
               >
                 <i className="fa-solid fa-chevron-left"></i>
               </button>
 
-              <span className="text-earth-600 font-medium px-4">
+              <span className="text-[10px] font-black uppercase tracking-widest text-black">
                 Trang {currentPage} / {Math.ceil(history.length / itemsPerPage)}
               </span>
 
@@ -783,10 +826,10 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                 disabled={
                   currentPage === Math.ceil(history.length / itemsPerPage)
                 }
-                className={`w-10 h-10 rounded-full flex items-center justify-center border ${
+                className={`w-10 h-10 border-2 border-black flex items-center justify-center transition-all ${
                   currentPage === Math.ceil(history.length / itemsPerPage)
-                    ? "border-earth-200 text-earth-300 cursor-not-allowed"
-                    : "border-earth-300 text-earth-600 hover:bg-earth-50 hover:border-earth-400"
+                    ? "bg-gray-100 text-gray-300 cursor-not-allowed"
+                    : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                 }`}
               >
                 <i className="fa-solid fa-chevron-right"></i>

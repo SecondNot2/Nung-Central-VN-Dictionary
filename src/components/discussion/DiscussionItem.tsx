@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Discussion, updateDiscussion } from "../../services/api/discussionService";
+import {
+  Discussion,
+  updateDiscussion,
+} from "../../services/api/discussionService";
 import { User } from "../../types";
 
 interface DiscussionItemProps {
@@ -121,9 +124,9 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
     <>
       <div className={`${indentClass} ${depth > 1 ? "mt-2" : ""}`}>
         <div className="flex gap-2 group">
-          {/* Avatar */}
+          {/* Avatar (Lite) */}
           <div
-            className={`${avatarSize} rounded-full bg-gradient-to-br from-bamboo-400 to-bamboo-600 flex items-center justify-center flex-shrink-0 overflow-hidden`}
+            className={`${avatarSize} border-2 border-black bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-brutal-sm`}
           >
             {discussion.user_avatar ? (
               <img
@@ -133,7 +136,7 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
               />
             ) : (
               <i
-                className={`fa-solid fa-user text-white ${
+                className={`fa-solid fa-user text-black ${
                   depth === 1 ? "text-sm" : "text-xs"
                 }`}
               />
@@ -141,26 +144,30 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
           </div>
 
           <div className="flex-1 min-w-0">
-            {/* Comment Bubble */}
+            {/* Comment Bubble (Lite) */}
             <div className="relative inline-block max-w-full">
-              <div className="bg-earth-100 rounded-2xl px-3 py-2">
-                <span className="font-semibold text-earth-900 text-sm block">
-                  {discussion.user_name || "Người dùng ẩn danh"}
+              <div
+                className={`border-2 border-black px-4 py-3 shadow-brutal-sm ${
+                  depth === 1 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                <span className="font-black uppercase tracking-tight text-xs block mb-1">
+                  {discussion.user_name || "Ẩn danh"}
                 </span>
                 {isEditing ? (
-                  <div className="mt-1">
+                  <div className="mt-2">
                     <textarea
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
-                      className="w-full p-2 text-sm border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 resize-none"
+                      className="w-full p-2 text-sm border-2 border-black outline-none bg-white resize-none"
                       rows={2}
                       autoFocus
                     />
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-3">
                       <button
                         onClick={handleEdit}
                         disabled={submitting}
-                        className="px-3 py-1 text-xs bg-bamboo-600 text-white rounded-full hover:bg-bamboo-700 disabled:opacity-50"
+                        className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest bg-black text-white border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all shadow-brutal-sm disabled:opacity-50"
                       >
                         {submitting ? (
                           <i className="fa-solid fa-circle-notch fa-spin" />
@@ -173,31 +180,31 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                           setIsEditing(false);
                           setEditContent(discussion.content);
                         }}
-                        className="px-3 py-1 text-xs bg-earth-200 text-earth-700 rounded-full hover:bg-earth-300"
+                        className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest bg-white text-black border-2 border-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all shadow-brutal-sm"
                       >
                         Hủy
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-earth-800 text-sm whitespace-pre-wrap break-words">
+                  <p className="text-black text-sm whitespace-pre-wrap break-words leading-relaxed">
                     {discussion.content}
                   </p>
                 )}
               </div>
 
-              {/* 3-dot Menu */}
+              {/* 3-dot Menu (Lite) */}
               {user && !isEditing && (
                 <div ref={menuRef} className="absolute -right-8 top-1">
                   <button
                     onClick={() => setShowMenu(!showMenu)}
-                    className="w-7 h-7 rounded-full hover:bg-earth-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="w-7 h-7 border-2 border-black bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-gray-100"
                   >
-                    <i className="fa-solid fa-ellipsis text-earth-500" />
+                    <i className="fa-solid fa-ellipsis text-black" />
                   </button>
 
                   {showMenu && (
-                    <div className="absolute right-0 top-8 bg-white rounded-lg shadow-lg border border-earth-200 py-1 min-w-[140px] z-10">
+                    <div className="absolute right-0 top-8 bg-white border-2 border-black shadow-brutal-sm py-1 min-w-[140px] z-10">
                       {isOwner && (
                         <>
                           <button
@@ -205,9 +212,9 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                               setIsEditing(true);
                               setShowMenu(false);
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-earth-700 hover:bg-earth-50 flex items-center gap-2"
+                            className="w-full px-4 py-2 text-left text-[10px] font-black uppercase tracking-widest text-black hover:bg-gray-50 flex items-center gap-2"
                           >
-                            <i className="fa-solid fa-pen text-earth-400" />
+                            <i className="fa-solid fa-pen" />
                             Chỉnh sửa
                           </button>
                           <button
@@ -215,9 +222,9 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                               setShowDeleteConfirm(true);
                               setShowMenu(false);
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                            className="w-full px-4 py-2 text-left text-[10px] font-black uppercase tracking-widest text-red-600 hover:bg-red-50 flex items-center gap-2"
                           >
-                            <i className="fa-solid fa-trash text-red-400" />
+                            <i className="fa-solid fa-trash" />
                             Xóa
                           </button>
                         </>
@@ -228,9 +235,9 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                             setShowReportConfirm(true);
                             setShowMenu(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-sm text-earth-700 hover:bg-earth-50 flex items-center gap-2"
+                          className="w-full px-4 py-2 text-left text-[10px] font-black uppercase tracking-widest text-black hover:bg-gray-50 flex items-center gap-2"
                         >
-                          <i className="fa-solid fa-flag text-earth-400" />
+                          <i className="fa-solid fa-flag" />
                           Báo cáo
                         </button>
                       )}
@@ -240,24 +247,29 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
               )}
             </div>
 
-            {/* Actions Row */}
+            {/* Actions Row (Lite) */}
             {!isEditing && (
-              <div className="flex items-center gap-3 mt-1 ml-2 text-xs">
-                <span className="text-earth-400">
+              <div className="flex items-center gap-4 mt-2 ml-1">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
                   {formatTime(discussion.created_at)}
                 </span>
 
                 <button
                   onClick={() => onLike(discussion.id)}
                   disabled={!user || isLiking}
-                  className={`font-semibold transition-colors ${
+                  className={`text-[10px] font-black uppercase tracking-widest transition-all ${
                     discussion.is_liked_by_user
-                      ? "text-bamboo-600"
-                      : "text-earth-500 hover:text-bamboo-600"
+                      ? "text-nung-red"
+                      : "text-gray-400 hover:text-black"
                   } ${
-                    !user ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                    !user ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
                   }`}
                 >
+                  <i
+                    className={`fa-solid fa-heart mr-1 ${
+                      discussion.is_liked_by_user ? "scale-110" : "scale-100"
+                    }`}
+                  />
                   Thích
                   {discussion.like_count > 0 && ` (${discussion.like_count})`}
                 </button>
@@ -265,19 +277,20 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                 <button
                   onClick={() => setShowReplyForm(!showReplyForm)}
                   disabled={!user}
-                  className={`font-semibold text-earth-500 hover:text-bamboo-600 transition-colors ${
-                    !user ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                  className={`text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-black transition-all ${
+                    !user ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
                   }`}
                 >
+                  <i className="fa-solid fa-reply mr-1" />
                   Trả lời
                 </button>
               </div>
             )}
 
-            {/* Reply Form */}
+            {/* Reply Form (Lite) */}
             {showReplyForm && user && (
-              <div className="flex gap-2 mt-2 ml-2">
-                <div className="w-6 h-6 rounded-full bg-bamboo-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <div className="flex gap-3 mt-4 ml-1">
+                <div className="w-8 h-8 border-2 border-black flex items-center justify-center flex-shrink-0 bg-gray-100 shadow-brutal-sm">
                   {user.avatar ? (
                     <img
                       src={user.avatar}
@@ -285,10 +298,10 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <i className="fa-solid fa-user text-bamboo-500 text-xs" />
+                    <i className="fa-solid fa-user text-black text-[10px]" />
                   )}
                 </div>
-                <div className="flex-1 flex items-center bg-earth-100 rounded-full px-3 py-1.5">
+                <div className="flex-1 flex items-center border-2 border-black bg-white px-3 py-2 shadow-brutal-sm">
                   <input
                     type="text"
                     value={replyContent}
@@ -297,12 +310,12 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
                       e.key === "Enter" && !e.shiftKey && handleSubmitReply()
                     }
                     placeholder={`Trả lời ${discussion.user_name}...`}
-                    className="flex-1 bg-transparent text-sm outline-none text-earth-800 placeholder-earth-400"
+                    className="flex-1 bg-transparent text-sm outline-none text-black placeholder-gray-400"
                   />
                   <button
                     onClick={handleSubmitReply}
                     disabled={!replyContent.trim() || submitting}
-                    className="ml-2 text-bamboo-600 hover:text-bamboo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="ml-2 text-black hover:text-nung-red disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   >
                     {submitting ? (
                       <i className="fa-solid fa-circle-notch fa-spin" />
@@ -336,69 +349,46 @@ const DiscussionItem: React.FC<DiscussionItemProps> = ({
         )}
       </div>
 
-      {/* Delete Confirm Dialog */}
-      {showDeleteConfirm && (
+      {/* Delete/Report Dialogs (Lite) */}
+      {(showDeleteConfirm || showReportConfirm) && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowDeleteConfirm(false)}
+            className="absolute inset-0 bg-black/40"
+            onClick={() => {
+              setShowDeleteConfirm(false);
+              setShowReportConfirm(false);
+            }}
           />
-          <div className="relative bg-white rounded-xl shadow-xl p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold text-earth-900 mb-2">
-              Xóa bình luận?
+          <div className="relative bg-white border-2 border-black shadow-brutal p-8 max-w-sm w-full animate-in zoom-in-95 duration-200">
+            <h3 className="text-xl font-black uppercase tracking-tight text-black mb-3">
+              {showDeleteConfirm ? "Xóa bình luận?" : "Báo cáo bình luận?"}
             </h3>
-            <p className="text-earth-600 text-sm mb-4">
-              Bạn có chắc chắn muốn xóa bình luận này? Hành động này không thể
-              hoàn tác.
+            <p className="text-black text-sm italic mb-6 leading-relaxed">
+              {showDeleteConfirm
+                ? "Bạn có chắc chắn muốn xóa bình luận này? Hành động này không thể hoàn tác."
+                : "Bạn muốn báo cáo bình luận này vi phạm quy định cộng đồng?"}
             </p>
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-4 justify-end">
               <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="px-4 py-2 text-sm text-earth-600 hover:bg-earth-100 rounded-lg transition-colors"
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setShowReportConfirm(false);
+                }}
+                className="px-6 py-2 border-2 border-black font-black uppercase text-[10px] tracking-widest bg-white text-black hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all shadow-brutal-sm"
               >
                 Hủy
               </button>
               <button
-                onClick={handleDelete}
+                onClick={showDeleteConfirm ? handleDelete : handleReport}
                 disabled={isDeleting}
-                className="px-4 py-2 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 flex items-center gap-2"
+                className={`px-6 py-2 border-2 border-black font-black uppercase text-[10px] tracking-widest text-white hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all shadow-brutal-sm flex items-center gap-2 ${
+                  showDeleteConfirm ? "bg-nung-red" : "bg-black"
+                }`}
               >
                 {isDeleting && (
                   <i className="fa-solid fa-circle-notch fa-spin" />
                 )}
-                Xóa
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Report Confirm Dialog */}
-      {showReportConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowReportConfirm(false)}
-          />
-          <div className="relative bg-white rounded-xl shadow-xl p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold text-earth-900 mb-2">
-              Báo cáo bình luận?
-            </h3>
-            <p className="text-earth-600 text-sm mb-4">
-              Bạn muốn báo cáo bình luận này vi phạm quy định cộng đồng?
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setShowReportConfirm(false)}
-                className="px-4 py-2 text-sm text-earth-600 hover:bg-earth-100 rounded-lg transition-colors"
-              >
-                Hủy
-              </button>
-              <button
-                onClick={handleReport}
-                className="px-4 py-2 text-sm bg-amber-500 text-white rounded-lg hover:bg-amber-600"
-              >
-                Báo cáo
+                Xác nhận
               </button>
             </div>
           </div>

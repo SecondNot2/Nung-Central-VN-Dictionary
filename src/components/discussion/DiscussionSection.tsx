@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { generateTranslationKey } from "../../services/api/discussionService";
 import DiscussionModal from "./DiscussionModal";
 import { User, TranslationResult } from "../../types";
-import { supabase, isSupabaseConfigured } from "../../services/api/supabaseClient";
+import {
+  supabase,
+  isSupabaseConfigured,
+} from "../../services/api/supabaseClient";
 
 interface DiscussionSectionProps {
   originalText: string;
@@ -46,19 +49,28 @@ const DiscussionSection: React.FC<DiscussionSectionProps> = ({
 
   return (
     <>
-      {/* Collapsed Discussion Bar */}
-      <div className="mt-6 border-t border-earth-200 pt-4">
+      {/* Collapsed Discussion Bar (Lite) */}
+      <div className="mt-8 border-t-2 border-black pt-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-earth-700">
-            <i className="fa-regular fa-comments text-bamboo-600" />
-            <span className="font-medium">Thảo luận ({totalCount})</span>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-black text-white border-2 border-black flex items-center justify-center shadow-brutal-sm">
+              <i className="fa-regular fa-comments" />
+            </div>
+            <div>
+              <span className="font-black uppercase tracking-tight text-lg">
+                Thảo luận
+              </span>
+              <span className="ml-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                ({totalCount})
+              </span>
+            </div>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-sm text-bamboo-600 hover:text-bamboo-700 font-medium transition-colors flex items-center gap-1"
+            className="px-4 py-2 border-2 border-black font-black uppercase text-[10px] tracking-widest hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all shadow-brutal-sm flex items-center gap-2"
           >
-            Xem tất cả thảo luận
-            <i className="fa-solid fa-chevron-right text-xs" />
+            Mở thảo luận
+            <i className="fa-solid fa-arrow-up-right-from-square" />
           </button>
         </div>
       </div>

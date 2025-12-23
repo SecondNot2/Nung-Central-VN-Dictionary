@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 export interface SelectOption {
   value: string;
   label: string;
+  shortLabel?: string;
   icon: string;
   description?: string;
 }
@@ -12,6 +13,8 @@ export interface CustomSelectProps {
   onChange: (value: string) => void;
   options: SelectOption[];
   label: string;
+  hideLabel?: boolean;
+  isCompact?: boolean;
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -19,6 +22,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   onChange,
   options,
   label,
+  hideLabel = false,
+  isCompact = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -53,37 +58,53 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   };
 
   return (
-    <div className="flex-1" ref={selectRef}>
-      <label className="block text-sm font-black text-nung-dark uppercase tracking-widest mb-3">
-        {label}
-      </label>
+    <div className={`flex-1 ${isCompact ? "w-full" : ""}`} ref={selectRef}>
+      {!hideLabel && (
+        <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
+          {label}
+        </label>
+      )}
       <div className="relative">
         {/* Selected Value Button */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full p-4 border-4 border-black font-bold text-nung-dark bg-white cursor-pointer flex items-center justify-between hover:bg-nung-sand/20 transition-all shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none"
+          className={`w-full border-2 border-black font-bold text-black bg-white cursor-pointer flex items-center justify-between transition-all shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 ${
+            isCompact ? "p-2 sm:p-3" : "p-4"
+          }`}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
             <span
-              className={`w-10 h-10 border-2 border-black flex items-center justify-center ${getIconStyle(
-                selectedOption?.value || ""
-              )}`}
+              className={`border-2 border-black flex items-center justify-center shrink-0 ${
+                isCompact ? "w-7 h-7 sm:w-8 sm:h-8" : "w-10 h-10"
+              } ${getIconStyle(selectedOption?.value || "")}`}
             >
-              <i className={`fa-solid ${selectedOption?.icon} text-lg`}></i>
+              <i
+                className={`fa-solid ${selectedOption?.icon} ${
+                  isCompact ? "text-sm" : "text-lg"
+                }`}
+              ></i>
             </span>
-            <span className="text-lg font-serif">{selectedOption?.label}</span>
+            <span
+              className={`font-bold uppercase tracking-tight truncate ${
+                isCompact ? "text-xs" : "text-lg"
+              }`}
+            >
+              {isCompact && selectedOption?.shortLabel
+                ? selectedOption.shortLabel
+                : selectedOption?.label}
+            </span>
           </div>
           <i
-            className={`fa-solid fa-chevron-down text-black transition-transform ${
+            className={`fa-solid fa-chevron-down text-black transition-transform shrink-0 ml-2 ${
               isOpen ? "rotate-180" : ""
-            }`}
+            } ${isCompact ? "text-[10px]" : "text-xs"}`}
           ></i>
         </button>
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute z-50 w-full mt-3 bg-white border-4 border-black shadow-brutal-lg animate-fade-in overflow-hidden">
+          <div className="absolute z-50 w-full mt-2 bg-white border-2 border-black shadow-brutal-sm animate-in fade-in zoom-in duration-200 overflow-hidden">
             {options.map((option) => (
               <button
                 key={option.value}
@@ -92,36 +113,40 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                   onChange(option.value);
                   setIsOpen(false);
                 }}
-                className={`w-full px-6 py-4 flex items-center gap-4 hover:bg-nung-sand transition-colors border-b-2 border-black last:border-b-0 ${
-                  value === option.value ? "bg-nung-sand/50" : ""
-                }`}
+                className={`w-full flex items-center gap-3 sm:gap-4 hover:bg-gray-50 transition-colors border-b-2 border-black last:border-b-0 ${
+                  isCompact ? "px-3 py-2 sm:px-4 sm:py-3" : "px-6 py-4"
+                } ${value === option.value ? "bg-gray-50" : ""}`}
               >
                 <span
-                  className={`w-12 h-12 border-2 border-black flex items-center justify-center shadow-brutal-sm ${getIconStyle(
-                    option.value
-                  )}`}
+                  className={`border-2 border-black flex items-center justify-center shrink-0 ${
+                    isCompact ? "w-8 h-8 sm:w-10 sm:h-10" : "w-12 h-12"
+                  } ${getIconStyle(option.value)}`}
                 >
-                  <i className={`fa-solid ${option.icon} text-xl`}></i>
+                  <i
+                    className={`fa-solid ${option.icon} ${
+                      isCompact ? "text-base" : "text-xl"
+                    }`}
+                  ></i>
                 </span>
-                <div className="text-left flex-1">
+                <div className="text-left flex-1 overflow-hidden">
                   <p
-                    className={`font-black text-lg ${
-                      value === option.value
-                        ? "text-nung-red"
-                        : "text-nung-dark"
+                    className={`font-black uppercase tracking-tight truncate ${
+                      isCompact ? "text-[10px] sm:text-xs" : "text-lg"
+                    } ${
+                      value === option.value ? "text-nung-red" : "text-black"
                     }`}
                   >
                     {option.label}
                   </p>
-                  {option.description && (
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
+                  {option.description && !isCompact && (
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight truncate">
                       {option.description}
                     </p>
                   )}
                 </div>
                 {value === option.value && (
-                  <div className="bg-black text-white w-6 h-6 flex items-center justify-center">
-                    <i className="fa-solid fa-check text-xs"></i>
+                  <div className="bg-black text-white w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center shrink-0">
+                    <i className="fa-solid fa-check text-[10px]"></i>
                   </div>
                 )}
               </button>
