@@ -199,54 +199,66 @@ const Navigation: React.FC<NavigationProps> = ({
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden border-t-4 border-black py-4 bg-nung-sand animate-fade-in">
-            <div className="space-y-2">
-              {visibleNavItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setRoute(item.id);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`w-full text-left px-5 py-4 border-2 transition-all font-serif font-bold ${
-                    currentRoute === item.id
-                      ? "bg-nung-blue text-white border-black shadow-brutal-sm"
-                      : "border-transparent hover:border-black hover:bg-white"
-                  }`}
-                >
-                  <i className={`fa-solid ${item.icon} mr-4 w-6 text-center`} />
-                  {item.label}
-                </button>
-              ))}
-              {!user && (
-                <div className="pt-4 mt-4 border-t-2 border-black/10 flex flex-col space-y-2 px-2">
+      {/* Mobile Navigation - Overlay Style */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop Overlay */}
+          <div
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-[2px]"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          <div className="lg:hidden absolute top-full left-0 right-0 border-b-4 border-black py-4 bg-nung-sand z-50 animate-fade-in shadow-brutal-lg max-h-[calc(100vh-5rem)] overflow-y-auto w-full">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="space-y-3">
+                {visibleNavItems.map((item) => (
                   <button
+                    key={item.id}
                     onClick={() => {
-                      setRoute(AppRoute.LOGIN);
+                      setRoute(item.id);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full py-3 font-bold border-2 border-black bg-white"
+                    className={`w-full text-left px-5 py-4 border-2 transition-all font-serif font-bold flex items-center shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none ${
+                      currentRoute === item.id
+                        ? "bg-nung-blue text-white border-black"
+                        : "bg-white text-nung-dark border-black"
+                    }`}
                   >
-                    Đăng nhập
+                    <i
+                      className={`fa-solid ${item.icon} mr-4 w-6 text-center text-lg`}
+                    />
+                    <span className="text-lg">{item.label}</span>
                   </button>
-                  <button
-                    onClick={() => {
-                      setRoute(AppRoute.REGISTER);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full py-3 font-bold border-2 border-black bg-nung-red text-white shadow-brutal-sm"
-                  >
-                    Tham gia ngay
-                  </button>
-                </div>
-              )}
+                ))}
+                {!user && (
+                  <div className="pt-4 mt-6 border-t-4 border-black flex flex-col space-y-3">
+                    <button
+                      onClick={() => {
+                        setRoute(AppRoute.LOGIN);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full py-4 font-bold border-2 border-black bg-white shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none transition-all text-lg"
+                    >
+                      Đăng nhập
+                    </button>
+                    <button
+                      onClick={() => {
+                        setRoute(AppRoute.REGISTER);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full py-4 font-bold border-2 border-black bg-nung-red text-white shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none transition-all text-lg"
+                    >
+                      Đăng ký tài khoản
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </>
+      )}
     </nav>
   );
 };

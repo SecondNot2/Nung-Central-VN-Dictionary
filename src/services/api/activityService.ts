@@ -302,7 +302,7 @@ async function fetchRecentReports(limit: number): Promise<ActivityItem[]> {
   try {
     const { data, error } = await supabase
       .from("discussion_reports")
-      .select("id, reason, status, reporter_id, created_at, resolved_at")
+      .select("id, reason, status, reporter_id, created_at, reviewed_at")
       .order("created_at", { ascending: false })
       .limit(limit);
 
@@ -324,7 +324,7 @@ async function fetchRecentReports(limit: number): Promise<ActivityItem[]> {
         route: AppRoute.ADMIN_REPORTS,
       });
 
-      if (item.status !== "pending" && item.resolved_at) {
+      if (item.status !== "pending" && item.reviewed_at) {
         activities.push({
           id: `report-resolved-${item.id}`,
           type: "report",
@@ -332,7 +332,7 @@ async function fetchRecentReports(limit: number): Promise<ActivityItem[]> {
           title: `Báo cáo đã xử lý`,
           description: `Kết quả: ${item.status}`,
           user_name: "Admin",
-          created_at: item.resolved_at,
+          created_at: item.reviewed_at,
           route: AppRoute.ADMIN_REPORTS,
         });
       }

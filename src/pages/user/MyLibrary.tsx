@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { User, AppRoute } from "../../types";
+import { User, AppRoute, Contribution } from "../../types";
 import {
   ToastContainer,
   useToast,
@@ -28,16 +28,7 @@ interface MyLibraryProps {
 
 type TabType = "saved" | "suggestions" | "contributions";
 
-interface Contribution {
-  id: string;
-  vietnamese_word: string;
-  nung_word: string;
-  phonetic?: string;
-  meaning?: string;
-  example?: string;
-  status: "pending" | "approved" | "rejected";
-  created_at: string;
-}
+// Local types are now handled by global imports
 
 const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
   const { toasts, addToast, removeToast } = useToast();
@@ -93,9 +84,9 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
             const { data } = await supabase
               .from("contributions")
               .select("*")
-              .eq("user_id", user.id)
+              .eq("contributor_id", user.id)
               .order("created_at", { ascending: false });
-            setContributions(data || []);
+            setContributions((data as any) || []);
           }
           break;
       }
@@ -443,18 +434,22 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
                             <div className="bg-paper p-4 border-2 border-black rotate-1">
                               <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
-                                Tiếng Việt:
+                                {item.source_lang === "vi"
+                                  ? "Gốc (Tiếng Việt):"
+                                  : "Gốc:"}
                               </p>
                               <span className="text-2xl font-display font-black text-nung-dark">
-                                {item.vietnamese_word}
+                                {item.word}
                               </span>
                             </div>
                             <div className="bg-white p-4 border-2 border-black -rotate-1 shadow-brutal-sm">
                               <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
-                                Tiếng Nùng:
+                                {item.target_lang === "nung"
+                                  ? "Đích (Tiếng Nùng):"
+                                  : "Đích:"}
                               </p>
                               <span className="text-2xl font-display font-black text-nung-blue">
-                                {item.nung_word}
+                                {item.translation}
                               </span>
                               {item.phonetic && (
                                 <p className="text-sm font-serif font-black text-nung-red mt-2 italic">

@@ -5,13 +5,22 @@ interface AdminSidebarProps {
   currentRoute: AppRoute;
   setRoute: (route: AppRoute) => void;
   onLogout?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({
   currentRoute,
   setRoute,
   onLogout,
+  isOpen,
+  onClose,
 }) => {
+  const handleMenuClick = (route: AppRoute) => {
+    setRoute(route);
+    if (onClose) onClose();
+  };
+
   const menuItems = [
     { id: AppRoute.ADMIN_DASHBOARD, label: "Tổng quan", icon: "fa-gauge-high" },
     { id: AppRoute.ADMIN_DICTIONARY, label: "Từ điển", icon: "fa-book" },
@@ -27,15 +36,29 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r-4 border-black fixed left-0 top-0 z-40 flex flex-col overflow-hidden">
+    <aside
+      className={`w-64 min-h-screen bg-white border-r-4 border-black fixed left-0 top-0 z-40 flex flex-col overflow-hidden transition-transform duration-300 lg:translate-x-0 ${
+        isOpen ? "translate-x-0 shadow-brutal-lg" : "-translate-x-full"
+      }`}
+    >
       {/* Brand */}
-      <div className="p-6 border-b-4 border-black flex items-center gap-3 bg-white">
-        <div className="w-10 h-10 bg-black text-white flex items-center justify-center border-2 border-black shadow-brutal-sm shrink-0">
-          <i className="fa-solid fa-shield-halved"></i>
+      <div className="p-6 border-b-4 border-black flex items-center justify-between bg-white">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-black text-white flex items-center justify-center border-2 border-black shadow-brutal-sm shrink-0">
+            <i className="fa-solid fa-shield-halved"></i>
+          </div>
+          <span className="font-black uppercase tracking-tighter text-xl">
+            Admin Panel
+          </span>
         </div>
-        <span className="font-black uppercase tracking-tighter text-xl">
-          Admin Panel
-        </span>
+
+        {/* Close button for mobile */}
+        <button
+          onClick={onClose}
+          className="lg:hidden w-8 h-8 border-2 border-black flex items-center justify-center hover:bg-gray-100 transition-colors"
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       {/* Menu Items */}
@@ -48,7 +71,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         {menuItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setRoute(item.id)}
+            onClick={() => handleMenuClick(item.id)}
             className={`w-full flex items-center gap-4 px-4 py-3 border-2 transition-all font-bold text-sm ${
               currentRoute === item.id
                 ? "bg-black text-white border-black"
@@ -64,7 +87,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Footer / Back to User Site */}
       <div className="p-4 border-t-4 border-black space-y-2">
         <button
-          onClick={() => setRoute(AppRoute.DICTIONARY)}
+          onClick={() => handleMenuClick(AppRoute.DICTIONARY)}
           className="w-full flex items-center gap-3 px-4 py-3 border-2 border-black bg-white text-black font-bold text-xs shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
         >
           <i className="fa-solid fa-house"></i>
@@ -72,7 +95,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </button>
         {onLogout && (
           <button
-            onClick={onLogout}
+            onClick={() => {
+              onLogout();
+              if (onClose) onClose();
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 border-2 border-black bg-nung-red text-white font-bold text-xs shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
           >
             <i className="fa-solid fa-right-from-bracket"></i>

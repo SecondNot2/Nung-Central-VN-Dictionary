@@ -95,51 +95,55 @@ const RecentActivityList: React.FC<RecentActivityListProps> = ({
           <button
             key={activity.id}
             onClick={() => handleClick(activity)}
-            className={`w-full text-left p-6 hover:bg-nung-sand/10 transition-all group cursor-pointer relative overflow-hidden`}
+            className={`w-full text-left p-3 lg:p-6 hover:bg-nung-sand/10 transition-all group cursor-pointer relative overflow-hidden`}
           >
-            <div className="flex items-start gap-6 relative z-10">
+            <div className="flex items-start gap-3 lg:gap-6 relative z-10">
               {/* Icon Container */}
               <div
-                className={`w-14 h-14 border-4 border-black ${actionBg} flex items-center justify-center flex-shrink-0 shadow-brutal-sm group-hover:rotate-6 transition-transform`}
+                className={`w-8 h-8 lg:w-14 lg:h-14 border-2 lg:border-4 border-black ${actionBg} flex items-center justify-center flex-shrink-0 shadow-brutal-xs lg:shadow-brutal-sm group-hover:rotate-6 transition-transform`}
               >
-                <i className={`fa-solid ${icon} ${actionColor} text-xl`} />
+                <i
+                  className={`fa-solid ${icon} ${actionColor} text-[10px] lg:text-xl`}
+                />
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-1 flex-wrap">
-                  <h4 className="text-lg font-display font-black uppercase tracking-tighter text-nung-dark group-hover:text-nung-red transition-colors">
+                <div className="flex items-center gap-2 lg:gap-3 mb-0.5 lg:mb-1 flex-wrap">
+                  <h4 className="text-xs lg:text-lg font-display font-black uppercase tracking-tighter text-nung-dark group-hover:text-nung-red transition-colors truncate max-w-full">
                     {activity.title}
                   </h4>
                   <span
-                    className={`text-[10px] px-2 py-0.5 border-2 border-black ${actionBg} ${actionColor} font-black uppercase tracking-widest`}
+                    className={`text-[7px] lg:text-[10px] px-1 lg:px-2 py-0.5 border-2 border-black ${actionBg} ${actionColor} font-black uppercase tracking-widest leading-none`}
                   >
                     {actionConfig[activity.action]?.label}
                   </span>
                 </div>
 
-                <p className="text-sm font-serif font-bold text-gray-600 mb-2 leading-relaxed">
+                <p className="text-[10px] lg:text-sm font-serif font-bold text-gray-400 mb-1 lg:mb-2 leading-tight lg:leading-relaxed line-clamp-1 lg:line-clamp-none">
                   {activity.description}
                 </p>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 lg:gap-4 flex-wrap">
                   {activity.user_name && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                    <div className="flex items-center gap-1 text-[7px] lg:text-[10px] font-black uppercase tracking-widest text-gray-400">
                       <i className="fa-solid fa-user-ninja text-nung-blue" />
-                      <span>{activity.user_name}</span>
+                      <span className="truncate max-w-[60px] lg:max-w-none">
+                        {activity.user_name}
+                      </span>
                     </div>
                   )}
-                  <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400">
-                    <i className="fa-solid fa-clock text-gray-300" />
+                  <div className="flex items-center gap-1 text-[7px] lg:text-[10px] font-black uppercase tracking-widest text-gray-300">
+                    <i className="fa-solid fa-clock opacity-50" />
                     <span>{formatRelativeTime(activity.created_at)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Indicator */}
-              <div className="flex-shrink-0 self-center">
-                <div className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm group-hover:translate-x-1 group-hover:translate-y-1 group-hover:shadow-none transition-all">
-                  <i className="fa-solid fa-chevron-right text-black" />
+              <div className="flex-shrink-0 self-center hidden sm:block">
+                <div className="w-8 h-8 lg:w-10 lg:h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-xs lg:shadow-brutal-sm group-hover:translate-x-1 group-hover:translate-y-1 group-hover:shadow-none transition-all">
+                  <i className="fa-solid fa-chevron-right text-black text-sm lg:text-base" />
                 </div>
               </div>
             </div>

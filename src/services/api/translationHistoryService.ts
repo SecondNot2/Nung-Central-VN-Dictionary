@@ -140,13 +140,30 @@ export async function addToHistory(
       .single();
 
     if (error) {
-      console.error("Error adding to history:", error);
+      console.error(
+        "Error adding to history (DB), falling back to local:",
+        error
+      );
+      // Fallback: save to local storage despite having a userId
+      const history = getLocalHistory();
+      const filtered = history.filter(
+        (h) => h.original.toLowerCase() !== item.original.toLowerCase()
+      );
+      const updated = [newItem, ...filtered].slice(0, MAX_HISTORY_ITEMS);
+      saveLocalHistory(updated);
       return newItem;
     }
 
     return dbToHistoryItem(data);
   } catch (err) {
-    console.error("Error in addToHistory:", err);
+    console.error("Error in addToHistory, falling back to local:", err);
+    // Fallback: save to local storage
+    const history = getLocalHistory();
+    const filtered = history.filter(
+      (h) => h.original.toLowerCase() !== item.original.toLowerCase()
+    );
+    const updated = [newItem, ...filtered].slice(0, MAX_HISTORY_ITEMS);
+    saveLocalHistory(updated);
     return newItem;
   }
 }

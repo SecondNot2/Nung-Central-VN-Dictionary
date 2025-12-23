@@ -167,8 +167,10 @@ const App: React.FC = () => {
         setUser(newUser);
         localStorage.setItem(AUTH_KEY, JSON.stringify(newUser));
       } else {
-        // Only clear user if explicitly logged out (not on initial load)
-        console.log("No supabase user, clearing state");
+        // Clear user if no active session
+        console.log("No supabase user, clearing state and localStorage");
+        setUser(null);
+        localStorage.removeItem(AUTH_KEY);
       }
       setAuthLoading(false);
     });
