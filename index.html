@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Từ điển Văn hóa Nùng & Miền Trung</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Great+Vibes&family=Merriweather:wght@300;400;700;900&family=Montserrat:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -17,11 +20,14 @@
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ["Inter", "sans-serif"],
-              serif: ["Merriweather", "serif"],
-            },
             colors: {
+              "nung-red": "#A32D2D",
+              "nung-blue": "#2A475E",
+              "nung-green": "#5C7F60",
+              "nung-brown": "#7A5C40",
+              "nung-sand": "#D9C9B4",
+              "nung-dark": "#1a1a1a",
+              // Fallback for existing components while refactoring
               earth: {
                 50: "#f9f5f3",
                 100: "#f2e8e5",
@@ -42,6 +48,24 @@
                 800: "#166534",
                 900: "#14532d",
               },
+            },
+            fontFamily: {
+              display: ['"Abril Fatface"', "cursive"],
+              body: ['"Montserrat"', "sans-serif"],
+              serif: ['"Merriweather"', "serif"],
+              hand: ['"Great Vibes"', "cursive"],
+              sans: ["Montserrat", "sans-serif"], // Override default sans
+            },
+            boxShadow: {
+              brutal: "5px 5px 0px 0px #000",
+              "brutal-lg": "8px 8px 0px 0px #000",
+              "brutal-sm": "3px 3px 0px 0px #000",
+            },
+            backgroundImage: {
+              paper:
+                "url('https://www.transparenttextures.com/patterns/lined-paper.png')",
+              fabric:
+                "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')",
             },
           },
         },

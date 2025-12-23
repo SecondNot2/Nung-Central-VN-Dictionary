@@ -42,19 +42,19 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   const getIconStyle = (optValue: string) => {
     switch (optValue) {
       case "vi":
-        return "bg-red-100 text-red-600";
+        return "bg-nung-red text-white";
       case "nung":
-        return "bg-emerald-100 text-emerald-600";
+        return "bg-nung-green text-white";
       case "central":
-        return "bg-amber-100 text-amber-600";
+        return "bg-nung-blue text-white";
       default:
-        return "bg-purple-100 text-purple-600";
+        return "bg-black text-white";
     }
   };
 
   return (
     <div className="flex-1" ref={selectRef}>
-      <label className="block text-sm font-bold text-earth-800 mb-2">
+      <label className="block text-sm font-black text-nung-dark uppercase tracking-widest mb-3">
         {label}
       </label>
       <div className="relative">
@@ -62,20 +62,20 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full p-3 border border-earth-300 rounded-xl focus:ring-2 focus:ring-bamboo-500 outline-none font-medium text-earth-900 bg-white cursor-pointer flex items-center justify-between hover:border-bamboo-400 transition-all"
+          className="w-full p-4 border-4 border-black font-bold text-nung-dark bg-white cursor-pointer flex items-center justify-between hover:bg-nung-sand/20 transition-all shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none"
         >
           <div className="flex items-center gap-3">
             <span
-              className={`w-8 h-8 rounded-lg flex items-center justify-center ${getIconStyle(
+              className={`w-10 h-10 border-2 border-black flex items-center justify-center ${getIconStyle(
                 selectedOption?.value || ""
               )}`}
             >
-              <i className={`fa-solid ${selectedOption?.icon}`}></i>
+              <i className={`fa-solid ${selectedOption?.icon} text-lg`}></i>
             </span>
-            <span>{selectedOption?.label}</span>
+            <span className="text-lg font-serif">{selectedOption?.label}</span>
           </div>
           <i
-            className={`fa-solid fa-chevron-down text-earth-400 transition-transform ${
+            className={`fa-solid fa-chevron-down text-black transition-transform ${
               isOpen ? "rotate-180" : ""
             }`}
           ></i>
@@ -83,7 +83,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
 
         {/* Dropdown */}
         {isOpen && (
-          <div className="absolute z-20 w-full mt-2 bg-white border border-earth-200 rounded-xl shadow-xl overflow-hidden animate-fade-in">
+          <div className="absolute z-50 w-full mt-3 bg-white border-4 border-black shadow-brutal-lg animate-fade-in overflow-hidden">
             {options.map((option) => (
               <button
                 key={option.value}
@@ -92,37 +92,37 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                   onChange(option.value);
                   setIsOpen(false);
                 }}
-                className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-bamboo-50 transition-colors ${
-                  value === option.value
-                    ? "bg-bamboo-50 border-l-4 border-bamboo-500"
-                    : "border-l-4 border-transparent"
+                className={`w-full px-6 py-4 flex items-center gap-4 hover:bg-nung-sand transition-colors border-b-2 border-black last:border-b-0 ${
+                  value === option.value ? "bg-nung-sand/50" : ""
                 }`}
               >
                 <span
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${getIconStyle(
+                  className={`w-12 h-12 border-2 border-black flex items-center justify-center shadow-brutal-sm ${getIconStyle(
                     option.value
                   )}`}
                 >
-                  <i className={`fa-solid ${option.icon} text-lg`}></i>
+                  <i className={`fa-solid ${option.icon} text-xl`}></i>
                 </span>
                 <div className="text-left flex-1">
                   <p
-                    className={`font-medium ${
+                    className={`font-black text-lg ${
                       value === option.value
-                        ? "text-bamboo-700"
-                        : "text-earth-900"
+                        ? "text-nung-red"
+                        : "text-nung-dark"
                     }`}
                   >
                     {option.label}
                   </p>
                   {option.description && (
-                    <p className="text-xs text-earth-500">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">
                       {option.description}
                     </p>
                   )}
                 </div>
                 {value === option.value && (
-                  <i className="fa-solid fa-check text-bamboo-600"></i>
+                  <div className="bg-black text-white w-6 h-6 flex items-center justify-center">
+                    <i className="fa-solid fa-check text-xs"></i>
+                  </div>
                 )}
               </button>
             ))}

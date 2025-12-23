@@ -241,9 +241,9 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
   // Status badge component
   const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
-      approved: "bg-bamboo-100 text-bamboo-700 border-bamboo-200",
-      pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
-      rejected: "bg-red-100 text-red-700 border-red-200",
+      approved: "bg-nung-blue text-white",
+      pending: "bg-amber-400 text-black",
+      rejected: "bg-nung-red text-white",
     };
     const icons = {
       approved: "fa-check",
@@ -251,25 +251,27 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
       rejected: "fa-times",
     };
     const labels = {
-      approved: "Đã duyệt",
-      pending: "Chờ duyệt",
-      rejected: "Từ chối",
+      approved: "HỢP LỆ",
+      pending: "CHỜ DUYỆT",
+      rejected: "TỪ CHỐI",
     };
 
     return (
       <span
-        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+        className={`inline-flex items-center px-3 py-1 border-2 border-black text-[10px] font-black uppercase tracking-widest shadow-none ${
           styles[status as keyof typeof styles]
         }`}
       >
-        <i className={`fa-solid ${icons[status as keyof typeof icons]} mr-1`} />
+        <i
+          className={`fa-solid ${icons[status as keyof typeof icons]} mr-1.5`}
+        />
         {labels[status as keyof typeof labels]}
       </span>
     );
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="bg-white text-black">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
@@ -280,115 +282,85 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
         onCancel={() =>
           setConfirmDialog((prev) => ({ ...prev, isOpen: false }))
         }
-        confirmText="Xóa"
+        confirmText="Xác nhận xóa"
         cancelText="Hủy"
       />
 
-      {/* Header */}
+      {/* Header Container */}
       <div className="mb-8">
-        <div className="flex items-center gap-4 mb-2">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white border-2 border-black p-6 shadow-brutal-sm">
+          <div>
+            <h1 className="text-2xl font-bold uppercase tracking-tight">
+              Trung tâm Từ điển
+            </h1>
+            <p className="text-gray-500 text-sm font-medium mt-1">
+              Quản lý và kiểm duyệt kho tàng ngôn ngữ
+            </p>
+          </div>
           <button
-            onClick={() => setRoute(AppRoute.ADMIN_DASHBOARD)}
-            className="p-2 hover:bg-earth-100 rounded-lg transition-colors"
+            onClick={() => openModal()}
+            className="px-6 py-3 bg-black text-white border-2 border-black font-bold uppercase tracking-widest text-xs shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center gap-2"
           >
-            <i className="fa-solid fa-arrow-left text-earth-600" />
+            <i className="fa-solid fa-plus" />
+            Thêm từ mới
           </button>
-          <h1 className="text-3xl font-serif font-bold text-earth-900">
-            <i className="fa-solid fa-book-bookmark mr-3 text-bamboo-600" />
-            Quản lý Từ điển
-          </h1>
         </div>
-        <p className="text-earth-600 ml-12">
-          Thêm, sửa, xóa và quản lý các mục trong từ điển
-        </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-earth-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-earth-500 uppercase tracking-wide">
-                Tổng số
-              </p>
-              <p className="text-2xl font-bold text-earth-900">
-                {entries.length}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-earth-100 rounded-lg flex items-center justify-center">
-              <i className="fa-solid fa-book text-earth-600" />
-            </div>
-          </div>
+        <div className="bg-white border-2 border-black p-4 shadow-brutal-sm">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
+            Tổng cộng
+          </p>
+          <p className="text-3xl font-bold">{entries.length}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-bamboo-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-bamboo-600 uppercase tracking-wide">
-                Đã duyệt
-              </p>
-              <p className="text-2xl font-bold text-bamboo-700">
-                {entries.filter((e) => e.status === "approved").length}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-bamboo-100 rounded-lg flex items-center justify-center">
-              <i className="fa-solid fa-check text-bamboo-600" />
-            </div>
-          </div>
+        <div className="bg-white border-2 border-black p-4 shadow-brutal-sm">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
+            Đã duyệt
+          </p>
+          <p className="text-3xl font-bold text-nung-blue">
+            {entries.filter((e) => e.status === "approved").length}
+          </p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-yellow-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-yellow-600 uppercase tracking-wide">
-                Chờ duyệt
-              </p>
-              <p className="text-2xl font-bold text-yellow-700">
-                {entries.filter((e) => e.status === "pending").length}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <i className="fa-solid fa-clock text-yellow-600" />
-            </div>
-          </div>
+        <div className="bg-white border-2 border-black p-4 shadow-brutal-sm">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
+            Chờ duyệt
+          </p>
+          <p className="text-3xl font-bold text-amber-500">
+            {entries.filter((e) => e.status === "pending").length}
+          </p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-red-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-red-600 uppercase tracking-wide">
-                Từ chối
-              </p>
-              <p className="text-2xl font-bold text-red-700">
-                {entries.filter((e) => e.status === "rejected").length}
-              </p>
-            </div>
-            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-              <i className="fa-solid fa-times text-red-600" />
-            </div>
-          </div>
+        <div className="bg-white border-2 border-black p-4 shadow-brutal-sm">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
+            Bị từ chối
+          </p>
+          <p className="text-3xl font-bold text-nung-red">
+            {entries.filter((e) => e.status === "rejected").length}
+          </p>
         </div>
       </div>
 
-      {/* Filters & Actions */}
-      <div className="bg-white rounded-xl shadow-md border border-earth-200 p-4 mb-6">
-        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-end">
-          {/* Search */}
-          <div className="flex-1 w-full lg:w-auto">
-            <label className="block text-sm font-medium text-earth-700 mb-1">
+      {/* Filters */}
+      <div className="bg-white border-2 border-black p-6 shadow-brutal-sm mb-8">
+        <div className="flex flex-col lg:flex-row gap-6 items-end">
+          <div className="flex-1 w-full">
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
               Tìm kiếm
             </label>
             <div className="relative">
-              <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-earth-400" />
+              <i className="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm từ hoặc nghĩa..."
-                className="w-full pl-10 pr-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all"
+                placeholder="Nhập từ cần tìm..."
+                className="w-full pl-10 pr-4 py-2 border-2 border-black bg-white font-bold text-sm outline-none transition-all placeholder:text-gray-300"
               />
             </div>
           </div>
 
-          {/* Language Filter */}
-          <div className="w-full lg:w-48">
+          <div className="w-full lg:w-60">
             <CustomSelect
               value={languageFilter}
               onChange={setLanguageFilter}
@@ -397,8 +369,7 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
             />
           </div>
 
-          {/* Status Filter */}
-          <div className="w-full lg:w-48">
+          <div className="w-full lg:w-60">
             <CustomSelect
               value={statusFilter}
               onChange={setStatusFilter}
@@ -406,113 +377,86 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
               label="Trạng thái"
             />
           </div>
-
-          {/* Add Button */}
-          <button
-            onClick={() => openModal()}
-            className="w-full lg:w-auto px-6 py-2.5 bg-gradient-to-r from-bamboo-600 to-bamboo-700 text-white font-medium rounded-lg hover:from-bamboo-700 hover:to-bamboo-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center"
-          >
-            <i className="fa-solid fa-plus mr-2" />
-            Thêm từ mới
-          </button>
         </div>
       </div>
 
       {/* Table */}
       <div
         ref={tableSectionRef}
-        className="bg-white rounded-xl shadow-md border border-earth-200 overflow-hidden"
+        className="bg-white border-2 border-black shadow-brutal-sm overflow-hidden mb-12"
       >
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-earth-50 border-b border-earth-200">
-              <tr>
-                <th className="text-left px-6 py-4 text-xs font-bold text-earth-600 uppercase tracking-wider">
-                  Từ gốc
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50 border-b-2 border-black">
+                <th className="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest">
+                  Từ vựng
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-earth-600 uppercase tracking-wider">
-                  Bản dịch
+                <th className="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest">
+                  Nghĩa
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-earth-600 uppercase tracking-wider hidden md:table-cell">
+                <th className="text-left px-6 py-4 text-[10px] font-black uppercase tracking-widest hidden md:table-cell">
                   Ngôn ngữ
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-bold text-earth-600 uppercase tracking-wider">
+                <th className="text-center px-6 py-4 text-[10px] font-black uppercase tracking-widest">
                   Trạng thái
                 </th>
-                <th className="text-right px-6 py-4 text-xs font-bold text-earth-600 uppercase tracking-wider">
+                <th className="text-right px-6 py-4 text-[10px] font-black uppercase tracking-widest">
                   Thao tác
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-earth-100">
+            <tbody className="divide-y border-black">
               {paginatedEntries.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center">
-                    <div className="text-earth-400">
-                      <i className="fa-solid fa-inbox text-4xl mb-3" />
-                      <p className="text-lg font-medium">Không có kết quả</p>
-                      <p className="text-sm">
-                        Thử thay đổi bộ lọc hoặc thêm từ mới
-                      </p>
-                    </div>
+                  <td colSpan={5} className="px-6 py-16 text-center">
+                    <p className="text-lg font-bold uppercase text-gray-400">
+                      Không tìm thấy từ vựng nào
+                    </p>
                   </td>
                 </tr>
               ) : (
                 paginatedEntries.map((entry) => (
                   <tr
                     key={entry.id}
-                    className="hover:bg-earth-50 transition-colors"
+                    className="hover:bg-gray-50 even:bg-white odd:bg-gray-50/30 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <div>
-                        <p className="font-semibold text-earth-900">
-                          {entry.word}
-                        </p>
-                        {entry.example && (
-                          <p className="text-xs text-earth-500 mt-1 truncate max-w-xs">
-                            {entry.example}
-                          </p>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <p className="text-earth-800">{entry.translation}</p>
-                      <p className="text-sm text-earth-500 italic">
-                        {entry.phonetic}
+                      <p className="font-bold text-lg uppercase">
+                        {entry.word}
                       </p>
                     </td>
+                    <td className="px-6 py-4">
+                      <p className="font-bold text-black">
+                        {entry.translation}
+                      </p>
+                      {entry.phonetic && (
+                        <p className="text-[10px] font-bold text-gray-400 uppercase mt-0.5">
+                          [{entry.phonetic}]
+                        </p>
+                      )}
+                    </td>
                     <td className="px-6 py-4 hidden md:table-cell">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-earth-100 text-earth-700">
-                        <i
-                          className={`fa-solid ${
-                            entry.language === "nung"
-                              ? "fa-mountain"
-                              : "fa-wheat-awn"
-                          } mr-1`}
-                        />
-                        {entry.language === "nung"
-                          ? "Tiếng Nùng"
-                          : "Miền Trung"}
+                      <span className="text-[10px] font-black uppercase tracking-tight text-gray-500 bg-gray-100 px-2 py-1 border border-gray-200">
+                        {entry.language === "nung" ? "Nùng" : "Miền Trung"}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                       <StatusBadge status={entry.status} />
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-end space-x-2">
+                      <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => openModal(entry)}
-                          className="p-2 text-earth-500 hover:text-bamboo-600 hover:bg-bamboo-50 rounded-lg transition-all"
-                          title="Chỉnh sửa"
+                          className="p-2 bg-white border-2 border-black text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                         >
-                          <i className="fa-solid fa-pen-to-square" />
+                          <i className="fa-solid fa-pen text-xs" />
                         </button>
                         <button
                           onClick={() => deleteEntry(entry)}
-                          className="p-2 text-earth-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                          title="Xóa"
+                          className="p-2 bg-white border-2 border-black text-nung-red shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                         >
-                          <i className="fa-solid fa-trash" />
+                          <i className="fa-solid fa-trash text-xs" />
                         </button>
                       </div>
                     </td>
@@ -525,13 +469,11 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-earth-200 flex items-center justify-between bg-earth-50">
-            <p className="text-sm text-earth-600">
-              Hiển thị {(currentPage - 1) * itemsPerPage + 1} -{" "}
-              {Math.min(currentPage * itemsPerPage, filteredEntries.length)} của{" "}
-              {filteredEntries.length} mục
+          <div className="px-6 py-4 border-t-2 border-black flex flex-col sm:flex-row items-center justify-between bg-gray-50 gap-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+              Trang {currentPage} / {totalPages}
             </p>
-            <div className="flex items-center space-x-2">
+            <div className="flex gap-2">
               <button
                 onClick={() => {
                   setCurrentPage((p) => Math.max(1, p - 1));
@@ -540,17 +482,39 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                   });
                 }}
                 disabled={currentPage === 1}
-                className={`w-9 h-9 rounded-lg flex items-center justify-center border ${
-                  currentPage === 1
-                    ? "border-earth-200 text-earth-300 cursor-not-allowed"
-                    : "border-earth-300 text-earth-600 hover:bg-white hover:border-earth-400"
-                }`}
+                className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all disabled:opacity-50"
               >
-                <i className="fa-solid fa-chevron-left text-sm" />
+                <i className="fa-solid fa-chevron-left text-xs" />
               </button>
-              <span className="text-sm text-earth-600 px-3">
-                {currentPage} / {totalPages}
-              </span>
+              <div className="flex gap-1.5">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) pageNum = i + 1;
+                  else if (currentPage <= 3) pageNum = i + 1;
+                  else if (currentPage >= totalPages - 2)
+                    pageNum = totalPages - 4 + i;
+                  else pageNum = currentPage - 2 + i;
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => {
+                        setCurrentPage(pageNum);
+                        tableSectionRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                        });
+                      }}
+                      className={`w-8 h-8 border-2 border-black font-bold text-xs flex items-center justify-center transition-all ${
+                        currentPage === pageNum
+                          ? "bg-black text-white shadow-none"
+                          : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
               <button
                 onClick={() => {
                   setCurrentPage((p) => Math.min(totalPages, p + 1));
@@ -559,13 +523,9 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                   });
                 }}
                 disabled={currentPage === totalPages}
-                className={`w-9 h-9 rounded-lg flex items-center justify-center border ${
-                  currentPage === totalPages
-                    ? "border-earth-200 text-earth-300 cursor-not-allowed"
-                    : "border-earth-300 text-earth-600 hover:bg-white hover:border-earth-400"
-                }`}
+                className="w-8 h-8 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all disabled:opacity-50"
               >
-                <i className="fa-solid fa-chevron-right text-sm" />
+                <i className="fa-solid fa-chevron-right text-xs" />
               </button>
             </div>
           </div>
@@ -576,57 +536,59 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fade-in">
-            <div className="sticky top-0 bg-white border-b border-earth-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-earth-900">
-                {editingEntry ? "Chỉnh sửa từ" : "Thêm từ mới"}
+          <div className="relative bg-white border-2 border-black shadow-brutal-sm w-full max-w-xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-black text-white px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+              <h2 className="text-xl font-bold uppercase tracking-tight">
+                {editingEntry ? "Chỉnh sửa từ vựng" : "Thêm từ vựng mới"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-earth-400 hover:text-earth-600 hover:bg-earth-100 rounded-lg transition-all"
+                className="text-white hover:text-nung-red transition-colors"
               >
-                <i className="fa-solid fa-xmark text-lg" />
+                <i className="fa-solid fa-xmark text-xl" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Từ gốc (Tiếng Việt) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.word}
-                  onChange={(e) =>
-                    setFormData({ ...formData, word: e.target.value })
-                  }
-                  className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all"
-                  placeholder="Nhập từ tiếng Việt"
-                  required
-                />
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
+                    Từ gốc <span className="text-nung-red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.word}
+                    onChange={(e) =>
+                      setFormData({ ...formData, word: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-sm outline-none transition-all"
+                    placeholder="Ví dụ: Ăn"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
+                    Bản dịch <span className="text-nung-red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.translation}
+                    onChange={(e) =>
+                      setFormData({ ...formData, translation: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-sm outline-none transition-all"
+                    placeholder="Ví dụ: Kín"
+                    required
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Bản dịch <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.translation}
-                  onChange={(e) =>
-                    setFormData({ ...formData, translation: e.target.value })
-                  }
-                  className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all"
-                  placeholder="Nhập bản dịch"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
+                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
                   Phiên âm
                 </label>
                 <input
@@ -635,14 +597,14 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                   onChange={(e) =>
                     setFormData({ ...formData, phonetic: e.target.value })
                   }
-                  className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all"
-                  placeholder="Nhập phiên âm"
+                  className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-sm outline-none transition-all"
+                  placeholder="Ví dụ: keen"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-earth-700 mb-1">
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
                     Ngôn ngữ
                   </label>
                   <select
@@ -653,14 +615,14 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                         language: e.target.value as "nung" | "central",
                       })
                     }
-                    className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all cursor-pointer"
+                    className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-xs appearance-none outline-none"
                   >
                     <option value="nung">Tiếng Nùng</option>
                     <option value="central">Tiếng Miền Trung</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-earth-700 mb-1">
+                  <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
                     Trạng thái
                   </label>
                   <select
@@ -674,17 +636,17 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                           | "rejected",
                       })
                     }
-                    className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all cursor-pointer"
+                    className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-xs appearance-none outline-none"
                   >
-                    <option value="pending">Chờ duyệt</option>
-                    <option value="approved">Đã duyệt</option>
-                    <option value="rejected">Từ chối</option>
+                    <option value="pending">CHỜ DUYỆT</option>
+                    <option value="approved">HỢP LỆ</option>
+                    <option value="rejected">TỪ CHỐI</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
+                <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1.5">
                   Ví dụ sử dụng
                 </label>
                 <textarea
@@ -692,25 +654,25 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                   onChange={(e) =>
                     setFormData({ ...formData, example: e.target.value })
                   }
-                  rows={3}
-                  className="w-full px-4 py-2.5 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all resize-none"
-                  placeholder="Nhập ví dụ câu sử dụng từ này"
+                  rows={2}
+                  className="w-full px-3 py-2 border-2 border-black bg-white font-medium text-sm outline-none transition-all resize-none"
+                  placeholder="Nhập ví dụ minh họa..."
                 />
               </div>
 
-              <div className="flex justify-end space-x-3 pt-4 border-t border-earth-200">
+              <div className="flex gap-3 justify-end pt-4 border-t-2 border-black">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 border border-earth-300 text-earth-700 font-medium rounded-lg hover:bg-earth-50 transition-all"
+                  className="px-4 py-2 border-2 border-black bg-white font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-gradient-to-r from-bamboo-600 to-bamboo-700 text-white font-medium rounded-lg hover:from-bamboo-700 hover:to-bamboo-800 transition-all shadow-md"
+                  className="px-6 py-2 bg-black text-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                 >
-                  {editingEntry ? "Cập nhật" : "Thêm mới"}
+                  Lưu từ vựng
                 </button>
               </div>
             </form>

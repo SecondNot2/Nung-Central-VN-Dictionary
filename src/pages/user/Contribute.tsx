@@ -179,7 +179,7 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-nung-sand bg-paper py-12 px-4">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       {/* Submit Confirmation Dialog */}
@@ -211,87 +211,88 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
 
       {/* Login Prompt Dialog */}
       {showLoginPrompt && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
             onClick={() => setShowLoginPrompt(false)}
           />
 
           {/* Dialog */}
-          <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all w-full max-w-md animate-fade-in">
-              <div className="p-6">
-                {/* Icon */}
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-bamboo-100 mb-4">
-                  <i className="fa-solid fa-right-to-bracket text-2xl text-bamboo-600"></i>
-                </div>
-
-                {/* Content */}
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-earth-900 mb-2">
-                    Yêu cầu đăng nhập
-                  </h3>
-                  <p className="text-earth-600">
-                    Bạn cần có tài khoản để gửi đóng góp. Vui lòng đăng nhập
-                    hoặc đăng ký để tiếp tục.
-                  </p>
-                </div>
+          <div className="relative transform bg-white border-4 border-black shadow-brutal-lg w-full max-w-md animate-fade-in z-10">
+            <div className="p-8">
+              {/* Icon */}
+              <div className="mx-auto flex h-20 w-20 items-center justify-center border-4 border-black bg-nung-sand text-nung-red mb-6 shadow-brutal-sm -rotate-3 transition-transform hover:rotate-0">
+                <i className="fa-solid fa-right-to-bracket text-3xl"></i>
               </div>
 
-              {/* Actions */}
-              <div className="bg-earth-50 px-6 py-4 flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  onClick={() => setShowLoginPrompt(false)}
-                  className="px-5 py-2.5 rounded-xl font-medium text-earth-700 bg-white border border-earth-300 hover:bg-earth-100 transition-all order-3 sm:order-1"
-                >
-                  Để sau
-                </button>
-                <button
-                  onClick={() => {
-                    setShowLoginPrompt(false);
-                    setRoute(AppRoute.REGISTER);
-                  }}
-                  className="px-5 py-2.5 rounded-xl font-medium text-bamboo-700 bg-bamboo-100 border border-bamboo-300 hover:bg-bamboo-200 transition-all order-2"
-                >
-                  <i className="fa-solid fa-user-plus mr-2"></i>
-                  Đăng ký
-                </button>
-                <button
-                  onClick={() => {
-                    setShowLoginPrompt(false);
-                    setRoute(AppRoute.LOGIN);
-                  }}
-                  className="px-5 py-2.5 rounded-xl font-medium text-white bg-bamboo-600 hover:bg-bamboo-700 transition-all shadow-md hover:shadow-lg order-1 sm:order-3"
-                >
-                  <i className="fa-solid fa-right-to-bracket mr-2"></i>
-                  Đăng nhập
-                </button>
+              {/* Content */}
+              <div className="text-center">
+                <h3 className="text-3xl font-display font-black text-nung-dark mb-4 uppercase tracking-tighter">
+                  Yêu cầu đăng nhập
+                </h3>
+                <p className="text-gray-600 font-serif font-bold">
+                  Bản cần đồng hành cùng chúng tôi để gửi đóng góp. <br />
+                  Hãy đăng nhập hoặc tạo tài khoản mới ngay!
+                </p>
               </div>
+            </div>
+
+            {/* Actions */}
+            <div className="bg-paper border-t-4 border-black p-6 flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                  setRoute(AppRoute.LOGIN);
+                }}
+                className="w-full py-4 bg-black text-white font-black uppercase tracking-widest border-2 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+              >
+                <i className="fa-solid fa-right-to-bracket mr-2"></i>
+                Đăng nhập ngay
+              </button>
+              <button
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                  setRoute(AppRoute.REGISTER);
+                }}
+                className="w-full py-4 bg-white text-black font-black uppercase tracking-widest border-2 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+              >
+                <i className="fa-solid fa-user-plus mr-2"></i>
+                Tạo tài khoản
+              </button>
+              <button
+                onClick={() => setShowLoginPrompt(false)}
+                className="w-full py-2 font-black text-gray-500 hover:text-black uppercase tracking-widest text-xs transition-colors"
+              >
+                Để sau tính tiếp
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white rounded-2xl shadow-xl p-8 border border-earth-100">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-bamboo-100 text-bamboo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-            <i className="fa-solid fa-hand-holding-heart"></i>
+      <div className="max-w-4xl mx-auto bg-white border-4 border-black shadow-brutal p-8 md:p-12 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-nung-red/5 -mr-32 -mt-32 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="text-center mb-12 relative z-10">
+          <div className="w-24 h-24 bg-nung-sand border-4 border-black text-nung-red flex items-center justify-center mx-auto mb-6 shadow-brutal transition-transform hover:scale-110 hover:-rotate-12 duration-300 -rotate-3">
+            <i className="fa-solid fa-hand-holding-heart text-4xl"></i>
           </div>
-          <h2 className="text-3xl font-serif font-bold text-earth-900">
-            Đóng góp dữ liệu
+          <h2 className="text-5xl font-display font-black text-nung-dark uppercase tracking-tighter mb-4">
+            Góp tay xây bản
           </h2>
-          <p className="text-earth-700 mt-2">
-            Giúp chúng tôi bảo tồn ngôn ngữ Nùng và các phương ngữ địa phương.
+          <p className="text-gray-600 font-serif font-bold text-lg max-w-2xl mx-auto leading-relaxed">
+            Mỗi đóng góp của bạn là một viên gạch quý báu để bảo tồn{" "}
+            <br className="hidden md:block" />
+            hồn thiêng ngôn ngữ Nùng và văn hóa xứ Lạng.
           </p>
         </div>
 
         <form onSubmit={handleSubmitClick} className="space-y-6">
           {/* Language Selection */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-language mr-2 text-earth-500"></i>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-language mr-2 text-nung-red"></i>
                 Ngôn ngữ gốc
               </label>
               <select
@@ -302,7 +303,7 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
                     setTargetLang(e.target.value === "vi" ? "nung" : "vi");
                   }
                 }}
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900 bg-white"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold bg-white shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all appearance-none cursor-pointer"
               >
                 {languageOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -312,14 +313,14 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-arrow-right mr-2 text-earth-500"></i>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-arrow-right mr-2 text-nung-red"></i>
                 Ngôn ngữ dịch
               </label>
               <select
                 value={targetLang}
                 onChange={(e) => setTargetLang(e.target.value)}
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900 bg-white"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold bg-white shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all appearance-none cursor-pointer"
               >
                 {getTargetOptions().map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -331,61 +332,61 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
           </div>
 
           {/* Word/Phrase Input */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-pen mr-2 text-earth-500"></i>
-                Từ / Cụm từ gốc <span className="text-red-500">*</span>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-pen mr-2 text-nung-red"></i>
+                Từ / Cụm từ gốc <span className="text-nung-red">*</span>
               </label>
               <input
                 required
                 value={word}
                 onChange={(e) => setWord(e.target.value)}
                 type="text"
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold text-lg shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                 placeholder={`Nhập từ ${getLangLabel(sourceLang)}`}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-language mr-2 text-earth-500"></i>
-                Bản dịch <span className="text-red-500">*</span>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-language mr-2 text-nung-red"></i>
+                Bản dịch <span className="text-nung-red">*</span>
               </label>
               <input
                 required
                 value={translation}
                 onChange={(e) => setTranslation(e.target.value)}
                 type="text"
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold text-lg shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                 placeholder={`Dịch sang ${getLangLabel(targetLang)}`}
               />
             </div>
           </div>
 
           {/* Phonetic & Region */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-volume-high mr-2 text-earth-500"></i>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-volume-high mr-2 text-nung-red"></i>
                 Phiên âm / Cách đọc
               </label>
               <input
                 value={phonetic}
                 onChange={(e) => setPhonetic(e.target.value)}
                 type="text"
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                 placeholder="Ví dụ: /piː vaŋ miː/"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-earth-800 mb-2">
-                <i className="fa-solid fa-map-location-dot mr-2 text-earth-500"></i>
+              <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+                <i className="fa-solid fa-map-location-dot mr-2 text-nung-red"></i>
                 Vùng miền / Phương ngữ
               </label>
               <select
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900 bg-white"
+                className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold bg-white shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all appearance-none cursor-pointer"
               >
                 {regionOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -398,30 +399,30 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
 
           {/* Example */}
           <div>
-            <label className="block text-sm font-medium text-earth-800 mb-2">
-              <i className="fa-solid fa-quote-left mr-2 text-earth-500"></i>
-              Câu ví dụ
+            <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+              <i className="fa-solid fa-quote-left mr-2 text-nung-red"></i>
+              Câu ví dụ minh họa
             </label>
             <input
               value={example}
               onChange={(e) => setExample(e.target.value)}
               type="text"
-              className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none text-earth-900"
-              placeholder="Ví dụ câu sử dụng từ này trong ngữ cảnh"
+              className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
+              placeholder="Ví dụ câu sử dụng từ này trong ngữ cảnh thực tế"
             />
           </div>
 
           {/* Meaning & Context */}
           <div>
-            <label className="block text-sm font-medium text-earth-800 mb-2">
-              <i className="fa-solid fa-book mr-2 text-earth-500"></i>Ý nghĩa &
-              Ngữ cảnh
+            <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-3">
+              <i className="fa-solid fa-book mr-2 text-nung-red"></i>Ý nghĩa &
+              Ngữ cảnh đặc biệt
             </label>
             <textarea
               value={meaning}
               onChange={(e) => setMeaning(e.target.value)}
-              className="w-full border border-earth-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-bamboo-500 outline-none h-24 text-earth-900"
-              placeholder="Giải thích ý nghĩa chi tiết, ngữ cảnh sử dụng, hoặc ghi chú văn hóa..."
+              className="w-full border-4 border-black px-4 py-4 focus:bg-nung-sand/10 outline-none h-32 text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all resize-none"
+              placeholder="Giải thích ý nghĩa chi tiết, hoàn cảnh sử dụng, hoặc các ghi chú văn hóa nếu có..."
             ></textarea>
           </div>
 
@@ -429,118 +430,143 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
           <button
             type="submit"
             disabled={submitting}
-            className={`w-full font-bold py-3 rounded-lg transition-all shadow-md flex items-center justify-center ${
-              submitting
-                ? "bg-earth-300 text-earth-600 cursor-not-allowed"
-                : "bg-bamboo-600 hover:bg-bamboo-700 text-white"
-            }`}
+            className="w-full py-5 bg-black text-white font-black uppercase tracking-widest border-2 border-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
           >
-            {submitting ? (
-              <>
-                <i className="fa-solid fa-circle-notch fa-spin mr-2"></i>
-                Đang gửi...
-              </>
-            ) : (
-              <>
-                <i className="fa-solid fa-paper-plane mr-2"></i>
-                Gửi đóng góp
-              </>
-            )}
+            <div className="absolute inset-0 bg-nung-red translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <span className="relative z-10 flex items-center justify-center">
+              {submitting ? (
+                <>
+                  <i className="fa-solid fa-circle-notch fa-spin mr-3"></i>
+                  Đang ghi nhận...
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-paper-plane mr-3 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+                  Gửi đóng góp của bạn
+                </>
+              )}
+            </span>
           </button>
         </form>
 
         {/* Contribution History Toggle */}
-        <div className="mt-8 border-t border-earth-200 pt-6">
+        <div className="mt-16 border-t-4 border-black pt-10 relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 py-2 border-2 border-black font-black uppercase tracking-widest text-sm shadow-brutal-sm rotate-1">
+            Nhật ký cống hiến
+          </div>
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="w-full flex items-center justify-between text-earth-700 hover:text-bamboo-600 transition-colors"
+            className="w-full flex items-center justify-between group p-4 border-2 border-black bg-nung-sand/30 hover:bg-nung-sand transition-colors"
           >
-            <span className="font-medium">
-              <i className="fa-solid fa-clock-rotate-left mr-2"></i>
-              Đóng góp của bạn ({contributions.length})
+            <span className="font-black uppercase tracking-widest text-nung-dark flex items-center">
+              <i className="fa-solid fa-clock-rotate-left mr-3 text-nung-red"></i>
+              Lịch sử đóng góp của bạn ({contributions.length})
             </span>
             <i
-              className={`fa-solid fa-chevron-down transition-transform ${
-                showHistory ? "rotate-180" : ""
+              className={`fa-solid fa-chevron-down border-2 border-black w-8 h-8 flex items-center justify-center transition-transform ${
+                showHistory
+                  ? "rotate-180 bg-black text-white"
+                  : "bg-white text-black"
               }`}
             ></i>
           </button>
 
           {showHistory && (
-            <div className="mt-4 space-y-3 max-h-96 overflow-y-auto">
+            <div className="mt-8 space-y-6 max-h-[1000px] overflow-y-auto pr-2 custom-scrollbar animate-fade-in">
               {loading ? (
-                <div className="text-center py-8 text-earth-500">
-                  <i className="fa-solid fa-circle-notch fa-spin text-2xl mb-2"></i>
-                  <p>Đang tải...</p>
+                <div className="text-center py-12 bg-white border-2 border-dashed border-black">
+                  <i className="fa-solid fa-circle-notch fa-spin text-4xl text-nung-red mb-4"></i>
+                  <p className="font-bold text-gray-400 uppercase tracking-widest text-xs">
+                    Đang truy xuất dữ liệu...
+                  </p>
                 </div>
               ) : contributions.length === 0 ? (
-                <div className="text-center py-8 text-earth-500">
-                  <i className="fa-solid fa-inbox text-3xl mb-2"></i>
-                  <p>Chưa có đóng góp nào</p>
+                <div className="text-center py-12 bg-white border-2 border-dashed border-black">
+                  <i className="fa-solid fa-inbox text-4xl text-gray-300 mb-4"></i>
+                  <p className="font-bold text-gray-400 uppercase tracking-widest text-xs">
+                    Chưa có đóng góp nào được ghi lại
+                  </p>
                 </div>
               ) : (
                 contributions.map((c) => (
                   <div
                     key={c.id}
-                    className="bg-earth-50 rounded-lg p-4 border border-earth-100 group relative"
+                    className="bg-white border-4 border-black p-6 shadow-brutal-sm group relative hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2 text-xs text-earth-500">
-                        <span className="bg-earth-200 px-2 py-0.5 rounded">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4 pb-4 border-b-2 border-dotted border-black">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="bg-black text-white px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-brutal-sm">
                           {getLangLabel(c.source_lang)}
                         </span>
-                        <i className="fa-solid fa-arrow-right"></i>
-                        <span className="bg-bamboo-100 text-bamboo-700 px-2 py-0.5 rounded">
+                        <i className="fa-solid fa-arrow-right text-gray-400"></i>
+                        <span className="bg-nung-blue text-white px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-brutal-sm">
                           {getLangLabel(c.target_lang)}
                         </span>
                         {c.region && (
-                          <span className="text-earth-400">• {c.region}</span>
+                          <span className="text-xs font-bold text-nung-red bg-nung-red/5 px-2 py-1 border border-nung-red/20 rotate-1 italic">
+                            # {c.region}
+                          </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3 ml-auto sm:ml-0">
                         {getStatusBadge(c.status)}
-                        <span className="text-xs text-earth-400">
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1">
                           {new Date(c.created_at).toLocaleDateString("vi-VN")}
                         </span>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="font-medium text-earth-900">{c.word}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                      <div className="bg-paper bg-nung-sand/10 p-4 border-2 border-black rotate-1">
+                        <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">
+                          Gốc:
+                        </p>
+                        <p className="text-xl font-display font-black text-nung-dark">
+                          {c.word}
+                        </p>
                       </div>
-                      <div>
-                        <p className="font-medium text-bamboo-700">
+                      <div className="bg-paper bg-white p-4 border-2 border-black -rotate-1 shadow-brutal-sm">
+                        <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">
+                          Dịch:
+                        </p>
+                        <p className="text-xl font-display font-black text-nung-blue">
                           {c.translation}
                         </p>
                         {c.phonetic && (
-                          <p className="text-sm text-earth-500 italic">
+                          <p className="text-sm font-serif font-black text-nung-red mt-2 flex items-center gap-2">
+                            <i className="fa-solid fa-volume-high text-xs"></i>
                             {c.phonetic}
                           </p>
                         )}
                       </div>
                     </div>
-                    {c.example && (
-                      <p className="text-sm text-earth-600 mt-2 italic">
-                        <i className="fa-solid fa-quote-left text-earth-300 mr-1"></i>
-                        {c.example}
-                      </p>
-                    )}
-                    {c.meaning && (
-                      <p className="text-sm text-earth-600 mt-1">{c.meaning}</p>
+                    {(c.example || c.meaning) && (
+                      <div className="space-y-3 bg-gray-50 p-4 border-2 border-black">
+                        {c.example && (
+                          <p className="text-sm font-serif font-bold text-gray-700 italic flex items-start gap-2">
+                            <i className="fa-solid fa-quote-left text-nung-red text-xs mt-1"></i>
+                            {c.example}
+                          </p>
+                        )}
+                        {c.meaning && (
+                          <p className="text-sm font-serif font-medium text-gray-600 border-t border-gray-200 pt-2">
+                            {c.meaning}
+                          </p>
+                        )}
+                      </div>
                     )}
                     {c.status === "rejected" && c.reject_reason && (
-                      <p className="text-sm text-red-600 mt-2 bg-red-50 px-3 py-2 rounded">
-                        <i className="fa-solid fa-circle-info mr-1"></i>
-                        Lý do: {c.reject_reason}
+                      <p className="text-xs font-black text-white bg-nung-red mt-4 p-3 border-2 border-black shadow-brutal-sm uppercase tracking-tight">
+                        <i className="fa-solid fa-circle-info mr-2"></i>
+                        Phản hồi: {c.reject_reason}
                       </p>
                     )}
                     {c.status === "pending" && (
                       <button
                         onClick={() => handleDeleteClick(c.id)}
-                        className="absolute top-2 right-2 p-1.5 text-earth-300 hover:text-red-500 hover:bg-red-50 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                        className="absolute -top-3 -right-3 w-10 h-10 bg-white text-black border-2 border-black hover:bg-nung-red hover:text-white transition-all shadow-brutal-sm flex items-center justify-center rotate-12 hover:rotate-0"
                         title="Xóa đóng góp"
                       >
-                        <i className="fa-solid fa-trash-can text-sm"></i>
+                        <i className="fa-solid fa-trash-can"></i>
                       </button>
                     )}
                   </div>

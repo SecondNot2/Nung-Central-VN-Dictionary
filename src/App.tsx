@@ -25,6 +25,7 @@ import {
   createProfileForOAuthUser,
 } from "./services/api/authService";
 import Footer from "./components/layout/Footer";
+import AdminLayout from "./components/layout/AdminLayout";
 
 const AUTH_KEY = "auth_user";
 
@@ -268,12 +269,34 @@ const App: React.FC = () => {
     currentRoute === AppRoute.REGISTER ||
     currentRoute === AppRoute.NOT_FOUND;
 
+  const isAdminRoute =
+    currentRoute === AppRoute.ADMIN ||
+    currentRoute === AppRoute.ADMIN_DICTIONARY ||
+    currentRoute === AppRoute.ADMIN_DASHBOARD ||
+    currentRoute === AppRoute.ADMIN_USERS ||
+    currentRoute === AppRoute.ADMIN_SUGGESTIONS ||
+    currentRoute === AppRoute.ADMIN_REPORTS ||
+    currentRoute === AppRoute.ADMIN_FEEDBACK;
+
   if (isFullScreenPage) {
     return renderContent();
   }
 
+  if (isAdminRoute && user?.role === "admin") {
+    return (
+      <AdminLayout
+        currentRoute={currentRoute}
+        setRoute={navigateTo}
+        user={user}
+        onLogout={handleLogout}
+      >
+        {renderContent()}
+      </AdminLayout>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-earth-50 font-sans text-earth-900">
+    <div className="min-h-screen flex flex-col bg-nung-sand bg-paper font-sans text-nung-dark">
       <Navigation
         currentRoute={currentRoute}
         setRoute={navigateTo}
@@ -284,7 +307,7 @@ const App: React.FC = () => {
       <main className="flex-grow">{renderContent()}</main>
 
       {/* Floating Feedback Button */}
-      <FeedbackButton user={user} />
+      {currentRoute !== AppRoute.CHAT && <FeedbackButton user={user} />}
 
       <Footer />
     </div>

@@ -273,20 +273,22 @@ const UserProfile: React.FC<UserProfileProps> = ({
   // Check login
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-earth-50">
-        <div className="text-center p-8 bg-white rounded-2xl shadow-lg">
-          <i className="fa-solid fa-user-slash text-4xl text-earth-400 mb-4" />
-          <h2 className="text-xl font-bold text-earth-900 mb-2">
+      <div className="min-h-screen flex items-center justify-center bg-nung-sand bg-paper">
+        <div className="text-center p-12 bg-white border-4 border-black shadow-brutal max-w-md w-full mx-4 rotate-1">
+          <div className="w-20 h-20 bg-nung-red text-white flex items-center justify-center border-2 border-black mx-auto mb-6 shadow-brutal-sm -rotate-2">
+            <i className="fa-solid fa-user-slash text-3xl" />
+          </div>
+          <h2 className="text-3xl font-display font-bold text-nung-dark mb-4 uppercase">
             Chưa đăng nhập
           </h2>
-          <p className="text-earth-600 mb-4">
-            Vui lòng đăng nhập để xem hồ sơ.
+          <p className="text-gray-600 font-serif font-bold mb-8">
+            Vui lòng đăng nhập để xem hồ sơ cá nhân của bạn.
           </p>
           <button
             onClick={() => setRoute(AppRoute.LOGIN)}
-            className="px-6 py-2 bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 transition-colors"
+            className="w-full py-4 bg-black text-white font-black uppercase tracking-widest border-2 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
           >
-            Đăng nhập
+            Đăng nhập ngay
           </button>
         </div>
       </div>
@@ -294,7 +296,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-earth-50 via-white to-bamboo-50/30 py-8">
+    <div className="min-h-screen bg-nung-sand bg-paper py-12 px-4">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       {/* Image Cropper Modal */}
@@ -306,21 +308,22 @@ const UserProfile: React.FC<UserProfileProps> = ({
         />
       )}
 
-      <div className="max-w-2xl mx-auto px-4">
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex flex-col md:flex-row items-center gap-6 mb-12 bg-white border-4 border-black p-6 shadow-brutal transform -rotate-1 relative">
           <button
             onClick={() => setRoute(AppRoute.DICTIONARY)}
-            className="p-2 hover:bg-earth-100 rounded-lg transition-colors"
+            className="absolute -top-4 -left-4 w-12 h-12 bg-black text-white hover:bg-nung-red border-2 border-white flex items-center justify-center transition-all shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+            title="Quay lại"
           >
-            <i className="fa-solid fa-arrow-left text-earth-600" />
+            <i className="fa-solid fa-arrow-left text-xl" />
           </button>
-          <div>
-            <h1 className="text-2xl font-serif font-bold text-earth-900">
+          <div className="text-center md:text-left pt-4 md:pt-0">
+            <h1 className="text-4xl font-display font-black text-nung-dark uppercase tracking-tighter">
               Hồ sơ cá nhân
             </h1>
-            <p className="text-earth-600 text-sm">
-              Quản lý thông tin tài khoản của bạn
+            <p className="text-gray-600 font-serif font-bold mt-1">
+              Quản lý thông tin & Bảo mật tài khoản
             </p>
           </div>
         </div>
@@ -332,16 +335,15 @@ const UserProfile: React.FC<UserProfileProps> = ({
         ) : (
           <div className="space-y-6">
             {/* Avatar Section */}
-            <div className="bg-white rounded-2xl p-6 border border-earth-200/50 shadow-sm">
-              <h2 className="text-lg font-semibold text-earth-900 mb-4">
-                Ảnh đại diện
+            <div className="bg-white border-4 border-black p-8 shadow-brutal relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-full bg-paper opacity-10 pointer-events-none"></div>
+              <h2 className="text-2xl font-display font-bold text-nung-dark mb-6 border-b-2 border-black pb-3 relative z-10">
+                📸 Ảnh đại diện
               </h2>
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
                 <div
-                  className={`relative w-24 h-24 rounded-full overflow-hidden border-4 transition-all ${
-                    dragOver
-                      ? "border-bamboo-500 scale-105"
-                      : "border-earth-200"
+                  className={`relative w-40 h-40 border-4 transition-all shadow-brutal-sm rotate-1 ${
+                    dragOver ? "border-nung-red scale-105" : "border-black"
                   }`}
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -357,18 +359,21 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-bamboo-400 to-bamboo-600 flex items-center justify-center text-white text-3xl font-bold">
+                    <div className="w-full h-full bg-nung-sand flex items-center justify-center text-nung-red text-6xl font-display font-black">
                       {(profile?.display_name ||
                         user.email)?.[0]?.toUpperCase()}
                     </div>
                   )}
                   {uploading && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <i className="fa-solid fa-circle-notch fa-spin text-white text-xl" />
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                      <i className="fa-solid fa-circle-notch fa-spin text-white text-3xl" />
                     </div>
                   )}
+                  <div className="absolute -bottom-2 -right-2 bg-black text-white px-2 py-1 text-[10px] font-black uppercase tracking-tighter shadow-brutal-sm">
+                    Profile Pic
+                  </div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 text-center md:text-left">
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -384,30 +389,32 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
-                    className="px-4 py-2 bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 disabled:opacity-50 transition-colors"
+                    className="px-8 py-3 bg-nung-red text-white border-2 border-black font-black uppercase tracking-widest shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
                   >
-                    <i className="fa-solid fa-upload mr-2" />
-                    Tải ảnh lên
+                    <i className="fa-solid fa-camera mr-2" />
+                    Thay đổi ảnh
                   </button>
-                  <p className="text-sm text-earth-500 mt-2">
-                    Kéo thả ảnh hoặc click để chọn. Ảnh sẽ tự động được tối ưu.
+                  <p className="text-xs font-bold text-gray-500 mt-4 uppercase tracking-widest leading-relaxed">
+                    Kéo thả ảnh hoặc click để chọn. <br />
+                    Tối đa 5MB, JPG/PNG/WEBP.
                   </p>
                 </div>
               </div>
             </div>
 
             {/* Profile Info */}
-            <div className="bg-white rounded-2xl p-6 border border-earth-200/50 shadow-sm">
-              <h2 className="text-lg font-semibold text-earth-900 mb-4">
-                Thông tin cá nhân
+            <div className="bg-white border-4 border-black p-8 shadow-brutal relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-nung-blue/5 -mr-16 -mt-16 rounded-full blur-2xl"></div>
+              <h2 className="text-2xl font-display font-bold text-nung-dark mb-6 border-b-2 border-black pb-3">
+                📝 Thông tin cơ bản
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
                   <label
                     htmlFor="displayName"
-                    className="block text-sm font-medium text-earth-700 mb-1"
+                    className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-2"
                   >
-                    Họ và tên
+                    Họ và tên hiển thị
                   </label>
                   <input
                     type="text"
@@ -416,90 +423,90 @@ const UserProfile: React.FC<UserProfileProps> = ({
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Nhập họ tên của bạn"
-                    className="w-full px-4 py-2 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-bold text-lg shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-earth-700 mb-1"
+                    className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2"
                   >
-                    Email
+                    Địa chỉ Email (Cố định)
                   </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={profile?.email || user.email}
-                    disabled
-                    className="w-full px-4 py-2 border border-earth-200 rounded-lg bg-earth-50 text-earth-500 cursor-not-allowed"
-                  />
+                  <div className="w-full px-4 py-3 border-2 border-black bg-gray-100 text-gray-500 font-bold cursor-not-allowed">
+                    {profile?.email || user.email}
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-earth-700 mb-1">
-                    Quyền hạn
+                  <label className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-2">
+                    Vai trò hệ thống
                   </label>
                   <div
-                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
+                    className={`inline-flex items-center gap-3 px-4 py-2 border-2 border-black font-black uppercase tracking-tighter text-sm shadow-brutal-sm ${
                       profile?.role === "admin"
-                        ? "bg-purple-50 text-purple-700"
-                        : "bg-bamboo-50 text-bamboo-700"
+                        ? "bg-purple-600 text-white"
+                        : "bg-nung-blue text-white"
                     }`}
                   >
                     <i
                       className={`fa-solid ${
-                        profile?.role === "admin" ? "fa-shield" : "fa-user"
+                        profile?.role === "admin"
+                          ? "fa-shield-halved"
+                          : "fa-user-gear"
                       }`}
                     />
                     {profile?.role === "admin"
-                      ? "Quản trị viên"
-                      : "Cộng tác viên"}
+                      ? "Administrator"
+                      : "Contributor"}
                   </div>
                 </div>
                 <button
                   onClick={handleSaveProfile}
                   disabled={saving || displayName === profile?.display_name}
-                  className="w-full py-2 bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full py-4 bg-black text-white font-black uppercase tracking-widest border-2 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
                   {saving ? (
                     <i className="fa-solid fa-circle-notch fa-spin" />
                   ) : (
-                    "Lưu thay đổi"
+                    "Cập nhật hồ sơ"
                   )}
                 </button>
               </div>
             </div>
 
             {/* Email Verification */}
-            <div className="bg-white rounded-2xl p-6 border border-earth-200/50 shadow-sm">
-              <h2 className="text-lg font-semibold text-earth-900 mb-4">
-                Xác thực email
+            <div className="bg-white border-4 border-black p-8 shadow-brutal relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-full bg-paper opacity-5 pointer-events-none"></div>
+              <h2 className="text-2xl font-display font-bold text-nung-dark mb-6 border-b-2 border-black pb-3 relative z-10">
+                🛡️ Xác thực bảo mật
               </h2>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                <div className="flex items-center gap-5">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    className={`w-16 h-16 border-4 border-black flex items-center justify-center shadow-brutal-sm rotate-3 transition-transform group-hover:rotate-0 ${
                       profile?.email_verified
-                        ? "bg-green-100 text-green-600"
-                        : "bg-amber-100 text-amber-600"
+                        ? "bg-nung-green text-white"
+                        : "bg-nung-red text-white"
                     }`}
                   >
                     <i
                       className={`fa-solid ${
-                        profile?.email_verified ? "fa-check" : "fa-clock"
-                      }`}
+                        profile?.email_verified
+                          ? "fa-user-check"
+                          : "fa-user-clock"
+                      } text-2xl`}
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-earth-900">
+                    <p className="text-xl font-display font-bold text-nung-dark uppercase tracking-tight">
                       {profile?.email_verified
-                        ? "Email đã xác thực"
-                        : "Email chưa xác thực"}
+                        ? "Đã xác thực Email"
+                        : "Chưa xác thực Email"}
                     </p>
-                    <p className="text-sm text-earth-500">
+                    <p className="text-sm font-serif font-bold text-gray-600">
                       {profile?.email_verified
-                        ? "Tài khoản của bạn đã được xác thực"
-                        : "Vui lòng kiểm tra email để xác thực"}
+                        ? "Tài khoản của bạn ở trạng thái an toàn."
+                        : "Vui lòng xác thực để bảo vệ tài khoản."}
                     </p>
                   </div>
                 </div>
@@ -507,12 +514,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <button
                     onClick={handleResendVerification}
                     disabled={sendingEmail}
-                    className="px-4 py-2 border border-bamboo-300 text-bamboo-700 rounded-lg hover:bg-bamboo-50 disabled:opacity-50 transition-colors"
+                    className="px-6 py-3 bg-white text-black border-2 border-black font-black uppercase tracking-widest shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
                   >
                     {sendingEmail ? (
                       <i className="fa-solid fa-circle-notch fa-spin" />
                     ) : (
-                      "Gửi lại"
+                      "Gửi lại mã"
                     )}
                   </button>
                 )}
@@ -520,24 +527,28 @@ const UserProfile: React.FC<UserProfileProps> = ({
             </div>
 
             {/* Change Password */}
-            <div className="bg-white rounded-2xl p-6 border border-earth-200/50 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-earth-900">
-                  Đổi mật khẩu
+            <div className="bg-white border-4 border-black p-8 shadow-brutal relative">
+              <div className="flex items-center justify-between mb-8 border-b-2 border-dotted border-black pb-4">
+                <h2 className="text-2xl font-display font-bold text-nung-dark uppercase tracking-tight">
+                  🔑 Đổi mật khẩu
                 </h2>
                 <button
                   onClick={() => setShowPasswordForm(!showPasswordForm)}
-                  className="text-bamboo-600 hover:text-bamboo-700 text-sm font-medium"
+                  className={`px-4 py-2 border-2 border-black font-black uppercase tracking-tighter text-xs shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all ${
+                    showPasswordForm
+                      ? "bg-black text-white"
+                      : "bg-nung-sand text-black"
+                  }`}
                 >
-                  {showPasswordForm ? "Hủy" : "Thay đổi"}
+                  {showPasswordForm ? "Đóng lại" : "Thay đổi ngay"}
                 </button>
               </div>
               {showPasswordForm && (
-                <div className="space-y-4">
+                <div className="space-y-6 animate-slide-in-bottom">
                   <div>
                     <label
                       htmlFor="currentPassword"
-                      className="block text-sm font-medium text-earth-700 mb-1"
+                      className="block text-xs font-black text-nung-dark uppercase tracking-widest mb-2"
                     >
                       Mật khẩu hiện tại
                     </label>
@@ -547,16 +558,16 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       name="currentPassword"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Nhập mật khẩu hiện tại"
-                      className="w-full px-4 py-2 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none"
+                      placeholder="Nhập mật khẩu cũ của bạn"
+                      className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="newPassword"
-                      className="block text-sm font-medium text-earth-700 mb-1"
+                      className="block text-xs font-black text-nung-blue uppercase tracking-widest mb-2"
                     >
-                      Mật khẩu mới
+                      Mật khẩu mới (Tối thiểu 8 ký tự)
                     </label>
                     <input
                       type="password"
@@ -564,14 +575,14 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       name="newPassword"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Tối thiểu 8 ký tự"
-                      className="w-full px-4 py-2 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none"
+                      placeholder="••••••••"
+                      className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="confirmPassword"
-                      className="block text-sm font-medium text-earth-700 mb-1"
+                      className="block text-xs font-black text-nung-blue uppercase tracking-widest mb-2"
                     >
                       Xác nhận mật khẩu mới
                     </label>
@@ -581,8 +592,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       name="confirmPassword"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Nhập lại mật khẩu mới"
-                      className="w-full px-4 py-2 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none"
+                      placeholder="••••••••"
+                      className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-bold shadow-brutal-sm focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all"
                     />
                   </div>
                   <button
@@ -593,12 +604,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       !newPassword ||
                       !confirmPassword
                     }
-                    className="w-full py-2 bg-earth-800 text-white rounded-lg hover:bg-earth-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="w-full py-4 bg-nung-red text-white font-black uppercase tracking-widest border-2 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {changingPassword ? (
                       <i className="fa-solid fa-circle-notch fa-spin" />
                     ) : (
-                      "Đổi mật khẩu"
+                      "Xác nhận đổi mật khẩu"
                     )}
                   </button>
                 </div>

@@ -203,6 +203,6 @@ Dự án được phát hành dưới giấy phép MIT. Xem file [LICENSE](LICEN
 ---
 
 <div align="center">
-  <p>🌟 Nếu dự án hữu ích, hãy cho chúng tôi một Star! 🌟</p>
+  <p>🌟 Nếu dự án hữu ích, hãy cho tôi một Star! 🌟</p>
   <p>Made with ❤️ for preserving Nung language and culture</p>
 </div>

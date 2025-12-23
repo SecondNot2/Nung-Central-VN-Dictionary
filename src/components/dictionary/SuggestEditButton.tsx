@@ -105,65 +105,65 @@ const SuggestEditButton: React.FC<SuggestEditButtonProps> = ({
     <>
       <button
         onClick={handleOpen}
-        className="flex items-center gap-1.5 text-sm text-earth-500 hover:text-bamboo-600 transition-colors px-2 py-1 rounded hover:bg-earth-50"
+        className="flex items-center gap-2 text-sm font-black text-gray-500 hover:text-nung-red transition-all px-4 py-2 border-2 border-black bg-white shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none uppercase tracking-widest"
         title="Đề xuất chỉnh sửa bản dịch"
       >
         <i className="fa-solid fa-pen-to-square" />
-        <span className="hidden sm:inline">Đề xuất chỉnh sửa</span>
+        <span className="hidden sm:inline">Góp ý</span>
       </button>
 
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => !submitting && setIsModalOpen(false)}
           />
 
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+          <div className="relative bg-white border-4 border-black shadow-brutal-lg w-full max-w-lg overflow-hidden animate-fade-in">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-earth-200 bg-gradient-to-r from-bamboo-50 to-earth-50">
+            <div className="flex items-center justify-between px-8 py-6 border-b-4 border-black bg-nung-red text-white">
               <div>
-                <h2 className="text-lg font-bold text-earth-900">
-                  <i className="fa-solid fa-pen-to-square mr-2 text-bamboo-600" />
+                <h2 className="text-2xl font-display font-bold uppercase tracking-tight">
+                  <i className="fa-solid fa-pen-to-square mr-3" />
                   Đề xuất chỉnh sửa
                 </h2>
-                <p className="text-xs text-earth-500 mt-0.5">
+                <p className="text-xs font-bold text-white/70 mt-1 uppercase tracking-widest">
                   Góp phần cải thiện chất lượng bản dịch
                 </p>
               </div>
               <button
                 onClick={() => !submitting && setIsModalOpen(false)}
                 disabled={submitting}
-                className="w-8 h-8 rounded-full hover:bg-earth-200 flex items-center justify-center transition-colors"
+                className="w-10 h-10 border-2 border-white flex items-center justify-center hover:bg-white hover:text-nung-red transition-colors shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none"
               >
-                <i className="fa-solid fa-xmark text-earth-500" />
+                <i className="fa-solid fa-xmark text-xl" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+            <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto bg-paper">
               {/* Original Text */}
               <div>
-                <label className="text-xs font-semibold text-earth-500 uppercase tracking-wide block mb-1">
+                <label className="text-xs font-black text-nung-red uppercase tracking-widest block mb-1">
                   Văn bản gốc
                 </label>
-                <p className="text-earth-800 bg-earth-50 px-3 py-2 rounded-lg text-sm">
+                <div className="text-nung-dark bg-white border-2 border-black p-4 font-body font-bold shadow-brutal-sm">
                   {originalText}
-                </p>
+                </div>
               </div>
 
               {/* Original Translation */}
               <div>
-                <label className="text-xs font-semibold text-earth-500 uppercase tracking-wide block mb-1">
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mb-1">
                   Bản dịch hiện tại
                 </label>
-                <div className="bg-earth-50 px-3 py-2 rounded-lg">
-                  <p className="text-earth-800 font-medium">
+                <div className="bg-gray-100 border-2 border-black p-4">
+                  <p className="text-gray-900 font-bold">
                     {originalTranslation.script}
                   </p>
                   {originalTranslation.phonetic && (
-                    <p className="text-bamboo-600 text-sm italic">
+                    <p className="text-nung-blue text-sm italic font-medium mt-1">
                       {originalTranslation.phonetic}
                     </p>
                   )}
@@ -171,79 +171,88 @@ const SuggestEditButton: React.FC<SuggestEditButtonProps> = ({
               </div>
 
               {/* Suggested Translation */}
-              <div>
-                <label className="text-xs font-semibold text-earth-500 uppercase tracking-wide block mb-1">
-                  Bản dịch đề xuất <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={suggestedScript}
-                  onChange={(e) => setSuggestedScript(e.target.value)}
-                  placeholder="Nhập văn bản dịch mới..."
-                  className="w-full px-3 py-2 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800"
-                />
-                <input
-                  type="text"
-                  value={suggestedPhonetic}
-                  onChange={(e) => setSuggestedPhonetic(e.target.value)}
-                  placeholder="Phiên âm (nếu có)..."
-                  className="w-full px-3 py-2 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800 mt-2 text-sm"
-                />
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-black text-nung-blue uppercase tracking-widest block mb-2">
+                    Bản dịch đề xuất <span className="text-nung-red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={suggestedScript}
+                    onChange={(e) => setSuggestedScript(e.target.value)}
+                    placeholder="Nhập văn bản dịch mới..."
+                    className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-bold text-lg"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-black text-nung-blue uppercase tracking-widest block mb-2">
+                    Phiên âm (nếu có)
+                  </label>
+                  <input
+                    type="text"
+                    value={suggestedPhonetic}
+                    onChange={(e) => setSuggestedPhonetic(e.target.value)}
+                    placeholder="Phiên âm ngữ âm..."
+                    className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark font-medium"
+                  />
+                </div>
               </div>
 
               {/* Reason */}
               <div>
-                <label className="text-xs font-semibold text-earth-500 uppercase tracking-wide block mb-1">
-                  Lý do chỉnh sửa (không bắt buộc)
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mb-2">
+                  Lý do chỉnh sửa
                 </label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   placeholder="Giải thích tại sao bạn đề xuất thay đổi này..."
                   rows={3}
-                  className="w-full px-3 py-2 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800 resize-none text-sm"
+                  className="w-full px-4 py-3 border-4 border-black outline-none focus:bg-nung-sand/10 text-nung-dark resize-none font-medium"
                 />
               </div>
 
               {/* Toast */}
               {toast && (
                 <div
-                  className={`px-4 py-3 rounded-lg flex items-center gap-2 ${
+                  className={`px-4 py-3 border-2 border-black shadow-brutal-sm flex items-center gap-3 animate-fade-in ${
                     toast.type === "success"
-                      ? "bg-green-50 text-green-700 border border-green-200"
-                      : "bg-red-50 text-red-700 border border-red-200"
+                      ? "bg-nung-green text-white"
+                      : "bg-nung-red text-white"
                   }`}
                 >
                   <i
                     className={`fa-solid ${
                       toast.type === "success"
                         ? "fa-check-circle"
-                        : "fa-times-circle"
+                        : "fa-triangle-exclamation"
                     }`}
                   />
-                  <span className="text-sm">{toast.message}</span>
+                  <span className="text-sm font-bold uppercase tracking-tight">
+                    {toast.message}
+                  </span>
                 </div>
               )}
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-earth-200 bg-earth-50 flex justify-end gap-3">
+            <div className="px-8 py-6 border-t-4 border-black bg-white flex justify-end gap-4 shadow-[0_-4px_0_0_#000]">
               <button
                 onClick={() => setIsModalOpen(false)}
                 disabled={submitting}
-                className="px-4 py-2 text-sm text-earth-600 hover:bg-earth-200 rounded-lg transition-colors"
+                className="px-6 py-3 font-bold text-gray-500 hover:text-black hover:bg-gray-100 transition-colors"
               >
-                Hủy
+                Hủy bỏ
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!suggestedScript.trim() || submitting}
-                className="px-4 py-2 text-sm bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+                className="px-8 py-3 bg-nung-red text-white border-2 border-black font-black uppercase tracking-widest shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting && (
                   <i className="fa-solid fa-circle-notch fa-spin" />
                 )}
-                Gửi đề xuất
+                Gửi đóng góp
               </button>
             </div>
           </div>

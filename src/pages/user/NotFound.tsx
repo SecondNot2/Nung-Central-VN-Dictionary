@@ -7,113 +7,75 @@ interface NotFoundProps {
 
 const NotFound: React.FC<NotFoundProps> = ({ setRoute }) => {
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-nung-dark">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 grayscale hover:grayscale-0 transition-all duration-1000"
         style={{ backgroundImage: "url('/404-background.png')" }}
       />
 
-      {/* Overlay - stronger on mobile for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-earth-900/90 via-earth-900/40 to-earth-900/20 md:bg-none" />
-
-      {/* Desktop only: subtle overlay on the left for card visibility */}
-      <div className="hidden md:block absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-earth-900/60 to-transparent" />
-
       {/* Content */}
-      <div className="relative z-10 min-h-screen flex items-end md:items-center justify-center md:justify-start p-6 pb-10 md:p-12">
-        {/* Card - transparent on mobile, glassmorphism on desktop */}
-        <div className="max-w-sm w-full md:bg-earth-900/40 md:backdrop-blur-md rounded-2xl md:border md:border-earth-700/30 p-0 md:p-8 md:shadow-2xl">
+      <div className="relative z-10 min-h-screen flex items-center justify-center md:justify-start p-6 md:p-24">
+        {/* Brutalist Card */}
+        <div className="max-w-md w-full bg-white border-8 border-black p-10 shadow-brutal transform -rotate-1">
           {/* 404 Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/30 border border-amber-500/40 mb-4 md:mb-6">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-amber-300 text-sm font-semibold">
-              Lỗi 404
+          <div className="inline-flex items-center gap-3 px-4 py-2 bg-nung-red text-white border-4 border-black mb-8 shadow-brutal-sm rotate-3">
+            <span className="w-3 h-3 bg-white border-2 border-black animate-ping" />
+            <span className="font-black uppercase tracking-widest text-sm">
+              Mã lỗi 404
             </span>
           </div>
 
           {/* Message */}
-          <div className="space-y-3 mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
-              Lạc đường rồi!
+          <div className="space-y-6 mb-10">
+            <h1 className="text-5xl md:text-6xl font-display font-black text-nung-dark uppercase tracking-tighter leading-none">
+              Lạc đường <br /> rồi bạn ơi!
             </h1>
-            <p className="text-white/90 md:text-earth-300 text-sm leading-relaxed drop-shadow-md md:drop-shadow-none">
-              Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển đến
-              địa chỉ khác.
+            <p className="text-gray-600 font-serif font-bold text-lg leading-relaxed italic border-l-8 border-nung-blue pl-6">
+              Trang bạn đang tìm kiếm không tồn tại hoặc đã bị "thất lạc" vào
+              vùng dữ liệu khác rồi.
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col gap-3 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <button
               onClick={() => setRoute(AppRoute.DICTIONARY)}
-              className="group flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-medium shadow-lg shadow-green-900/30 transition-all duration-300 cursor-pointer"
+              className="flex-1 group flex items-center justify-center gap-3 px-6 py-4 bg-nung-red text-white border-4 border-black font-black uppercase tracking-widest text-sm shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
+              <i className="fa-solid fa-house text-xl"></i>
               <span>Về Trang chủ</span>
             </button>
 
             <button
               onClick={() => window.history.back()}
-              className="group flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/20 hover:bg-white/30 md:bg-white/10 md:hover:bg-white/20 backdrop-blur-sm text-white font-medium border border-white/30 md:border-white/20 transition-all duration-300 cursor-pointer"
+              className="flex-1 group flex items-center justify-center gap-3 px-6 py-4 bg-white text-black border-4 border-black font-black uppercase tracking-widest text-sm shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              <svg
-                className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="19" y1="12" x2="5" y2="12" />
-                <polyline points="12 19 5 12 12 5" />
-              </svg>
+              <i className="fa-solid fa-arrow-left text-xl group-hover:-translate-x-2 transition-transform"></i>
               <span>Quay lại</span>
             </button>
           </div>
 
           {/* Helpful Links */}
-          <div className="pt-5 border-t border-white/20 md:border-white/10">
-            <p className="text-white/70 md:text-earth-400 text-xs mb-3">
-              Có thể bạn muốn tìm:
+          <div className="pt-8 border-t-4 border-black border-dotted">
+            <p className="text-gray-400 font-black uppercase tracking-widest text-[10px] mb-4">
+              Thử tìm ở các khu vực khác:
             </p>
             <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setRoute(AppRoute.DICTIONARY)}
-                className="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 md:bg-white/5 md:hover:bg-white/15 text-white md:text-earth-300 md:hover:text-white text-xs transition-all duration-200 cursor-pointer border border-white/20 md:border-white/10"
-              >
-                Tra từ điển
-              </button>
-              <button
-                onClick={() => setRoute(AppRoute.CHAT)}
-                className="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 md:bg-white/5 md:hover:bg-white/15 text-white md:text-earth-300 md:hover:text-white text-xs transition-all duration-200 cursor-pointer border border-white/20 md:border-white/10"
-              >
-                Chatbot
-              </button>
-              <button
-                onClick={() => setRoute(AppRoute.DICTIONARY_LIST)}
-                className="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 md:bg-white/5 md:hover:bg-white/15 text-white md:text-earth-300 md:hover:text-white text-xs transition-all duration-200 cursor-pointer border border-white/20 md:border-white/10"
-              >
-                Danh sách từ
-              </button>
-              <button
-                onClick={() => setRoute(AppRoute.CONTRIBUTE)}
-                className="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 md:bg-white/5 md:hover:bg-white/15 text-white md:text-earth-300 md:hover:text-white text-xs transition-all duration-200 cursor-pointer border border-white/20 md:border-white/10"
-              >
-                Đóng góp
-              </button>
+              {[
+                { label: "Tra từ điển", route: AppRoute.DICTIONARY },
+                { label: "Chatbot AI", route: AppRoute.CHAT },
+                { label: "Danh sách từ", route: AppRoute.DICTIONARY_LIST },
+                { label: "Đóng góp", route: AppRoute.CONTRIBUTE },
+              ].map((link) => (
+                <button
+                  key={link.label}
+                  onClick={() => setRoute(link.route)}
+                  className="px-3 py-1.5 bg-nung-sand/20 hover:bg-black hover:text-white border-2 border-black font-black uppercase tracking-widest text-[10px] transition-all"
+                >
+                  {link.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>

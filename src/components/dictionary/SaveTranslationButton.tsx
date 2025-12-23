@@ -90,19 +90,25 @@ const SaveTranslationButton: React.FC<SaveTranslationButtonProps> = ({
     <button
       onClick={handleClick}
       disabled={loading || checking}
-      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${
+      className={`flex items-center gap-2 px-4 py-2 border-2 border-black transition-all shadow-brutal-sm active:translate-x-1 active:translate-y-1 active:shadow-none ${
         isSaved
-          ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
-          : "bg-earth-100 text-earth-600 hover:bg-earth-200"
-      } ${loading || checking ? "opacity-50 cursor-wait" : "cursor-pointer"}`}
+          ? "bg-white text-nung-red"
+          : "bg-white text-gray-400 group-hover:text-black"
+      } ${
+        loading || checking
+          ? "opacity-50 cursor-wait shadow-none translate-x-1 translate-y-1"
+          : "cursor-pointer"
+      }`}
       title={isSaved ? "Bỏ lưu" : "Lưu bản dịch"}
     >
       {loading || checking ? (
         <i className="fa-solid fa-circle-notch fa-spin" />
       ) : (
-        <i className={`fa-${isSaved ? "solid" : "regular"} fa-bookmark`} />
+        <i className={`fa-${isSaved ? "solid" : "regular"} fa-heart`} />
       )}
-      <span className="text-sm font-medium">{isSaved ? "Đã lưu" : "Lưu"}</span>
+      <span className="text-sm font-black uppercase tracking-widest">
+        {isSaved ? "Đã yêu" : "Yêu"}
+      </span>
     </button>
   );
 };

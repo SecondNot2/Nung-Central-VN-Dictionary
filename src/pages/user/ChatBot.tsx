@@ -19,9 +19,9 @@ const ChatBot: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -38,9 +38,8 @@ const ChatBot: React.FC = () => {
     setLoading(true);
 
     try {
-      // Format history for the new service structure (simple array of role/text)
       const history = messages.map((m) => ({
-        role: m.role === "model" ? "assistant" : "user", // OpenAI uses 'assistant' usually, but let's stick to what the service expects
+        role: m.role === "model" ? "assistant" : "user",
         text: m.text,
       }));
 
@@ -70,23 +69,36 @@ const ChatBot: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto h-[calc(100vh-64px)] flex flex-col p-4">
-      <div className="bg-white rounded-t-xl shadow-lg border-b border-earth-200 p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-bamboo-100 flex items-center justify-center mr-3">
-            <i className="fa-solid fa-robot text-bamboo-600"></i>
+    <div className="max-w-5xl mx-auto h-[calc(100vh-100px)] flex flex-col p-4 md:p-8">
+      {/* Bot Header */}
+      <div className="bg-white border-4 border-black shadow-brutal p-6 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-nung-red/5 -mr-12 -mt-12 rounded-full"></div>
+        <div className="flex items-center relative z-10">
+          <div className="w-16 h-16 border-4 border-black bg-nung-blue text-white flex items-center justify-center mr-4 shadow-brutal-sm rotate-3">
+            <i className="fa-solid fa-robot text-3xl"></i>
           </div>
           <div>
-            <h2 className="font-bold text-earth-900">Trợ lý Ngôn ngữ</h2>
-            <p className="text-xs text-earth-500">Hỗ trợ bởi AI</p>
+            <h2 className="text-3xl font-display font-black text-nung-dark uppercase tracking-tighter">
+              Trợ lý Ngôn ngữ
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="bg-black text-white px-2 py-0.5 text-[10px] font-black uppercase tracking-widest border border-black">
+                HỆ THỐNG AI
+              </span>
+              <span className="text-nung-red font-black text-[10px] uppercase tracking-widest flex items-center gap-1">
+                <span className="w-2 h-2 bg-nung-red rounded-full animate-pulse"></span>
+                ĐANG TRỰC TUYẾN
+              </span>
+            </div>
           </div>
         </div>
-        <p className="text-sm text-earth-500 mb-4 text-green-700">
-          (Tính năng đang được phát triển)
-        </p>
+        <span className="bg-nung-sand border-2 border-black px-3 py-1 font-black uppercase tracking-widest text-[10px] -rotate-1">
+          Beta Version 2.0
+        </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto bg-earth-50 p-4 space-y-4 shadow-inner">
+      {/* Chat Area */}
+      <div className="flex-1 overflow-y-auto bg-nung-sand/5 bg-paper border-4 border-black shadow-brutal p-6 space-y-8 scroll-smooth">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -94,55 +106,78 @@ const ChatBot: React.FC = () => {
               msg.role === "user" ? "justify-end" : "justify-start"
             }`}
           >
-            <div
-              className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-sm ${
-                msg.role === "user"
-                  ? "bg-bamboo-600 text-white rounded-br-none"
-                  : "bg-white text-earth-800 border border-earth-100 rounded-bl-none"
-              }`}
-            >
-              <p className="whitespace-pre-wrap">{msg.text}</p>
-              <p
-                className={`text-[10px] mt-1 ${
-                  msg.role === "user" ? "text-bamboo-200" : "text-earth-400"
+            <div className={`max-w-[85%] group`}>
+              {msg.role === "model" && (
+                <p className="text-[10px] font-black uppercase tracking-widest text-nung-blue mb-2 pl-2">
+                  ANTIGRAVITY BOT
+                </p>
+              )}
+              {msg.role === "user" && (
+                <p className="text-[10px] font-black uppercase tracking-widest text-nung-red mb-2 text-right pr-2">
+                  BẠN
+                </p>
+              )}
+
+              <div
+                className={`px-6 py-4 border-4 border-black transform transition-all group-hover:rotate-0 ${
+                  msg.role === "user"
+                    ? "bg-nung-blue text-white shadow-brutal-sm -rotate-1"
+                    : "bg-white text-nung-dark shadow-brutal-sm rotate-1"
                 }`}
               >
-                {msg.timestamp.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
+                <p className="text-lg font-serif font-bold leading-relaxed whitespace-pre-wrap">
+                  {msg.text}
+                </p>
+
+                <div
+                  className={`mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-60 ${
+                    msg.role === "user" ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  <i className="fa-solid fa-clock"></i>
+                  {msg.timestamp.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         ))}
+
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-white rounded-2xl rounded-bl-none px-5 py-3 border border-earth-100 shadow-sm flex items-center space-x-2">
-              <div className="w-2 h-2 bg-earth-400 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-earth-400 rounded-full animate-bounce delay-75"></div>
-              <div className="w-2 h-2 bg-earth-400 rounded-full animate-bounce delay-150"></div>
+            <div className="bg-white border-4 border-black px-6 py-4 shadow-brutal-sm flex items-center space-x-3 rotate-1">
+              <div className="w-3 h-3 bg-nung-red border-2 border-black animate-bounce"></div>
+              <div className="w-3 h-3 bg-nung-red border-2 border-black animate-bounce delay-75"></div>
+              <div className="w-3 h-3 bg-nung-red border-2 border-black animate-bounce delay-150"></div>
+              <span className="ml-2 font-black uppercase tracking-widest text-xs">
+                AI đang soạn tin...
+              </span>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-white p-4 rounded-b-xl shadow-lg border-t border-earth-200">
-        <div className="flex items-center space-x-2">
+      {/* Input Area */}
+      <div className="mt-6 bg-white border-4 border-black shadow-brutal p-4 relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-nung-red/10"></div>
+        <div className="flex items-center gap-4 relative z-10">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Hỏi về từ vựng Nùng, ngữ pháp hoặc văn hóa..."
-            className="flex-1 border border-earth-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800 placeholder-earth-400"
+            placeholder="Gửi tin nhắn cho trợ lý ảo..."
+            className="flex-1 bg-nung-sand/10 border-2 border-black px-6 py-4 focus:outline-none focus:bg-white focus:ring-4 focus:ring-nung-blue/20 transition-all font-serif font-bold text-nung-dark placeholder-gray-400"
           />
           <button
             onClick={handleSend}
             disabled={loading || !input.trim()}
-            className="bg-bamboo-600 hover:bg-bamboo-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-nung-red text-white border-4 border-black p-4 flex items-center justify-center shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
           >
-            <i className="fa-solid fa-paper-plane"></i>
+            <i className="fa-solid fa-paper-plane text-2xl group-hover:rotate-12 transition-transform"></i>
           </button>
         </div>
       </div>

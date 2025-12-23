@@ -49,32 +49,32 @@ const Navigation: React.FC<NavigationProps> = ({
   const visibleNavItems = getVisibleNavItems();
 
   return (
-    <nav className="sticky top-0 z-50 bg-earth-900 text-earth-50 shadow-md">
+    <nav className="sticky top-0 z-50 bg-nung-sand border-b-4 border-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div
-            className="flex items-center space-x-3 cursor-pointer"
+            className="flex items-center cursor-pointer group"
             onClick={() => setRoute(AppRoute.DICTIONARY)}
           >
-            <div className="bg-bamboo-600 p-2 rounded-full">
-              <i className="fa-solid fa-language text-white" />
+            <div className="flex items-center bg-nung-red text-white border-2 border-black p-2 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
+              <i className="fa-solid fa-compass text-2xl mr-2" />
+              <span className="font-display text-2xl tracking-tight">
+                NungDic
+              </span>
             </div>
-            <span className="font-serif font-bold text-xl tracking-wide">
-              NungDic
-            </span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-2 font-serif font-bold text-sm">
             {visibleNavItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setRoute(item.id)}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                className={`px-4 py-2 border-2 transition-all duration-200 ${
                   currentRoute === item.id
-                    ? "bg-earth-700 text-white"
-                    : "text-earth-200 hover:bg-earth-800 hover:text-white"
+                    ? "bg-nung-blue text-white border-black shadow-brutal-sm"
+                    : "border-transparent hover:border-black hover:bg-white text-nung-dark"
                 }`}
               >
                 <i className={`fa-solid ${item.icon} mr-2`} />
@@ -84,26 +84,26 @@ const Navigation: React.FC<NavigationProps> = ({
           </div>
 
           {/* Right Side: Auth */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             {user ? (
               /* User Menu */
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-earth-800 transition-colors"
+                  className="flex items-center space-x-2 px-3 py-2 border-2 border-black bg-white shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
                 >
                   {user.avatar ? (
                     <img
                       src={user.avatar}
                       alt={user.name}
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="w-8 h-8 rounded-none border-2 border-black object-cover"
                     />
                   ) : (
-                    <div className="w-8 h-8 bg-bamboo-600 rounded-full flex items-center justify-center text-white font-medium">
+                    <div className="w-8 h-8 bg-nung-green border-2 border-black flex items-center justify-center text-white font-bold">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className="hidden md:block text-sm font-medium">
+                  <span className="hidden md:block text-sm font-bold uppercase">
                     {user.name}
                   </span>
                   <i
@@ -120,15 +120,17 @@ const Navigation: React.FC<NavigationProps> = ({
                       className="fixed inset-0 z-40"
                       onClick={() => setIsUserMenuOpen(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-earth-200 py-2 z-50 animate-fade-in">
-                      <div className="px-4 py-3 border-b border-earth-100">
-                        <p className="text-sm font-medium text-earth-900">
+                    <div className="absolute right-0 mt-3 w-64 bg-white border-4 border-black shadow-brutal-lg py-2 z-50 animate-fade-in">
+                      <div className="px-4 py-3 border-b-2 border-black bg-nung-sand/30">
+                        <p className="text-sm font-bold text-nung-dark uppercase">
                           {user.name}
                         </p>
-                        <p className="text-xs text-earth-500">{user.email}</p>
+                        <p className="text-xs font-medium text-gray-600 truncate">
+                          {user.email}
+                        </p>
                         {isAdmin && (
-                          <span className="inline-block mt-1 px-2 py-0.5 bg-bamboo-100 text-bamboo-700 text-xs font-medium rounded-full">
-                            Quản trị viên
+                          <span className="inline-block mt-1 px-2 py-0.5 bg-nung-red text-white text-[10px] font-bold uppercase border-1 border-black">
+                            ADMIN
                           </span>
                         )}
                       </div>
@@ -137,9 +139,9 @@ const Navigation: React.FC<NavigationProps> = ({
                           setRoute(AppRoute.MY_LIBRARY);
                           setIsUserMenuOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-earth-700 hover:bg-earth-50 transition-colors flex items-center"
+                        className="w-full text-left px-4 py-3 text-sm font-bold hover:bg-nung-blue hover:text-white transition-colors flex items-center border-b-2 border-transparent hover:border-black"
                       >
-                        <i className="fa-solid fa-folder-open mr-2" />
+                        <i className="fa-solid fa-folder-open mr-3" />
                         Thư viện của tôi
                       </button>
                       <button
@@ -147,9 +149,9 @@ const Navigation: React.FC<NavigationProps> = ({
                           setRoute(AppRoute.PROFILE);
                           setIsUserMenuOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-earth-700 hover:bg-earth-50 transition-colors flex items-center"
+                        className="w-full text-left px-4 py-3 text-sm font-bold hover:bg-nung-blue hover:text-white transition-colors flex items-center border-b-2 border-transparent hover:border-black"
                       >
-                        <i className="fa-solid fa-user mr-2" />
+                        <i className="fa-solid fa-user mr-3" />
                         Hồ sơ cá nhân
                       </button>
                       <button
@@ -157,9 +159,9 @@ const Navigation: React.FC<NavigationProps> = ({
                           onLogout?.();
                           setIsUserMenuOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center"
+                        className="w-full text-left px-4 py-3 text-sm font-bold text-nung-red hover:bg-nung-red hover:text-white transition-colors flex items-center"
                       >
-                        <i className="fa-solid fa-right-from-bracket mr-2" />
+                        <i className="fa-solid fa-right-from-bracket mr-3" />
                         Đăng xuất
                       </button>
                     </div>
@@ -168,16 +170,16 @@ const Navigation: React.FC<NavigationProps> = ({
               </div>
             ) : (
               /* Login/Register Buttons */
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setRoute(AppRoute.LOGIN)}
-                  className="px-4 py-2 text-sm font-medium text-earth-200 hover:text-white transition-colors"
+                  className="hidden sm:block px-4 py-2 text-sm font-bold border-2 border-transparent hover:border-black transition-all"
                 >
                   Đăng nhập
                 </button>
                 <button
                   onClick={() => setRoute(AppRoute.REGISTER)}
-                  className="px-4 py-2 text-sm font-medium bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 transition-colors"
+                  className="px-6 py-2 text-sm font-bold bg-nung-red text-white border-2 border-black shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
                 >
                   Đăng ký
                 </button>
@@ -187,12 +189,12 @@ const Navigation: React.FC<NavigationProps> = ({
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-earth-800 transition-colors"
+              className="lg:hidden p-2 border-2 border-black bg-white hover:bg-nung-sand transition-colors"
             >
               <i
                 className={`fa-solid ${
                   isMobileMenuOpen ? "fa-xmark" : "fa-bars"
-                } text-lg`}
+                } text-xl`}
               />
             </button>
           </div>
@@ -200,8 +202,8 @@ const Navigation: React.FC<NavigationProps> = ({
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-earth-800 py-3 animate-fade-in">
-            <div className="space-y-1">
+          <div className="lg:hidden border-t-4 border-black py-4 bg-nung-sand animate-fade-in">
+            <div className="space-y-2">
               {visibleNavItems.map((item) => (
                 <button
                   key={item.id}
@@ -209,16 +211,38 @@ const Navigation: React.FC<NavigationProps> = ({
                     setRoute(item.id);
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-full text-left px-5 py-4 border-2 transition-all font-serif font-bold ${
                     currentRoute === item.id
-                      ? "bg-earth-700 text-white"
-                      : "text-earth-200 hover:bg-earth-800"
+                      ? "bg-nung-blue text-white border-black shadow-brutal-sm"
+                      : "border-transparent hover:border-black hover:bg-white"
                   }`}
                 >
-                  <i className={`fa-solid ${item.icon} mr-3 w-5 text-center`} />
+                  <i className={`fa-solid ${item.icon} mr-4 w-6 text-center`} />
                   {item.label}
                 </button>
               ))}
+              {!user && (
+                <div className="pt-4 mt-4 border-t-2 border-black/10 flex flex-col space-y-2 px-2">
+                  <button
+                    onClick={() => {
+                      setRoute(AppRoute.LOGIN);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full py-3 font-bold border-2 border-black bg-white"
+                  >
+                    Đăng nhập
+                  </button>
+                  <button
+                    onClick={() => {
+                      setRoute(AppRoute.REGISTER);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full py-3 font-bold border-2 border-black bg-nung-red text-white shadow-brutal-sm"
+                  >
+                    Tham gia ngay
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -351,12 +351,17 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       {/* Toast Container */}
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-serif font-bold text-earth-900 mb-2">
-          Từ điển ngôn ngữ dân tộc - vùng miền
+      <div className="text-center mb-12 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-12 bg-nung-sand/40 -rotate-1 skew-x-12 blur-xl -z-10"></div>
+        <h1 className="text-4xl md:text-6xl font-display font-bold text-nung-dark mb-2 text-outline-light">
+          Từ điển{" "}
+          <span className="bg-nung-red text-white px-3 py-0.5 border-2 border-black inline-block transform rotate-1 shadow-brutal-sm ">
+            Nùng
+          </span>{" "}
+          & Miền Trung
         </h1>
-        <p className="text-earth-700">
-          Dịch tiếng Việt sang Tiếng Nùng (Lạng Sơn) và Phương ngữ Miền Trung
+        <p className="text-nung-blue font-serif font-bold text-lg uppercase tracking-widest mt-6">
+          Gìn giữ ngôn ngữ - Kết nối cội nguồn
         </p>
       </div>
 
@@ -375,23 +380,27 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       />
 
       {/* Input Section */}
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-earth-200">
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <CustomSelect
-            value={sourceLang}
-            onChange={setSourceLang}
-            options={sourceLanguageOptions}
-            label="Ngôn ngữ nguồn"
-          />
-          <div className="flex items-end justify-center pb-3">
+      <div className="bg-white border-4 border-black shadow-brutal-lg p-8 mb-12 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-16 h-16 bg-nung-red/5 -mr-8 -mt-8 transform rotate-45"></div>
+
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
+          <div className="flex-1">
+            <CustomSelect
+              value={sourceLang}
+              onChange={setSourceLang}
+              options={sourceLanguageOptions}
+              label="Ngôn ngữ nguồn"
+            />
+          </div>
+          <div className="flex items-end justify-center pb-2">
             <button
               type="button"
               onClick={handleSwapLanguages}
               disabled={targetLang === "all"}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-12 h-12 border-2 border-black flex items-center justify-center transition-all shadow-brutal-sm ${
                 targetLang === "all"
-                  ? "bg-earth-100 text-earth-300 cursor-not-allowed"
-                  : "bg-bamboo-100 text-bamboo-600 hover:bg-bamboo-200 hover:scale-110 active:scale-95"
+                  ? "bg-gray-100 text-gray-300 cursor-not-allowed opacity-50"
+                  : "bg-white text-nung-red hover:bg-nung-red hover:text-white hover:shadow-none hover:translate-x-1 hover:translate-y-1"
               }`}
               title="Hoán đổi ngôn ngữ"
             >
@@ -399,18 +408,20 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
               <i className="fa-solid fa-arrow-down-arrow-up md:hidden"></i>
             </button>
           </div>
-          <CustomSelect
-            value={targetLang}
-            onChange={setTargetLang}
-            options={getFilteredTargetOptions()}
-            label="Ngôn ngữ đích"
-          />
+          <div className="flex-1">
+            <CustomSelect
+              value={targetLang}
+              onChange={setTargetLang}
+              options={getFilteredTargetOptions()}
+              label="Ngôn ngữ đích"
+            />
+          </div>
         </div>
 
         <div className="relative">
           <textarea
-            className="w-full p-4 border border-earth-300 rounded-lg focus:ring-2 focus:ring-bamboo-500 focus:border-transparent outline-none transition-all text-lg min-h-[120px] bg-white text-earth-900 placeholder-earth-400"
-            placeholder="Nhập câu tiếng Việt vào đây..."
+            className="w-full p-6 border-4 border-black font-body text-xl font-medium outline-none transition-all min-h-[160px] bg-nung-sand/10 text-nung-dark placeholder-gray-400 focus:bg-white"
+            placeholder="Nhập nội dung cần tra cứu..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             spellCheck={false}
@@ -418,36 +429,40 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
           {/* Spell Check Suggestion */}
           {spellingSuggestion && (
-            <div className="absolute bottom-4 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border border-bamboo-200 animate-fade-in">
-              <span className="text-earth-500 text-sm mr-2">Ý bạn là:</span>
+            <div className="absolute bottom-6 left-6 z-10 bg-white border-2 border-black px-4 py-2 shadow-brutal-sm animate-fade-in flex items-center gap-3">
+              <span className="text-gray-500 text-sm font-bold">Gợi ý:</span>
               <button
                 onClick={applySuggestion}
-                className="text-bamboo-700 font-bold hover:underline"
+                className="text-nung-red font-bold hover:underline"
               >
                 {spellingSuggestion}
               </button>
             </div>
           )}
-          <button
-            onClick={handleTranslate}
-            disabled={loading || !inputText.trim()}
-            className={`absolute bottom-4 right-4 px-6 py-2 rounded-full font-medium shadow-md transition-all flex items-center ${
-              loading
-                ? "bg-earth-300 text-earth-600 cursor-not-allowed"
-                : "bg-bamboo-600 text-white hover:bg-bamboo-700 active:scale-95"
-            }`}
-          >
-            {loading ? (
-              <>
-                <i className="fa-solid fa-circle-notch fa-spin mr-2"></i> Đang
-                dịch...
-              </>
-            ) : (
-              <>
-                Dịch<i className="fa-solid fa-arrow-right ml-2"></i>
-              </>
-            )}
-          </button>
+
+          <div className="mt-6 flex justify-end">
+            <button
+              onClick={handleTranslate}
+              disabled={loading || !inputText.trim()}
+              className={`group flex items-center gap-3 px-8 py-4 border-2 border-black font-serif font-black text-xl uppercase tracking-wider transition-all shadow-brutal ${
+                loading
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none translate-x-1 translate-y-1"
+                  : "bg-nung-red text-white hover:bg-white hover:text-nung-red hover:shadow-none hover:translate-x-1 hover:translate-y-1"
+              }`}
+            >
+              {loading ? (
+                <>
+                  <i className="fa-solid fa-circle-notch fa-spin"></i> Đang xử
+                  lý
+                </>
+              ) : (
+                <>
+                  Tra cứu{" "}
+                  <i className="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -464,136 +479,139 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
       {/* Loading Skeleton */}
       {loading && !result && (
-        <div className="space-y-6 animate-pulse">
-          <div className="bg-white rounded-xl shadow-md border-l-4 border-earth-300 h-40 w-full p-6">
-            <div className="h-6 bg-earth-200 rounded w-1/4 mb-4"></div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="h-10 bg-earth-100 rounded"></div>
-              <div className="h-10 bg-earth-100 rounded"></div>
+        <div className="space-y-8 animate-pulse">
+          <div className="bg-white border-4 border-black shadow-brutal p-8">
+            <div className="h-8 bg-gray-200 border-2 border-black w-1/4 mb-6"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="h-20 bg-gray-100 border-2 border-black"></div>
+              <div className="h-20 bg-gray-100 border-2 border-black"></div>
             </div>
           </div>
-          <div className="bg-white rounded-xl shadow h-32 w-full p-6">
-            <div className="h-6 bg-earth-200 rounded w-1/3 mb-4"></div>
-            <div className="h-4 bg-earth-100 rounded w-full mb-2"></div>
-            <div className="h-4 bg-earth-100 rounded w-2/3"></div>
+          <div className="bg-white border-4 border-black shadow-brutal p-8">
+            <div className="h-8 bg-gray-200 border-2 border-black w-1/3 mb-6"></div>
+            <div className="h-4 bg-gray-100 border-2 border-black w-full mb-4"></div>
+            <div className="h-4 bg-gray-100 border-2 border-black w-2/3"></div>
           </div>
         </div>
       )}
 
       {/* Results Section */}
       {result && !loading && (
-        <div className="space-y-6">
+        <div className="space-y-12 mb-20">
           {/* Translation Cards */}
-          {result.translations.map((trans, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-xl shadow-md border-l-4 border-bamboo-500 overflow-hidden"
-            >
-              <div className="bg-bamboo-50 px-6 py-4 flex justify-between items-center border-b border-bamboo-100">
-                <h2 className="text-xl font-bold text-bamboo-900">
-                  {trans.language}
-                </h2>
-                <div className="flex items-center gap-2">
-                  <SaveTranslationButton
-                    user={user || null}
-                    originalText={inputText}
-                    sourceLang={sourceLang}
-                    targetLang={targetLang}
-                    result={result}
-                    onSaveSuccess={() =>
-                      addToast("Đã lưu bản dịch!", "success")
-                    }
-                    onLoginRequired={() => {
-                      addToast("Vui lòng đăng nhập để lưu bản dịch", "warning");
-                      if (setRoute) setRoute(AppRoute.LOGIN);
-                    }}
-                  />
-                  <button
-                    onClick={() =>
-                      playAudio(trans.phonetic || trans.script, idx)
-                    }
-                    className="flex items-center space-x-2 text-bamboo-700 hover:text-bamboo-900 transition-colors px-3 py-1 rounded hover:bg-bamboo-100"
-                    disabled={ttsLoading !== null}
-                    title="Nghe phát âm"
-                  >
-                    {ttsLoading === idx ? (
-                      <>
+          <div className="grid grid-cols-1 gap-8">
+            {result.translations.map((trans, idx) => (
+              <div
+                key={idx}
+                className="bg-white border-4 border-black shadow-brutal-lg overflow-hidden relative group animate-fade-in"
+              >
+                <div className="bg-nung-sand border-b-4 border-black px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                  <div>
+                    <h2 className="text-3xl font-display font-bold text-nung-dark uppercase tracking-tight">
+                      {trans.language}
+                    </h2>
+                    <div className="h-1 w-20 bg-nung-red mt-1"></div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <SaveTranslationButton
+                      user={user || null}
+                      originalText={inputText}
+                      sourceLang={sourceLang}
+                      targetLang={targetLang}
+                      result={result}
+                      onSaveSuccess={() =>
+                        addToast("Đã lưu bản dịch!", "success")
+                      }
+                      onLoginRequired={() => {
+                        addToast(
+                          "Vui lòng đăng nhập để lưu bản dịch",
+                          "warning"
+                        );
+                        if (setRoute) setRoute(AppRoute.LOGIN);
+                      }}
+                    />
+                    <button
+                      onClick={() =>
+                        playAudio(trans.phonetic || trans.script, idx)
+                      }
+                      className="bg-black text-white px-6 py-2 border-2 border-black font-bold flex items-center gap-3 shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+                      disabled={ttsLoading !== null}
+                      title="Nghe phát âm"
+                    >
+                      {ttsLoading === idx ? (
                         <i className="fa-solid fa-circle-notch fa-spin"></i>
-                        <span className="text-sm font-medium">
-                          Đang tạo âm thanh...
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <i className="fa-solid fa-volume-high text-xl"></i>
-                        <span className="text-sm font-medium">Nghe</span>
-                      </>
-                    )}
-                  </button>
+                      ) : (
+                        <i className="fa-solid fa-volume-high"></i>
+                      )}
+                      <span>Nghe</span>
+                    </button>
 
-                  {/* Suggest Edit Button */}
-                  <SuggestEditButton
-                    user={user || null}
-                    originalText={inputText}
-                    sourceLang={sourceLang}
-                    targetLang={targetLang}
-                    result={result}
-                    onLoginRequired={() => {
-                      addToast(
-                        "Vui lòng đăng nhập để đề xuất chỉnh sửa",
-                        "warning"
-                      );
-                      if (setRoute) setRoute(AppRoute.LOGIN);
-                    }}
-                    onSuccess={() =>
-                      addToast("Đã gửi đề xuất chỉnh sửa!", "success")
-                    }
-                  />
+                    <SuggestEditButton
+                      user={user || null}
+                      originalText={inputText}
+                      sourceLang={sourceLang}
+                      targetLang={targetLang}
+                      result={result}
+                      onLoginRequired={() => {
+                        addToast(
+                          "Vui lòng đăng nhập để đề xuất chỉnh sửa",
+                          "warning"
+                        );
+                        if (setRoute) setRoute(AppRoute.LOGIN);
+                      }}
+                      onSuccess={() =>
+                        addToast("Đã gửi đề xuất chỉnh sửa!", "success")
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="p-8 grid gap-8 md:grid-cols-2 bg-paper">
+                  <div className="col-span-1 p-6 bg-white border-2 border-black shadow-brutal-sm rotate-1 transition-transform group-hover:rotate-0">
+                    <label className="text-xs font-black text-nung-red uppercase tracking-widest mb-3 block">
+                      Văn bản gốc / Chữ viết
+                    </label>
+                    <p className="text-4xl text-nung-dark font-display font-black break-words leading-tight">
+                      {trans.script}
+                    </p>
+                  </div>
+                  <div className="col-span-1 p-6 bg-nung-blue/5 border-2 border-black shadow-brutal-sm -rotate-1 transition-transform group-hover:rotate-0">
+                    <label className="text-xs font-black text-nung-blue uppercase tracking-widest mb-3 block">
+                      Phiên âm / Cách đọc
+                    </label>
+                    <p className="text-2xl text-nung-blue italic font-bold break-words">
+                      {trans.phonetic || "N/A"}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="p-6 grid gap-6 md:grid-cols-2">
-                <div className="col-span-1">
-                  <label className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1 block">
-                    Văn bản gốc / Chữ viết
-                  </label>
-                  <p className="text-2xl text-earth-900 font-serif font-bold break-words">
-                    {trans.script}
-                  </p>
-                </div>
-                <div className="col-span-1">
-                  <label className="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1 block">
-                    Phiên âm / Cách đọc
-                  </label>
-                  <p className="text-xl text-bamboo-700 italic font-medium break-words">
-                    {trans.phonetic}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Dictionary & Notes Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Definitions */}
             {result.definitions && result.definitions.length > 0 && (
-              <div className="bg-white rounded-xl shadow p-6">
-                <h3 className="text-lg font-bold text-earth-800 mb-4 border-b border-earth-100 pb-2">
-                  <i className="fa-solid fa-book-open mr-2 text-earth-500"></i>
-                  Từ vựng & Định nghĩa
+              <div className="bg-white border-4 border-black p-8 shadow-brutal relative">
+                <div className="absolute top-4 right-4 text-nung-red/20 opacity-20">
+                  <i className="fa-solid fa-book-open text-6xl"></i>
+                </div>
+                <h3 className="text-2xl font-display font-bold text-nung-dark mb-6 border-b-2 border-black pb-3">
+                  📖 Từ vựng & Định nghĩa
                 </h3>
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {result.definitions.map((def, idx) => (
-                    <li key={idx}>
-                      <span className="font-bold text-bamboo-700 block text-lg">
+                    <li key={idx} className="group">
+                      <span className="font-display font-bold text-nung-red text-2xl block mb-1 group-hover:translate-x-1 transition-transform">
                         {def.word}
                       </span>
-                      <span className="text-earth-800 text-sm block mb-1">
+                      <p className="text-nung-dark font-medium mb-3">
                         {def.definition}
-                      </span>
-                      <span className="text-earth-500 text-xs italic block bg-earth-50 p-2 rounded">
-                        <i className="fa-solid fa-quote-left mr-1 text-earth-300"></i>
+                      </p>
+                      <div className="bg-nung-sand/20 p-4 border-l-4 border-black border-2 text-sm italic font-medium text-gray-700 relative">
+                        <i className="fa-solid fa-quote-left mr-2 text-nung-blue/30"></i>
                         {def.example}
-                      </span>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -602,14 +620,21 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
             {/* Cultural Note */}
             {result.culturalNote && (
-              <div className="bg-earth-100 rounded-xl shadow p-6">
-                <h3 className="text-lg font-bold text-earth-800 mb-4 border-b border-earth-200 pb-2">
-                  <i className="fa-solid fa-leaf mr-2 text-bamboo-600"></i>
-                  Ghi chú văn hóa
+              <div className="bg-nung-green border-4 border-black p-8 shadow-brutal text-white relative group">
+                <div className="absolute top-0 left-0 w-full h-full bg-fabric opacity-10 pointer-events-none"></div>
+                <h3 className="text-2xl font-display font-bold text-nung-sand mb-6 border-b-2 border-white/30 pb-3 relative z-10">
+                  🌿 Ghi chú văn hóa
                 </h3>
-                <p className="text-earth-800 leading-relaxed text-sm">
-                  {result.culturalNote}
-                </p>
+                <div className="bg-white/10 backdrop-blur-sm p-6 border-2 border-dashed border-white/30 relative z-10">
+                  <p className="leading-relaxed font-serif text-lg italic">
+                    {result.culturalNote}
+                  </p>
+                </div>
+                <div className="mt-8 text-right relative z-10">
+                  <span className="font-hand text-4xl text-nung-sand -rotate-12 inline-block">
+                    Bản sắc!
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -632,18 +657,22 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       {history.length > 0 && (
         <div
           ref={historySectionRef}
-          className="mt-12 border-t border-earth-200 pt-8 animate-fade-in"
+          className="mt-20 pt-12 border-t-4 border-black animate-fade-in mb-12"
         >
-          <div className="flex justify-between items-end mb-6">
-            <h2 className="text-2xl font-serif font-bold text-earth-800">
-              <i className="fa-solid fa-clock-rotate-left mr-2 text-earth-500"></i>
-              Lịch sử tra cứu
-            </h2>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8">
+            <div>
+              <div className="inline-block bg-nung-red text-white font-display font-bold text-2xl px-6 py-2 border-2 border-black shadow-brutal transform -rotate-1 mb-2">
+                🕒 Lịch sử tra cứu
+              </div>
+              <p className="text-gray-600 font-serif font-bold text-sm ml-2">
+                Các nội dung bạn đã tìm kiếm gần đây
+              </p>
+            </div>
             <button
               onClick={handleClearHistory}
-              className="text-sm font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded transition-colors flex items-center"
+              className="bg-white text-red-500 border-2 border-black px-4 py-2 font-bold hover:bg-red-500 hover:text-white hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all shadow-brutal-sm flex items-center gap-2"
             >
-              <i className="fa-solid fa-trash-can mr-2"></i> Xóa tất cả
+              <i className="fa-solid fa-trash-can"></i> Xóa tất cả
             </button>
           </div>
 

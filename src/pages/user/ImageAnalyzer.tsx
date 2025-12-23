@@ -96,33 +96,50 @@ const ImageAnalyzer: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-serif font-bold text-earth-900 mb-2">
-          Dịch qua Hình ảnh
-        </h1>
-        <p className="text-sm text-earth-500 mb-4 text-green-700">
-          (Tính năng đang được phát triển)
-        </p>
-        <p className="text-earth-700">
-          Tải lên hình ảnh văn bản, đồ vật hoặc cảnh vật để hiểu ý nghĩa.
-        </p>
+    <div className="max-w-6xl mx-auto px-4 py-12 bg-nung-sand bg-paper min-h-screen">
+      <div className="text-center mb-12 relative">
+        <div className="inline-block bg-white border-4 border-black p-8 shadow-brutal transform rotate-1">
+          <h1 className="text-5xl font-display font-black text-nung-dark mb-4 uppercase tracking-tighter">
+            Trình soi ảnh AI
+          </h1>
+          <div className="flex flex-col items-center gap-2">
+            <span className="bg-nung-red text-white px-3 py-1 border-2 border-black font-black uppercase tracking-widest text-[10px] -rotate-2">
+              Tính năng đang thử nghiệm (Beta)
+            </span>
+            <p className="text-gray-600 font-serif font-bold italic mt-2 underline decoration-nung-blue decoration-2 underline-offset-4">
+              Tải lên hình ảnh văn bản, đồ vật hoặc cảnh vật để hiểu ý nghĩa.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Upload Section */}
-        <div className="bg-white p-6 rounded-xl shadow-md border border-earth-200">
-          <div className="mb-6 flex flex-col items-center justify-center border-2 border-dashed border-earth-300 rounded-lg h-64 bg-earth-50 hover:bg-earth-100 transition-colors relative">
+        <div className="bg-white p-8 border-4 border-black shadow-brutal relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-nung-red/5 -mr-12 -mt-12 rounded-full group-hover:bg-nung-red/10 transition-colors"></div>
+
+          <h3 className="text-xl font-display font-black text-nung-dark mb-6 uppercase tracking-widest border-l-8 border-nung-red pl-4">
+            Tải lên hình ảnh
+          </h3>
+
+          <div className="mb-8 flex flex-col items-center justify-center border-4 border-dashed border-black h-80 bg-nung-sand/5 hover:bg-nung-sand/10 transition-all relative group/upload">
             {previewUrl ? (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="h-full w-full object-contain rounded-lg p-2"
+                className="h-full w-full object-contain p-4 group-hover/upload:scale-105 transition-transform"
               />
             ) : (
-              <div className="text-center text-earth-500 p-4">
-                <i className="fa-solid fa-cloud-arrow-up text-4xl mb-3"></i>
-                <p>Nhấp để tải ảnh lên</p>
+              <div className="text-center p-8 space-y-4">
+                <div className="w-20 h-20 bg-white border-4 border-black flex items-center justify-center mx-auto shadow-brutal-sm group-hover/upload:-translate-y-2 transition-transform">
+                  <i className="fa-solid fa-cloud-arrow-up text-4xl text-nung-red"></i>
+                </div>
+                <p className="font-black uppercase tracking-widest text-sm">
+                  Nhấp vào đây hoặc kéo thả ảnh
+                </p>
+                <p className="text-xs font-serif font-bold italic text-gray-400">
+                  Hỗ trợ JPG, PNG (Tối đa 5MB)
+                </p>
               </div>
             )}
             <input
@@ -136,60 +153,79 @@ const ImageAnalyzer: React.FC = () => {
           <button
             onClick={handleAnalyze}
             disabled={!processedImage || loading}
-            className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
+            className={`w-full py-4 border-4 border-black font-black uppercase tracking-widest transition-all relative overflow-hidden group/btn ${
               !processedImage || loading
-                ? "bg-earth-300 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 shadow-lg active:scale-95"
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
+                : "bg-black text-white shadow-brutal hover:translate-x-2 hover:translate-y-2 hover:shadow-none"
             }`}
           >
             {loading ? (
-              <span>
-                <i className="fa-solid fa-spinner fa-spin mr-2"></i> Đang xử
-                lý...
+              <span className="flex items-center justify-center">
+                <i className="fa-solid fa-circle-notch fa-spin mr-3"></i> Đang
+                đọc dữ liệu...
               </span>
             ) : (
-              <span>
-                <i className="fa-solid fa-wand-magic-sparkles mr-2"></i> Phân
-                tích hình ảnh
+              <span className="flex items-center justify-center">
+                <i className="fa-solid fa-wand-magic-sparkles mr-3 text-nung-red"></i>{" "}
+                Kích hoạt AI phân tích
               </span>
             )}
           </button>
         </div>
 
         {/* Result Section */}
-        <div className="bg-white p-6 rounded-xl shadow-md border border-earth-200 flex flex-col">
-          <h3 className="text-xl font-bold text-earth-800 mb-4 border-b border-earth-100 pb-2">
-            Kết quả phân tích
+        <div className="bg-white p-8 border-4 border-black shadow-brutal flex flex-col relative overflow-hidden">
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-nung-blue/5 -ml-16 -mb-16 rounded-full"></div>
+
+          <h3 className="text-xl font-display font-black text-nung-dark mb-6 uppercase tracking-widest border-l-8 border-nung-blue pl-4">
+            Báo cáo từ AI
           </h3>
 
-          <div className="flex-1 overflow-y-auto min-h-[250px] bg-white border border-earth-100 rounded-lg p-4 text-earth-900 leading-relaxed">
+          <div className="flex-1 overflow-y-auto min-h-[400px] bg-paper border-4 border-black p-6 relative z-10">
             {loading ? (
-              <div className="flex flex-col items-center justify-center h-full text-earth-400 space-y-4">
-                <div className="w-12 h-12 border-4 border-earth-300 border-t-indigo-500 rounded-full animate-spin"></div>
-                <p className="text-center font-medium">
-                  Đang phân tích chi tiết hình ảnh...
-                  <br />
-                  <span className="text-sm font-normal">
-                    Quá trình này có thể mất vài giây.
-                  </span>
-                </p>
+              <div className="flex flex-col items-center justify-center h-full space-y-8 py-12">
+                <div className="relative">
+                  <div className="w-20 h-20 border-8 border-nung-sand border-t-nung-red rounded-full animate-spin"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <i className="fa-solid fa-brain text-2xl text-nung-dark animate-pulse"></i>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <p className="font-black uppercase tracking-widest text-lg mb-2">
+                    Đang suy nghĩ...
+                  </p>
+                  <p className="text-sm font-serif font-bold italic text-gray-500">
+                    Hệ thống đang đối chiếu dữ liệu hình ảnh với kho từ điển
+                  </p>
+                </div>
               </div>
             ) : analysis ? (
-              <div className="prose prose-earth text-earth-900">
+              <div className="prose prose-nung max-w-none">
                 {analysis.split("\n").map((line, i) => (
-                  <p key={i} className="mb-2">
+                  <p
+                    key={i}
+                    className="mb-4 text-nung-dark font-serif font-bold leading-relaxed last:mb-0"
+                  >
                     {line}
                   </p>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-earth-300">
-                <i className="fa-regular fa-image text-5xl mb-3"></i>
-                <p className="italic text-center">
-                  Kết quả phân tích sẽ hiển thị tại đây.
+              <div className="flex flex-col items-center justify-center h-full text-gray-300 space-y-6 opacity-50">
+                <div className="w-24 h-24 border-4 border-dashed border-gray-300 flex items-center justify-center rotate-6">
+                  <i className="fa-regular fa-image text-5xl"></i>
+                </div>
+                <p className="italic font-serif font-bold text-center px-12 text-lg">
+                  Kết quả phân tích chi tiết sẽ được hiển thị ngay tại đây sau
+                  khi bạn tải ảnh lên.
                 </p>
               </div>
             )}
+          </div>
+
+          <div className="mt-6 flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest italic">
+            <i className="fa-solid fa-shield-halved"></i>
+            Dữ liệu được bảo mật và xóa sau phiên làm việc
           </div>
         </div>
       </div>

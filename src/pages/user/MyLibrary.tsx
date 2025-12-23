@@ -16,7 +16,10 @@ import {
   deleteSuggestion,
   TranslationSuggestion,
 } from "../../services/api/suggestionService";
-import { supabase, isSupabaseConfigured } from "../../services/api/supabaseClient";
+import {
+  supabase,
+  isSupabaseConfigured,
+} from "../../services/api/supabaseClient";
 
 interface MyLibraryProps {
   user: User | null;
@@ -137,19 +140,19 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
     switch (status) {
       case "pending":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
+          <span className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-amber-400 text-black border-2 border-black shadow-brutal-sm">
             Đang chờ
           </span>
         );
       case "approved":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+          <span className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-nung-green text-white border-2 border-black shadow-brutal-sm">
             Đã duyệt
           </span>
         );
       case "rejected":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">
+          <span className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-nung-red text-white border-2 border-black shadow-brutal-sm">
             Từ chối
           </span>
         );
@@ -212,50 +215,55 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-earth-50 via-white to-bamboo-50 py-8">
+    <div className="min-h-screen bg-nung-sand bg-paper py-12 px-4">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      <div className="max-w-5xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-earth-900 mb-2">
-            <i className="fa-solid fa-folder-open mr-3 text-bamboo-600" />
-            Thư viện của tôi
-          </h1>
-          <p className="text-earth-600">
-            Quản lý các bản dịch đã lưu, đề xuất chỉnh sửa và đóng góp của bạn
-          </p>
+        <div className="mb-12 relative">
+          <div className="inline-block bg-white border-4 border-black p-8 shadow-brutal transform -rotate-1">
+            <h1 className="text-5xl font-display font-black text-nung-dark mb-4 uppercase tracking-tighter flex items-center gap-4">
+              <div className="w-16 h-16 bg-nung-red text-white border-4 border-black flex items-center justify-center shadow-brutal-sm rotate-3 group-hover:rotate-0 transition-transform">
+                <i className="fa-solid fa-folder-open text-3xl" />
+              </div>
+              Thư viện của tôi
+            </h1>
+            <p className="text-gray-600 font-serif font-bold text-lg italic underline decoration-nung-blue decoration-2 underline-offset-4">
+              Quản lý bản dịch đã lưu, đề xuất chỉnh sửa và đóng góp của bạn
+            </p>
+          </div>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="border-b border-earth-200">
+        <div className="bg-white border-4 border-black shadow-brutal mb-12 relative overflow-hidden">
+          <div className="border-b-4 border-black bg-nung-sand/10">
             <div className="flex flex-wrap">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors relative ${
+                  className={`flex items-center gap-3 px-8 py-5 font-black uppercase tracking-widest transition-all relative border-r-4 border-black last:border-r-0 ${
                     activeTab === tab.id
-                      ? "text-bamboo-600 bg-bamboo-50"
-                      : "text-earth-500 hover:text-earth-700 hover:bg-earth-50"
+                      ? "bg-black text-white"
+                      : "bg-white text-black hover:bg-nung-sand"
                   }`}
                 >
-                  <i className={`fa-solid ${tab.icon}`} />
+                  <i
+                    className={`fa-solid ${tab.icon} ${
+                      activeTab === tab.id ? "text-nung-red" : "text-gray-400"
+                    }`}
+                  />
                   <span className="hidden sm:inline">{tab.label}</span>
                   {tab.count > 0 && (
                     <span
-                      className={`px-2 py-0.5 text-xs rounded-full ${
+                      className={`px-2 py-0.5 text-[10px] font-black border-2 border-black ${
                         activeTab === tab.id
-                          ? "bg-bamboo-600 text-white"
-                          : "bg-earth-200 text-earth-600"
+                          ? "bg-white text-black"
+                          : "bg-gray-100 text-gray-400"
                       }`}
                     >
                       {tab.count}
                     </span>
-                  )}
-                  {activeTab === tab.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-bamboo-600" />
                   )}
                 </button>
               ))}
@@ -265,34 +273,34 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
           {/* Content */}
           <div className="p-6">
             {loading ? (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="h-20 bg-earth-100 rounded-xl" />
-                  </div>
+                  <div
+                    key={i}
+                    className="animate-pulse bg-white border-4 border-black h-24 shadow-brutal-sm"
+                  />
                 ))}
               </div>
             ) : getPaginatedData().length === 0 ? (
-              <div className="text-center py-16 text-earth-400">
+              <div className="text-center py-20 bg-nung-sand/5 border-4 border-black border-dashed mx-4">
                 <i
                   className={`fa-solid ${
                     tabs.find((t) => t.id === activeTab)?.icon
-                  } text-5xl mb-4 block opacity-50`}
+                  } text-6xl mb-6 block text-gray-200 rotate-12`}
                 />
-                <p className="text-lg">
-                  {activeTab === "saved" && "Chưa có bản dịch nào được lưu"}
-                  {activeTab === "suggestions" &&
-                    "Chưa có đề xuất chỉnh sửa nào"}
+                <h3 className="text-2xl font-display font-black text-nung-dark uppercase tracking-tighter mb-4">
+                  {activeTab === "saved" && "Chưa có gì được lưu giữ!"}
+                  {activeTab === "suggestions" && "Đang trống trơn bạn ơi!"}
                   {activeTab === "contributions" &&
-                    "Chưa có đóng góp từ vựng nào"}
-                </p>
-                <p className="text-sm mt-2">
+                    "Chưa tìm thấy đóng góp nào!"}
+                </h3>
+                <p className="text-gray-500 font-serif font-bold italic max-w-md mx-auto">
                   {activeTab === "saved" &&
-                    "Lưu bản dịch bằng cách nhấn nút bookmark trong kết quả dịch"}
+                    "Hãy lưu lại những bản dịch tâm đắc bằng cách nhấn nút Tim trong kết quả tìm kiếm nhé."}
                   {activeTab === "suggestions" &&
-                    'Đề xuất chỉnh sửa bản dịch bằng cách nhấn "Đề xuất chỉnh sửa"'}
+                    "Nếu thấy từ nào chưa chuẩn, hãy mạnh dạn đề xuất chỉnh sửa để cộng đồng cùng hoàn thiện."}
                   {activeTab === "contributions" &&
-                    'Đóng góp từ vựng mới trong phần "Đóng góp"'}
+                    "Mỗi từ mới bạn đóng góp là một di sản cho mai sau. Bắt đầu ngay thôi!"}
                 </p>
               </div>
             ) : (
@@ -302,35 +310,42 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
                   (getPaginatedData() as SavedTranslation[]).map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-start gap-4 p-4 bg-earth-50 rounded-xl hover:bg-earth-100 transition-colors group"
+                      className="flex items-start gap-6 p-6 bg-white border-4 border-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group relative"
                     >
-                      <div className="w-10 h-10 rounded-full bg-bamboo-100 flex items-center justify-center flex-shrink-0">
-                        <i className="fa-solid fa-bookmark text-bamboo-600" />
+                      <div className="w-14 h-14 border-4 border-black bg-nung-red text-white flex items-center justify-center flex-shrink-0 shadow-brutal-sm -rotate-3 group-hover:rotate-0 transition-transform">
+                        <i className="fa-solid fa-heart text-2xl" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-earth-500 text-sm mb-1">
-                          {item.original_text}
-                        </p>
-                        <p className="text-earth-900 font-semibold">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 border border-black/5">
+                            GỐC: {item.original_text}
+                          </span>
+                        </div>
+                        <p className="text-2xl font-display font-black text-nung-dark mb-1">
                           {item.result?.translations?.[0]?.script || ""}
                         </p>
-                        <p className="text-bamboo-600 text-sm italic">
-                          {item.result?.translations?.[0]?.phonetic || ""}
+                        <p className="text-lg font-serif font-black text-nung-red italic flex items-center gap-2">
+                          <i className="fa-solid fa-volume-high text-sm"></i>
+                          {item.result?.translations?.[0]?.phonetic
+                            ? `/${item.result.translations[0].phonetic}/`
+                            : ""}
                         </p>
-                        <p className="text-earth-400 text-xs mt-2">
+                        <div className="mt-4 flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          <i className="fa-solid fa-calendar-days"></i>
                           {formatDate(item.created_at)}
-                        </p>
+                        </div>
                       </div>
                       <button
                         onClick={() =>
                           setConfirmDialog({
                             isOpen: true,
-                            title: "Xóa bản dịch đã lưu?",
-                            message: "Bạn có chắc chắn muốn xóa bản dịch này?",
+                            title: "Xóa bản dịch này?",
+                            message:
+                              "Bản dịch này sẽ bị xóa khỏi thư viện của bạn.",
                             onConfirm: () => handleDeleteSaved(item.id),
                           })
                         }
-                        className="opacity-0 group-hover:opacity-100 p-2 text-earth-400 hover:text-red-500 transition-all"
+                        className="absolute -top-3 -right-3 w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-black hover:bg-nung-red hover:text-white shadow-brutal-sm group-hover:opacity-100 sm:opacity-0 transition-all rotate-12 hover:rotate-0"
                       >
                         <i className="fa-solid fa-trash" />
                       </button>
@@ -343,34 +358,48 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
                     (item) => (
                       <div
                         key={item.id}
-                        className="p-4 bg-earth-50 rounded-xl hover:bg-earth-100 transition-colors group"
+                        className="p-6 bg-white border-4 border-black shadow-brutal-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group relative"
                       >
-                        <div className="flex items-start justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-2">
+                            <div className="flex items-center gap-3 mb-4">
                               {getStatusBadge(item.status)}
-                              <span className="text-earth-400 text-xs">
+                              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1">
+                                <i className="fa-solid fa-clock mr-1"></i>
                                 {formatDate(item.created_at)}
                               </span>
                             </div>
-                            <p className="text-earth-500 text-sm mb-1">
-                              <span className="font-medium">Văn bản gốc:</span>{" "}
-                              {item.original_text}
-                            </p>
-                            <div className="flex items-center gap-2 text-sm mt-2">
-                              <span className="text-earth-500 line-through">
-                                {item.original_translation}
-                              </span>
-                              <i className="fa-solid fa-arrow-right text-earth-400" />
-                              <span className="text-bamboo-700 font-medium">
-                                {item.suggested_translation}
-                              </span>
-                            </div>
-                            {item.reason && (
-                              <p className="text-earth-500 text-sm mt-2 italic">
-                                <i className="fa-solid fa-quote-left text-earth-300 mr-1" />
-                                {item.reason}
+                            <div className="bg-nung-sand/10 border-2 border-black p-4 mb-4 transform -rotate-1">
+                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
+                                Cụm từ gốc:
                               </p>
+                              <p className="text-xl font-display font-black text-nung-dark">
+                                {item.original_text}
+                              </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                              <div className="p-3 border-2 border-black border-dashed bg-gray-50 flex items-center gap-3">
+                                <i className="fa-solid fa-xmark text-nung-red"></i>
+                                <span className="text-gray-400 line-through font-serif font-bold">
+                                  {item.original_translation}
+                                </span>
+                              </div>
+                              <div className="p-3 border-2 border-black bg-nung-blue/5 flex items-center gap-3 shadow-brutal-sm">
+                                <i className="fa-solid fa-check text-nung-blue"></i>
+                                <span className="text-nung-blue font-display font-black text-lg">
+                                  {item.suggested_translation}
+                                </span>
+                              </div>
+                            </div>
+
+                            {item.reason && (
+                              <div className="mt-6 p-4 bg-paper border-2 border-black relative">
+                                <i className="fa-solid fa-quote-left absolute -top-3 -left-2 text-2xl text-nung-red/20" />
+                                <p className="text-sm font-serif font-bold text-gray-600 italic">
+                                  {item.reason}
+                                </p>
+                              </div>
                             )}
                           </div>
                           {item.status === "pending" && (
@@ -378,14 +407,14 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
                               onClick={() =>
                                 setConfirmDialog({
                                   isOpen: true,
-                                  title: "Xóa đề xuất?",
+                                  title: "Xóa đề xuất này?",
                                   message:
-                                    "Bạn có chắc chắn muốn xóa đề xuất này?",
+                                    "Đề xuất này sẽ không còn tồn tại trên hệ thống.",
                                   onConfirm: () =>
                                     handleDeleteSuggestion(item.id),
                                 })
                               }
-                              className="opacity-0 group-hover:opacity-100 p-2 text-earth-400 hover:text-red-500 transition-all"
+                              className="absolute -top-3 -right-3 w-10 h-10 bg-white border-2 border-black flex items-center justify-center text-black hover:bg-nung-red hover:text-white shadow-brutal-sm group-hover:opacity-100 sm:opacity-0 transition-all rotate-12 hover:rotate-0"
                             >
                               <i className="fa-solid fa-trash" />
                             </button>
@@ -400,39 +429,61 @@ const MyLibrary: React.FC<MyLibraryProps> = ({ user, setRoute }) => {
                   (getPaginatedData() as Contribution[]).map((item) => (
                     <div
                       key={item.id}
-                      className="p-4 bg-earth-50 rounded-xl hover:bg-earth-100 transition-colors"
+                      className="p-6 bg-white border-4 border-black shadow-brutal-sm hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal transition-all group relative"
                     >
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-3 mb-4">
                             {getStatusBadge(item.status)}
-                            <span className="text-earth-400 text-xs">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest bg-gray-100 px-2 py-1">
+                              <i className="fa-solid fa-clock mr-1"></i>
                               {formatDate(item.created_at)}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-earth-700 font-medium">
-                              {item.vietnamese_word}
-                            </span>
-                            <i className="fa-solid fa-arrow-right text-earth-400" />
-                            <span className="text-bamboo-700 font-bold">
-                              {item.nung_word}
-                            </span>
-                            {item.phonetic && (
-                              <span className="text-bamboo-500 text-sm italic">
-                                ({item.phonetic})
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                            <div className="bg-paper p-4 border-2 border-black rotate-1">
+                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
+                                Tiếng Việt:
+                              </p>
+                              <span className="text-2xl font-display font-black text-nung-dark">
+                                {item.vietnamese_word}
                               </span>
-                            )}
+                            </div>
+                            <div className="bg-white p-4 border-2 border-black -rotate-1 shadow-brutal-sm">
+                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">
+                                Tiếng Nùng:
+                              </p>
+                              <span className="text-2xl font-display font-black text-nung-blue">
+                                {item.nung_word}
+                              </span>
+                              {item.phonetic && (
+                                <p className="text-sm font-serif font-black text-nung-red mt-2 italic">
+                                  /{item.phonetic}/
+                                </p>
+                              )}
+                            </div>
                           </div>
-                          {item.meaning && (
-                            <p className="text-earth-600 text-sm mt-1">
-                              {item.meaning}
-                            </p>
-                          )}
-                          {item.example && (
-                            <p className="text-earth-500 text-sm mt-1 italic">
-                              Ví dụ: {item.example}
-                            </p>
+
+                          {(item.meaning || item.example) && (
+                            <div className="mt-6 space-y-3 bg-nung-sand/5 p-4 border-2 border-black border-dotted">
+                              {item.meaning && (
+                                <p className="text-sm font-serif font-bold text-gray-700 leading-relaxed">
+                                  <span className="font-black uppercase text-[10px] tracking-widest text-gray-400 block mb-1">
+                                    Giải nghĩa:
+                                  </span>
+                                  {item.meaning}
+                                </p>
+                              )}
+                              {item.example && (
+                                <p className="text-sm font-serif font-bold text-gray-600 italic border-t border-black/10 pt-3">
+                                  <span className="font-black uppercase text-[10px] tracking-widest text-gray-400 block mb-1">
+                                    Ví dụ:
+                                  </span>
+                                  <i className="fa-solid fa-quote-left mr-2 text-nung-red/30"></i>
+                                  {item.example}
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>

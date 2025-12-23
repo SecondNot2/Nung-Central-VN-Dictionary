@@ -141,20 +141,20 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
     switch (type) {
       case "bug":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full flex items-center gap-1">
-            <i className="fa-solid fa-bug" /> Lỗi
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-nung-red text-white border-2 border-black flex items-center gap-1 shadow-brutal-sm">
+            <i className="fa-solid fa-bug" /> BÁO LỖI
           </span>
         );
       case "feature":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full flex items-center gap-1">
-            <i className="fa-solid fa-lightbulb" /> Tính năng
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-amber-400 text-black border-2 border-black flex items-center gap-1 shadow-brutal-sm">
+            <i className="fa-solid fa-lightbulb" /> TÍNH NĂNG
           </span>
         );
       case "suggestion":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
-            <i className="fa-solid fa-comment" /> Góp ý
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-nung-blue text-white border-2 border-black flex items-center gap-1 shadow-brutal-sm">
+            <i className="fa-solid fa-comment" /> GÓP Ý
           </span>
         );
       default:
@@ -166,32 +166,32 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
     switch (status) {
       case "new":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-            Mới
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-white text-black border-2 border-black shadow-brutal-sm">
+            MỚI
           </span>
         );
       case "in_progress":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
-            Đang xử lý
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-amber-200 text-black border-2 border-black shadow-brutal-sm">
+            ĐANG XỬ LÝ
           </span>
         );
       case "resolved":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-            Đã giải quyết
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-green-400 text-black border-2 border-black shadow-brutal-sm">
+            ĐÃ GIẢI QUYẾT
           </span>
         );
       case "closed":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-            Đã đóng
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-gray-200 text-black border-2 border-black">
+            ĐÃ ĐÓNG
           </span>
         );
       case "wont_fix":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-            Không xử lý
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-gray-400 text-white border-2 border-black">
+            KHÔNG XỬ LÝ
           </span>
         );
       default:
@@ -203,26 +203,26 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
     switch (priority) {
       case "critical":
         return (
-          <span className="px-2 py-0.5 text-xs font-medium bg-red-500 text-white rounded">
-            Nghiêm trọng
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-red-600 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-pulse">
+            KHẨN CẤP
           </span>
         );
       case "high":
         return (
-          <span className="px-2 py-0.5 text-xs font-medium bg-orange-500 text-white rounded">
-            Cao
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-orange-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            CAO
           </span>
         );
       case "medium":
         return (
-          <span className="px-2 py-0.5 text-xs font-medium bg-blue-500 text-white rounded">
-            TB
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-blue-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            TRUNG BÌNH
           </span>
         );
       case "low":
         return (
-          <span className="px-2 py-0.5 text-xs font-medium bg-gray-400 text-white rounded">
-            Thấp
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-gray-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            THẤP
           </span>
         );
       default:
@@ -246,171 +246,226 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
   if (!user || user.role !== "admin") return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-earth-50 via-white to-bamboo-50 py-8">
+    <div className="bg-white text-black min-h-screen">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => setRoute(AppRoute.ADMIN_DASHBOARD)}
-            className="text-earth-500 hover:text-earth-700 mb-2 flex items-center gap-1 text-sm"
-          >
-            <i className="fa-solid fa-arrow-left" />
-            Quay lại Dashboard
-          </button>
-          <h1 className="text-3xl font-bold text-earth-900">
-            <i className="fa-solid fa-comment-dots mr-3 text-bamboo-600" />
-            Quản lý phản hồi người dùng
-          </h1>
-          <p className="text-earth-600 mt-1">
-            Xem và xử lý các báo lỗi, yêu cầu tính năng và góp ý từ người dùng
-          </p>
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white border-2 border-black p-6 shadow-brutal-sm">
+          <div>
+            <h1 className="text-2xl font-bold uppercase tracking-tight">
+              Phản hồi người dùng
+            </h1>
+            <p className="text-gray-500 text-sm font-medium mt-1">
+              Lắng nghe và giải quyết các vấn đề từ cộng đồng
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-nung-orange text-white border-2 border-black px-4 py-2 font-bold uppercase tracking-widest text-[10px] shadow-brutal-sm">
+              {counts.all} PHẢN HỒI
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-4 mb-6 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Filters Sidebar */}
+        <div className="lg:col-span-1 space-y-6">
           {/* Type Filter */}
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm text-earth-500 self-center mr-2">
-              Loại:
-            </span>
-            {[
-              { id: "all" as FilterType, label: "Tất cả", count: counts.all },
-              { id: "bug" as FilterType, label: "Báo lỗi", count: counts.bug },
-              {
-                id: "feature" as FilterType,
-                label: "Tính năng",
-                count: counts.feature,
-              },
-              {
-                id: "suggestion" as FilterType,
-                label: "Góp ý",
-                count: counts.suggestion,
-              },
-            ].map((f) => (
-              <button
-                key={f.id}
-                onClick={() => {
-                  setTypeFilter(f.id);
-                  setCurrentPage(1);
-                }}
-                className={`px-3 py-1.5 rounded-lg font-medium text-sm transition-colors ${
-                  typeFilter === f.id
-                    ? "bg-bamboo-600 text-white"
-                    : "bg-earth-100 text-earth-600 hover:bg-earth-200"
-                }`}
-              >
-                {f.label}
-                {f.count > 0 && (
+          <div className="bg-white border-2 border-black p-6 shadow-brutal-sm">
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+              <i className="fa-solid fa-filter" /> Phân loại
+            </p>
+            <div className="space-y-2">
+              {[
+                {
+                  id: "all" as FilterType,
+                  label: "Tất cả",
+                  count: counts.all,
+                  icon: "fa-list",
+                },
+                {
+                  id: "bug" as FilterType,
+                  label: "Báo lỗi",
+                  count: counts.bug,
+                  icon: "fa-bug",
+                },
+                {
+                  id: "feature" as FilterType,
+                  label: "Tính năng",
+                  count: counts.feature,
+                  icon: "fa-lightbulb",
+                },
+                {
+                  id: "suggestion" as FilterType,
+                  label: "Góp ý",
+                  count: counts.suggestion,
+                  icon: "fa-comment",
+                },
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    setTypeFilter(f.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`w-full px-4 py-3 border-2 border-black font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-between shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none ${
+                    typeFilter === f.id
+                      ? "bg-black text-white shadow-none"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <i className={`fa-solid ${f.icon} text-xs`} />
+                    {f.label}
+                  </span>
                   <span
-                    className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
-                      typeFilter === f.id ? "bg-white/20" : "bg-earth-200"
+                    className={`px-1.5 py-0.5 border-2 border-black text-[8px] ${
+                      typeFilter === f.id
+                        ? "bg-white text-black"
+                        : "bg-gray-100 text-black"
                     }`}
                   >
                     {f.count}
                   </span>
-                )}
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Status Filter */}
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm text-earth-500 self-center mr-2">
-              Trạng thái:
-            </span>
-            {[
-              { id: "all" as StatusFilter, label: "Tất cả" },
-              { id: "new" as StatusFilter, label: "Mới" },
-              { id: "in_progress" as StatusFilter, label: "Đang xử lý" },
-              { id: "resolved" as StatusFilter, label: "Đã giải quyết" },
-              { id: "closed" as StatusFilter, label: "Đã đóng" },
-            ].map((s) => (
-              <button
-                key={s.id}
-                onClick={() => {
-                  setStatusFilter(s.id);
-                  setCurrentPage(1);
-                }}
-                className={`px-3 py-1.5 rounded-lg font-medium text-sm transition-colors ${
-                  statusFilter === s.id
-                    ? "bg-earth-700 text-white"
-                    : "bg-earth-100 text-earth-600 hover:bg-earth-200"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
+          <div className="bg-white border-2 border-black p-6 shadow-brutal-sm">
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+              <i className="fa-solid fa-spinner" /> Trạng thái
+            </p>
+            <div className="space-y-2">
+              {[
+                {
+                  id: "all" as StatusFilter,
+                  label: "Toàn bộ",
+                  icon: "fa-layer-group",
+                },
+                {
+                  id: "new" as StatusFilter,
+                  label: "Mới",
+                  icon: "fa-plus-circle",
+                },
+                {
+                  id: "in_progress" as StatusFilter,
+                  label: "Đang xử lý",
+                  icon: "fa-wrench",
+                },
+                {
+                  id: "resolved" as StatusFilter,
+                  label: "Đã xong",
+                  icon: "fa-check-double",
+                },
+                {
+                  id: "closed" as StatusFilter,
+                  label: "Đã đóng",
+                  icon: "fa-box-archive",
+                },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    setStatusFilter(s.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`w-full px-4 py-3 border-2 border-black font-bold uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none ${
+                    statusFilter === s.id
+                      ? "bg-black text-white shadow-none"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <i className={`fa-solid ${s.icon} text-xs`} />
+                  {s.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Feedback List */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="lg:col-span-3 space-y-4">
           {loading ? (
-            <div className="p-6 space-y-4">
+            <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="h-32 bg-earth-100 rounded-xl" />
+                <div
+                  key={i}
+                  className="animate-pulse bg-white border-2 border-black p-8 shadow-brutal-sm"
+                >
+                  <div className="h-6 w-1/3 bg-gray-100 mb-4" />
+                  <div className="h-12 w-full bg-gray-100" />
                 </div>
               ))}
             </div>
           ) : paginatedFeedback.length === 0 ? (
-            <div className="p-12 text-center text-earth-400">
-              <i className="fa-solid fa-inbox text-5xl mb-4 block opacity-50" />
-              <p className="text-lg">Không có phản hồi nào</p>
+            <div className="bg-white border-2 border-black p-16 text-center shadow-brutal-sm">
+              <p className="text-xl font-bold uppercase tracking-tight text-gray-400">
+                Hộp thư trống
+              </p>
             </div>
           ) : (
-            <div className="divide-y divide-earth-100">
+            <div className="space-y-4">
               {paginatedFeedback.map((feedback) => (
                 <div
                   key={feedback.id}
-                  className="p-6 hover:bg-earth-50 transition-colors"
+                  className="bg-white border-2 border-black p-6 shadow-brutal-sm transition-all group"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col md:flex-row items-start justify-between gap-6">
                     <div className="flex-1 min-w-0">
-                      {/* Header */}
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                      {/* Meta */}
+                      <div className="flex flex-wrap items-center gap-3 mb-4">
                         {getTypeBadge(feedback.type)}
                         {getStatusBadge(feedback.status)}
                         {feedback.type === "bug" &&
                           getPriorityBadge(feedback.priority)}
-                        <span className="text-earth-400 text-xs">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           {formatDate(feedback.created_at)}
                         </span>
                       </div>
 
-                      {/* Title */}
-                      <h3 className="text-lg font-semibold text-earth-900 mb-1">
-                        {feedback.title}
-                      </h3>
+                      {/* Content */}
+                      <div className="mb-6">
+                        <h3 className="text-xl font-bold uppercase tracking-tight mb-2">
+                          {feedback.title}
+                        </h3>
+                        <p className="text-black font-medium text-lg leading-relaxed">
+                          {feedback.description}
+                        </p>
+                      </div>
 
-                      {/* Description */}
-                      <p className="text-earth-600 text-sm mb-3 whitespace-pre-wrap">
-                        {feedback.description}
-                      </p>
-
-                      {/* Meta info */}
-                      <div className="flex flex-wrap items-center gap-4 text-xs text-earth-400">
-                        <span>
-                          <i className="fa-solid fa-user mr-1" />
-                          {feedback.user_name || "Ẩn danh"}
-                        </span>
-                        {feedback.category && (
-                          <span>
-                            <i className="fa-solid fa-tag mr-1" />
-                            {feedback.category}
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white border-2 border-black p-3 shadow-brutal-sm">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 block mb-1">
+                            Người gửi:
                           </span>
+                          <span className="text-xs font-bold uppercase">
+                            {feedback.user_name || "Khách vãng lai"}
+                          </span>
+                        </div>
+
+                        {feedback.category && (
+                          <div className="bg-gray-50 border-2 border-black p-3 shadow-brutal-sm">
+                            <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 block mb-1">
+                              Danh mục:
+                            </span>
+                            <span className="text-xs font-bold uppercase">
+                              {feedback.category}
+                            </span>
+                          </div>
                         )}
                       </div>
 
                       {/* Admin Response */}
                       {feedback.admin_response && (
-                        <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-100">
-                          <span className="text-xs font-medium text-green-600">
-                            Phản hồi từ Admin:
+                        <div className="mt-4 p-4 bg-blue-50 border-2 border-black">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-nung-blue block mb-1">
+                            PHẢN HỒI HỆ THỐNG:
                           </span>
-                          <p className="text-green-800 text-sm mt-1">
+                          <p className="text-blue-900 font-medium italic text-sm">
                             {feedback.admin_response}
                           </p>
                         </div>
@@ -418,7 +473,7 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto self-start">
                       <button
                         onClick={() =>
                           setResponseModal({
@@ -429,9 +484,9 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
                           })
                         }
                         disabled={processingId === feedback.id}
-                        className="px-3 py-1.5 bg-bamboo-500 text-white rounded-lg hover:bg-bamboo-600 disabled:opacity-50 text-sm font-medium flex items-center gap-1"
+                        className="flex-1 md:w-28 px-4 py-2 bg-black text-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                       >
-                        <i className="fa-solid fa-reply" />
+                        <i className="fa-solid fa-reply mr-2" />
                         Xử lý
                       </button>
                       <button
@@ -442,9 +497,9 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
                           })
                         }
                         disabled={processingId === feedback.id}
-                        className="px-3 py-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 text-sm font-medium flex items-center gap-1"
+                        className="flex-1 md:w-28 px-4 py-2 bg-white text-nung-red border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                       >
-                        <i className="fa-solid fa-trash" />
+                        <i className="fa-solid fa-trash mr-2" />
                         Xóa
                       </button>
                     </div>
@@ -456,13 +511,56 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
 
           {/* Pagination */}
           {feedbackList.length > perPage && (
-            <div className="p-4 border-t border-earth-100">
-              <Pagination
-                currentPage={currentPage}
-                totalItems={feedbackList.length}
-                itemsPerPage={perPage}
-                onPageChange={setCurrentPage}
-              />
+            <div className="flex justify-center gap-2 pt-8">
+              <button
+                onClick={() => {
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === 1}
+                className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 disabled:opacity-50"
+              >
+                <i className="fa-solid fa-chevron-left text-xs" />
+              </button>
+
+              <div className="flex gap-1.5">
+                {Array.from({
+                  length: Math.ceil(feedbackList.length / perPage),
+                }).map((_, i) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => {
+                        setCurrentPage(pageNum);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`w-10 h-10 border-2 border-black font-bold text-xs flex items-center justify-center transition-all ${
+                        currentPage === pageNum
+                          ? "bg-black text-white shadow-none"
+                          : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => {
+                  setCurrentPage((p) =>
+                    Math.min(Math.ceil(feedbackList.length / perPage), p + 1)
+                  );
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={
+                  currentPage === Math.ceil(feedbackList.length / perPage)
+                }
+                className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 disabled:opacity-50"
+              >
+                <i className="fa-solid fa-chevron-right text-xs" />
+              </button>
             </div>
           )}
         </div>
@@ -472,7 +570,7 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
       {responseModal.isOpen && responseModal.feedback && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() =>
               setResponseModal({
                 isOpen: false,
@@ -482,55 +580,79 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
               })
             }
           />
-          <div className="relative bg-white rounded-xl shadow-xl p-6 max-w-lg w-full">
-            <h3 className="text-lg font-bold text-earth-900 mb-4">
-              Xử lý phản hồi
-            </h3>
+          <div className="relative bg-white border-2 border-black shadow-brutal-sm w-full max-w-xl animate-in fade-in zoom-in duration-200">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-xl font-bold uppercase tracking-tight">
+                  Xử lý phản hồi
+                </h3>
+                <button
+                  onClick={() =>
+                    setResponseModal({
+                      isOpen: false,
+                      feedback: null,
+                      response: "",
+                      newStatus: "",
+                    })
+                  }
+                  className="text-gray-400 hover:text-black transition-colors"
+                >
+                  <i className="fa-solid fa-times text-lg" />
+                </button>
+              </div>
 
-            {/* Status */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-earth-700 mb-2">
-                Trạng thái
-              </label>
-              <select
-                value={responseModal.newStatus}
-                onChange={(e) =>
-                  setResponseModal({
-                    ...responseModal,
-                    newStatus: e.target.value,
-                  })
-                }
-                className="w-full px-3 py-2 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500"
-              >
-                <option value="new">Mới</option>
-                <option value="in_progress">Đang xử lý</option>
-                <option value="resolved">Đã giải quyết</option>
-                <option value="closed">Đã đóng</option>
-                <option value="wont_fix">Không xử lý</option>
-              </select>
+              <div className="space-y-6">
+                <div className="p-4 bg-gray-50 border-2 border-black">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 block mb-1">
+                    Nội dung đang xử lý:
+                  </span>
+                  <p className="text-sm font-bold italic truncate">
+                    "{responseModal.feedback.title}"
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2">
+                    Trạng thái mới
+                  </label>
+                  <select
+                    value={responseModal.newStatus}
+                    onChange={(e) =>
+                      setResponseModal({
+                        ...responseModal,
+                        newStatus: e.target.value,
+                      })
+                    }
+                    className="w-full border-2 border-black p-3 text-sm font-bold bg-white focus:bg-gray-50 outline-none transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="new">Mới</option>
+                    <option value="in_progress">Đang triển khai</option>
+                    <option value="resolved">Hoàn tất</option>
+                    <option value="closed">Đóng</option>
+                    <option value="wont_fix">Không xử lý</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-2">
+                    Nội dung trả lời
+                  </label>
+                  <textarea
+                    value={responseModal.response}
+                    onChange={(e) =>
+                      setResponseModal({
+                        ...responseModal,
+                        response: e.target.value,
+                      })
+                    }
+                    placeholder="Nhập nội dung phản hồi..."
+                    className="w-full border-2 border-black p-3 text-sm font-medium focus:bg-gray-50 outline-none resize-none transition-all h-32"
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Response */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-earth-700 mb-2">
-                Phản hồi cho người dùng
-              </label>
-              <textarea
-                value={responseModal.response}
-                onChange={(e) =>
-                  setResponseModal({
-                    ...responseModal,
-                    response: e.target.value,
-                  })
-                }
-                placeholder="Nhập phản hồi cho người dùng..."
-                rows={4}
-                className="w-full px-3 py-2 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 resize-none"
-              />
-            </div>
-
-            {/* Actions */}
-            <div className="flex gap-3 justify-end">
+            <div className="bg-gray-50 border-t-2 border-black p-4 flex gap-3">
               <button
                 onClick={() =>
                   setResponseModal({
@@ -540,19 +662,20 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
                     newStatus: "",
                   })
                 }
-                className="px-4 py-2 text-sm text-earth-600 hover:bg-earth-100 rounded-lg"
+                className="flex-1 px-4 py-2 bg-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
               >
                 Hủy
               </button>
               <button
                 onClick={handleUpdateStatus}
                 disabled={processingId === responseModal.feedback.id}
-                className="px-4 py-2 text-sm bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 disabled:opacity-50 flex items-center gap-2"
+                className="flex-1 px-4 py-2 bg-black text-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
               >
-                {processingId === responseModal.feedback.id && (
-                  <i className="fa-solid fa-circle-notch fa-spin" />
+                {processingId === responseModal.feedback.id ? (
+                  <i className="fa-solid fa-spinner fa-spin" />
+                ) : (
+                  "Lưu thay đổi"
                 )}
-                Lưu
               </button>
             </div>
           </div>
@@ -564,8 +687,8 @@ const AdminFeedback: React.FC<AdminFeedbackProps> = ({ user, setRoute }) => {
         <ConfirmDialog
           isOpen={deleteConfirm.isOpen}
           title="Xóa phản hồi?"
-          message="Bạn có chắc chắn muốn xóa phản hồi này? Hành động này không thể hoàn tác."
-          confirmText="Xóa"
+          message="Hành động này không thể hoàn tác."
+          confirmText="Xóa vĩnh viễn"
           cancelText="Hủy"
           onConfirm={() => handleDelete(deleteConfirm.feedbackId)}
           onCancel={() => setDeleteConfirm(null)}

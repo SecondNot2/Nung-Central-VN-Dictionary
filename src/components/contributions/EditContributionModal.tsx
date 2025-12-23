@@ -79,188 +79,188 @@ export const EditContributionModal: React.FC<EditContributionModalProps> = ({
   if (!isOpen || !contribution) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
         onClick={onCancel}
       />
 
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all w-full max-w-2xl animate-fade-in">
-          {/* Header */}
-          <div className="bg-bamboo-50 px-6 py-4 border-b border-bamboo-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-bamboo-100 rounded-full flex items-center justify-center">
-                <i className="fa-solid fa-pen-to-square text-bamboo-600"></i>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-earth-900">
-                  Chỉnh sửa đóng góp
-                </h3>
-                <p className="text-sm text-earth-600">
-                  Sửa thông tin trước khi duyệt
-                </p>
-              </div>
+      <div className="relative bg-white border-2 border-black shadow-brutal w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+        {/* Header */}
+        <div className="bg-black text-white px-8 py-6 flex items-center justify-between sticky top-0 z-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 border-2 border-white bg-nung-red flex items-center justify-center">
+              <i className="fa-solid fa-pen-nib text-xl"></i>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold uppercase tracking-tight">
+                Hiệu đính đóng góp
+              </h3>
+              <p className="text-gray-400 text-xs font-bold uppercase">
+                Chỉnh sửa thông tin chính xác
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onCancel}
+            className="w-10 h-10 border-2 border-white bg-white text-black flex items-center justify-center hover:bg-nung-red hover:text-white transition-colors"
+          >
+            <i className="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+          {/* Language Selection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Ngôn ngữ gốc
+              </label>
+              <select
+                value={sourceLang}
+                onChange={(e) => setSourceLang(e.target.value)}
+                className="w-full border-2 border-black bg-white p-3 font-bold uppercase tracking-widest text-xs outline-none transition-all appearance-none cursor-pointer"
+              >
+                {languageOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Ngôn ngữ dịch
+              </label>
+              <select
+                value={targetLang}
+                onChange={(e) => setTargetLang(e.target.value)}
+                className="w-full border-2 border-black bg-white p-3 font-bold uppercase tracking-widest text-xs outline-none transition-all appearance-none cursor-pointer"
+              >
+                {languageOptions
+                  .filter((opt) => opt.value !== sourceLang)
+                  .map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {/* Language Selection */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Ngôn ngữ gốc
-                </label>
-                <select
-                  value={sourceLang}
-                  onChange={(e) => setSourceLang(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 bg-white focus:ring-2 focus:ring-bamboo-500 outline-none"
-                >
-                  {languageOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Ngôn ngữ dịch
-                </label>
-                <select
-                  value={targetLang}
-                  onChange={(e) => setTargetLang(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 bg-white focus:ring-2 focus:ring-bamboo-500 outline-none"
-                >
-                  {languageOptions
-                    .filter((opt) => opt.value !== sourceLang)
-                    .map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Word & Translation */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Từ / Cụm từ gốc <span className="text-red-500">*</span>
-                </label>
-                <input
-                  required
-                  value={word}
-                  onChange={(e) => setWord(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 focus:ring-2 focus:ring-bamboo-500 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Bản dịch <span className="text-red-500">*</span>
-                </label>
-                <input
-                  required
-                  value={translation}
-                  onChange={(e) => setTranslation(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 focus:ring-2 focus:ring-bamboo-500 outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Phonetic & Region */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Phiên âm
-                </label>
-                <input
-                  value={phonetic}
-                  onChange={(e) => setPhonetic(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 focus:ring-2 focus:ring-bamboo-500 outline-none"
-                  placeholder="/piː vaŋ miː/"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-earth-700 mb-1">
-                  Vùng miền
-                </label>
-                <select
-                  value={region}
-                  onChange={(e) => setRegion(e.target.value)}
-                  className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 bg-white focus:ring-2 focus:ring-bamboo-500 outline-none"
-                >
-                  {regionOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Example */}
+          {/* Word & Translation */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-earth-700 mb-1">
-                Câu ví dụ
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Từ / Cụm từ gốc <span className="text-nung-red">*</span>
               </label>
               <input
-                value={example}
-                onChange={(e) => setExample(e.target.value)}
-                className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 focus:ring-2 focus:ring-bamboo-500 outline-none"
+                required
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                className="w-full border-2 border-black p-3 font-bold text-lg outline-none transition-all"
+                placeholder="Nhập từ cần dịch..."
               />
             </div>
-
-            {/* Meaning */}
             <div>
-              <label className="block text-sm font-medium text-earth-700 mb-1">
-                Ý nghĩa & Ngữ cảnh
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Bản dịch đề xuất <span className="text-nung-red">*</span>
               </label>
-              <textarea
-                value={meaning}
-                onChange={(e) => setMeaning(e.target.value)}
-                rows={3}
-                className="w-full border border-earth-300 rounded-lg px-3 py-2 text-earth-900 focus:ring-2 focus:ring-bamboo-500 outline-none resize-none"
+              <input
+                required
+                value={translation}
+                onChange={(e) => setTranslation(e.target.value)}
+                className="w-full border-2 border-black p-3 font-bold text-lg text-nung-blue outline-none transition-all"
+                placeholder="Bản dịch tiếng Nùng..."
               />
             </div>
+          </div>
 
-            {/* Actions */}
-            <div className="flex gap-3 justify-end pt-4 border-t border-earth-200">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="px-5 py-2.5 rounded-xl font-medium text-earth-700 bg-white border border-earth-300 hover:bg-earth-100 transition-all"
-              >
-                Hủy
-              </button>
-              <button
-                type="submit"
-                disabled={saving}
-                className={`px-5 py-2.5 rounded-xl font-medium text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 ${
-                  saving
-                    ? "bg-earth-400 cursor-not-allowed"
-                    : "bg-bamboo-600 hover:bg-bamboo-700"
-                }`}
-              >
-                {saving ? (
-                  <>
-                    <i className="fa-solid fa-circle-notch fa-spin"></i>
-                    Đang lưu...
-                  </>
-                ) : (
-                  <>
-                    <i className="fa-solid fa-check"></i>
-                    Lưu thay đổi
-                  </>
-                )}
-              </button>
+          {/* Phonetic & Region */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Phiên âm (IPA)
+              </label>
+              <input
+                value={phonetic}
+                onChange={(e) => setPhonetic(e.target.value)}
+                className="w-full border-2 border-black p-3 font-bold italic outline-none transition-all"
+                placeholder="/piː vaŋ miː/"
+              />
             </div>
-          </form>
-        </div>
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                Khu vực / Biến thể
+              </label>
+              <select
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                className="w-full border-2 border-black bg-white p-3 font-bold uppercase tracking-widest text-xs outline-none transition-all appearance-none cursor-pointer"
+              >
+                {regionOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Example */}
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+              Ví dụ sử dụng trong câu
+            </label>
+            <textarea
+              value={example}
+              onChange={(e) => setExample(e.target.value)}
+              rows={2}
+              className="w-full border-2 border-black p-3 font-medium italic outline-none transition-all resize-none"
+              placeholder="Câu ví dụ minh họa..."
+            />
+          </div>
+
+          {/* Meaning */}
+          <div>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+              Ý nghĩa & Ngữ cảnh giải thích
+            </label>
+            <textarea
+              value={meaning}
+              onChange={(e) => setMeaning(e.target.value)}
+              rows={3}
+              className="w-full border-2 border-black p-3 font-medium outline-none transition-all resize-none"
+              placeholder="Giải thích thêm về từ vựng này..."
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-4 justify-end pt-6 border-t-2 border-black">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 px-6 py-3 bg-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 px-6 py-3 bg-black text-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 disabled:opacity-50"
+            >
+              {saving ? (
+                <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+              ) : (
+                <i className="fa-solid fa-save mr-2"></i>
+              )}
+              Lưu & Cập nhật
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

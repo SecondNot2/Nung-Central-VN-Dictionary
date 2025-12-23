@@ -147,20 +147,20 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
     switch (status) {
       case "pending":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
-            Đang chờ
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-amber-400 text-black border-2 border-black shadow-brutal-sm">
+            ĐANG CHỜ XỬ LÝ
           </span>
         );
       case "resolved":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-            Đã xử lý
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-green-400 text-black border-2 border-black shadow-brutal-sm">
+            ĐÃ GIẢI QUYẾT
           </span>
         );
       case "dismissed":
         return (
-          <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
-            Đã bỏ qua
+          <span className="px-2 py-1 text-[8px] font-black uppercase tracking-widest bg-gray-400 text-white border-2 border-black">
+            ĐÃ BÁC BỎ
           </span>
         );
       default:
@@ -186,157 +186,175 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
   if (!user || user.role !== "admin") return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-earth-50 via-white to-bamboo-50 py-8">
+    <div className="bg-white text-black">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={() => setRoute(AppRoute.ADMIN_DASHBOARD)}
-            className="text-earth-500 hover:text-earth-700 mb-2 flex items-center gap-1 text-sm"
-          >
-            <i className="fa-solid fa-arrow-left" />
-            Quay lại Dashboard
-          </button>
-          <h1 className="text-3xl font-bold text-earth-900">
-            <i className="fa-solid fa-flag mr-3 text-red-500" />
-            Quản lý báo cáo bình luận
-          </h1>
-          <p className="text-earth-600 mt-1">
-            Xem xét và xử lý các bình luận bị báo cáo vi phạm
-          </p>
+      {/* Header Container */}
+      <div className="mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white border-2 border-black p-6 shadow-brutal-sm">
+          <div>
+            <h1 className="text-2xl font-bold uppercase tracking-tight">
+              Báo cáo vi phạm
+            </h1>
+            <p className="text-gray-500 text-sm font-medium mt-1">
+              Kiểm duyệt bình luận và nội dung không phù hợp
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-nung-red text-white border-2 border-black px-4 py-2 font-bold uppercase tracking-widest text-[10px] shadow-brutal-sm">
+              {counts.pending} ĐANG CHỜ
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
-          <div className="flex flex-wrap gap-2">
-            {[
-              {
-                id: "pending" as FilterType,
-                label: "Đang chờ",
-                count: counts.pending,
-                color: "amber",
-              },
-              {
-                id: "resolved" as FilterType,
-                label: "Đã xử lý",
-                count: counts.resolved,
-                color: "green",
-              },
-              {
-                id: "dismissed" as FilterType,
-                label: "Đã bỏ qua",
-                count: counts.dismissed,
-                color: "gray",
-              },
-              {
-                id: "all" as FilterType,
-                label: "Tất cả",
-                count: counts.all,
-                color: "earth",
-              },
-            ].map((f) => (
-              <button
-                key={f.id}
-                onClick={() => {
-                  setFilter(f.id);
-                  setCurrentPage(1);
-                }}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filter === f.id
-                    ? "bg-bamboo-600 text-white"
-                    : "bg-earth-100 text-earth-600 hover:bg-earth-200"
-                }`}
-              >
-                {f.label}
-                <span
-                  className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                    filter === f.id ? "bg-white/20" : "bg-earth-200"
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Sidebar Filters */}
+        <div className="lg:col-span-1 space-y-6">
+          <div className="bg-white border-2 border-black p-6 shadow-brutal-sm">
+            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+              <i className="fa-solid fa-filter" /> Trạng thái xử lý
+            </p>
+            <div className="space-y-2">
+              {[
+                {
+                  id: "pending" as FilterType,
+                  label: "Chờ xử lý",
+                  count: counts.pending,
+                  icon: "fa-clock",
+                },
+                {
+                  id: "resolved" as FilterType,
+                  label: "Đã giải quyết",
+                  count: counts.resolved,
+                  icon: "fa-check-double",
+                },
+                {
+                  id: "dismissed" as FilterType,
+                  label: "Đã bác bỏ",
+                  count: counts.dismissed,
+                  icon: "fa-ban",
+                },
+                {
+                  id: "all" as FilterType,
+                  label: "Tất cả",
+                  count: counts.all,
+                  icon: "fa-layer-group",
+                },
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    setFilter(f.id);
+                    setCurrentPage(1);
+                  }}
+                  className={`w-full px-4 py-3 border-2 border-black font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-between ${
+                    filter === f.id
+                      ? "bg-black text-white shadow-none"
+                      : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                   }`}
                 >
-                  {f.count}
-                </span>
-              </button>
-            ))}
+                  <span className="flex items-center gap-2">
+                    <i className={`fa-solid ${f.icon} text-xs`} />
+                    {f.label}
+                  </span>
+                  <span
+                    className={`px-1.5 py-0.5 border-2 border-black text-[8px] ${
+                      filter === f.id
+                        ? "bg-white text-black"
+                        : "bg-gray-100 text-black"
+                    }`}
+                  >
+                    {f.count}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Reports List */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="lg:col-span-3 space-y-4">
           {loading ? (
-            <div className="p-6 space-y-4">
+            <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="h-32 bg-earth-100 rounded-xl" />
+                <div
+                  key={i}
+                  className="animate-pulse bg-white border-2 border-black p-8 shadow-brutal-sm"
+                >
+                  <div className="h-4 w-1/3 bg-gray-100 mb-4" />
+                  <div className="h-12 w-full bg-gray-100" />
                 </div>
               ))}
             </div>
           ) : paginatedReports.length === 0 ? (
-            <div className="p-12 text-center text-earth-400">
-              <i className="fa-solid fa-inbox text-5xl mb-4 block opacity-50" />
-              <p className="text-lg">Không có báo cáo nào</p>
+            <div className="bg-white border-2 border-black p-16 text-center shadow-brutal-sm">
+              <p className="text-xl font-bold uppercase tracking-tight text-gray-400">
+                Không có báo cáo nào
+              </p>
             </div>
           ) : (
-            <div className="divide-y divide-earth-100">
+            <div className="space-y-4">
               {paginatedReports.map((report) => (
                 <div
                   key={report.id}
-                  className="p-6 hover:bg-earth-50 transition-colors"
+                  className="bg-white border-2 border-black p-6 shadow-brutal-sm transition-all group"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col md:flex-row items-start justify-between gap-6">
                     <div className="flex-1 min-w-0">
-                      {/* Status & Date */}
-                      <div className="flex items-center gap-3 mb-3">
+                      {/* Meta */}
+                      <div className="flex flex-wrap items-center gap-3 mb-4">
                         {getStatusBadge(report.status)}
-                        <span className="text-earth-400 text-sm">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           {formatDate(report.created_at)}
                         </span>
                       </div>
 
-                      {/* Reported Comment */}
-                      <div className="mb-3 p-4 bg-red-50 rounded-lg border border-red-100">
-                        <div className="flex items-center gap-2 mb-2">
-                          <i className="fa-solid fa-comment text-red-400" />
-                          <span className="text-xs font-medium text-red-600 uppercase">
+                      {/* Content Card */}
+                      <div className="mb-6 p-5 bg-gray-50 border-2 border-black">
+                        <div className="flex items-center gap-2 mb-3">
+                          <i className="fa-solid fa-comment text-nung-red text-xs" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-nung-red">
                             Bình luận bị báo cáo
                           </span>
-                          <span className="text-xs text-red-500">
-                            bởi {report.discussion_user_name}
-                          </span>
                         </div>
-                        <p className="text-earth-800 italic">
+                        <p className="text-black font-medium text-lg leading-relaxed">
                           "{report.discussion_content}"
                         </p>
+                        <div className="mt-3 pt-3 border-t border-gray-200 text-[10px] font-bold text-gray-400">
+                          Tác giả: {report.discussion_user_name}
+                        </div>
                       </div>
 
                       {/* Reporter Info */}
-                      <div className="flex items-center gap-2 text-sm text-earth-600">
-                        <i className="fa-solid fa-user text-earth-400" />
-                        <span>
-                          Người báo cáo: <strong>{report.reporter_name}</strong>
-                        </span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white border-2 border-black p-3 shadow-brutal-sm">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-gray-400 block mb-1">
+                            Người báo cáo:
+                          </span>
+                          <span className="text-xs font-bold uppercase">
+                            {report.reporter_name}
+                          </span>
+                        </div>
+
+                        {report.reason && (
+                          <div className="bg-amber-50 border-2 border-black p-3 shadow-brutal-sm">
+                            <span className="text-[8px] font-black uppercase tracking-widest text-amber-600 block mb-1">
+                              Lý do:
+                            </span>
+                            <p className="text-xs font-medium italic text-amber-900 leading-tight">
+                              {report.reason}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Report Reason */}
-                      {report.reason && (
-                        <div className="mt-2 p-3 bg-amber-50 rounded-lg">
-                          <span className="text-xs font-medium text-amber-600">
-                            Lý do báo cáo:
-                          </span>
-                          <p className="text-amber-800 text-sm mt-1">
-                            {report.reason}
-                          </p>
-                        </div>
-                      )}
-
-                      {/* Action taken (if resolved) */}
                       {report.action_taken && (
-                        <div className="mt-2 p-3 bg-green-50 rounded-lg">
-                          <span className="text-xs font-medium text-green-600">
-                            Hành động đã thực hiện:
+                        <div className="mt-4 p-4 bg-green-50 border-2 border-black">
+                          <span className="text-[8px] font-black uppercase tracking-widest text-green-600 block mb-1">
+                            KẾT LUẬN:
                           </span>
-                          <p className="text-green-800 text-sm mt-1">
+                          <p className="text-green-900 font-medium italic text-sm">
                             {report.action_taken}
                           </p>
                         </div>
@@ -345,15 +363,15 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
 
                     {/* Actions */}
                     {report.status === "pending" && (
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto self-start">
                         <button
                           onClick={() =>
                             setConfirmDialog({
                               isOpen: true,
-                              title: "Xóa bình luận vi phạm?",
+                              title: "Xóa bình luận?",
                               message:
-                                "Bình luận sẽ bị xóa vĩnh viễn. Hành động này không thể hoàn tác.",
-                              confirmText: "Xóa bình luận",
+                                "Hành động này sẽ xóa vĩnh viễn bình luận bị báo cáo.",
+                              confirmText: "Xóa ngay",
                               isDanger: true,
                               action: async () =>
                                 handleDeleteComment(
@@ -363,31 +381,31 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
                             })
                           }
                           disabled={processingId === report.id}
-                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 flex items-center gap-2 text-sm font-medium"
+                          className="flex-1 md:w-28 px-4 py-2 bg-black text-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center justify-center gap-2"
                         >
                           {processingId === report.id ? (
-                            <i className="fa-solid fa-circle-notch fa-spin" />
+                            <i className="fa-solid fa-spinner fa-spin" />
                           ) : (
                             <i className="fa-solid fa-trash" />
                           )}
-                          Xóa bình luận
+                          Xóa
                         </button>
                         <button
                           onClick={() =>
                             setConfirmDialog({
                               isOpen: true,
-                              title: "Bỏ qua báo cáo?",
+                              title: "Bác bỏ báo cáo?",
                               message:
-                                "Bình luận sẽ được giữ nguyên và báo cáo sẽ bị bỏ qua.",
-                              confirmText: "Bỏ qua",
+                                "Giữ lại bình luận và đánh dấu báo cáo là không hợp lệ.",
+                              confirmText: "Bác bỏ",
                               action: async () => handleDismiss(report.id),
                             })
                           }
                           disabled={processingId === report.id}
-                          className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 flex items-center gap-2 text-sm font-medium"
+                          className="flex-1 md:w-28 px-4 py-2 bg-white border-2 border-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center justify-center gap-2"
                         >
                           <i className="fa-solid fa-times" />
-                          Bỏ qua
+                          Bác bỏ
                         </button>
                       </div>
                     )}
@@ -399,13 +417,56 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
 
           {/* Pagination */}
           {filteredReports.length > perPage && (
-            <div className="p-4 border-t border-earth-100">
-              <Pagination
-                currentPage={currentPage}
-                totalItems={filteredReports.length}
-                itemsPerPage={perPage}
-                onPageChange={setCurrentPage}
-              />
+            <div className="flex justify-center gap-2 pt-8">
+              <button
+                onClick={() => {
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === 1}
+                className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all disabled:opacity-50"
+              >
+                <i className="fa-solid fa-chevron-left text-xs" />
+              </button>
+
+              <div className="flex gap-1.5">
+                {Array.from({
+                  length: Math.ceil(filteredReports.length / perPage),
+                }).map((_, i) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => {
+                        setCurrentPage(pageNum);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`w-10 h-10 border-2 border-black font-bold text-xs flex items-center justify-center transition-all ${
+                        currentPage === pageNum
+                          ? "bg-black text-white shadow-none"
+                          : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => {
+                  setCurrentPage((p) =>
+                    Math.min(Math.ceil(filteredReports.length / perPage), p + 1)
+                  );
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={
+                  currentPage === Math.ceil(filteredReports.length / perPage)
+                }
+                className="w-10 h-10 border-2 border-black bg-white flex items-center justify-center shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all disabled:opacity-50"
+              >
+                <i className="fa-solid fa-chevron-right text-xs" />
+              </button>
             </div>
           )}
         </div>
@@ -419,6 +480,7 @@ const AdminReports: React.FC<AdminReportsProps> = ({ user, setRoute }) => {
           message={confirmDialog.message}
           confirmText={confirmDialog.confirmText}
           cancelText="Hủy"
+          type={confirmDialog.isDanger ? "danger" : "info"}
           onConfirm={confirmDialog.action}
           onCancel={() => setConfirmDialog(null)}
         />
