@@ -140,46 +140,46 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-bamboo-50 via-earth-50 to-earth-100 px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-12 relative overflow-hidden">
       <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       {/* Back to Home Button */}
       <button
         onClick={() => setRoute(AppRoute.DICTIONARY)}
-        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-earth-200/50 text-earth-700 hover:bg-white hover:text-bamboo-600 hover:border-bamboo-300 transition-all shadow-sm hover:shadow-md group z-10"
+        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-black font-bold uppercase text-[10px] shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all z-10"
       >
-        <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform" />
-        <span className="font-medium">Trang chủ</span>
+        <i className="fa-solid fa-arrow-left" />
+        Trang chủ
       </button>
 
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-40 right-20 w-80 h-80 bg-bamboo-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-20 w-64 h-64 bg-earth-200/40 rounded-full blur-3xl" />
-      </div>
+      {/* Decorative patterns (Lite) */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-nung-blue/5 rotate-12 -translate-x-20 -translate-y-20 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-nung-red/5 -rotate-12 translate-x-20 translate-y-20 pointer-events-none" />
 
       <div className="w-full max-w-md relative">
         {/* Logo & Header */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-earth-600 to-earth-800 rounded-2xl shadow-lg mb-4 transform hover:scale-105 transition-transform">
-            <i className="fa-solid fa-user-plus text-white text-3xl" />
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white border-2 border-black mb-4 shadow-brutal-sm">
+            <i className="fa-solid fa-user-plus text-2xl" />
           </div>
-          <h1 className="text-3xl font-serif font-bold text-earth-900 mb-2">
-            Tạo tài khoản mới
+          <h1 className="text-3xl font-bold uppercase tracking-tight text-black mb-1">
+            Đăng ký
           </h1>
-          <p className="text-earth-600">Tham gia cộng đồng bảo tồn ngôn ngữ</p>
+          <p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest">
+            Tham gia cộng đồng NungDic
+          </p>
         </div>
 
         {/* Register Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-earth-200/50 p-8 animate-fade-in">
+        <div className="bg-white border-2 border-black shadow-brutal p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Field */}
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-earth-700 mb-2"
+                className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2"
               >
-                <i className="fa-solid fa-user mr-2 text-earth-400" />
+                <i className="fa-solid fa-user mr-2" />
                 Họ và tên
               </label>
               <input
@@ -187,16 +187,14 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateField("name", e.target.value)}
-                className={`w-full px-4 py-3 rounded-xl border ${
-                  errors.name
-                    ? "border-red-400 focus:ring-red-500"
-                    : "border-earth-300 focus:ring-bamboo-500"
-                } focus:ring-2 focus:border-transparent outline-none transition-all bg-white text-earth-900 placeholder-earth-400`}
+                className={`w-full px-4 py-3 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all ${
+                  errors.name ? "border-nung-red" : "border-black"
+                }`}
                 placeholder="Nguyễn Văn A"
                 autoComplete="name"
               />
               {errors.name && (
-                <p className="mt-2 text-sm text-red-500 flex items-center">
+                <p className="mt-2 text-[10px] font-bold text-nung-red uppercase tracking-wider flex items-center">
                   <i className="fa-solid fa-circle-exclamation mr-1" />
                   {errors.name}
                 </p>
@@ -207,9 +205,9 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-earth-700 mb-2"
+                className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2"
               >
-                <i className="fa-solid fa-envelope mr-2 text-earth-400" />
+                <i className="fa-solid fa-envelope mr-2" />
                 Email
               </label>
               <input
@@ -217,16 +215,14 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                 type="email"
                 value={formData.email}
                 onChange={(e) => updateField("email", e.target.value)}
-                className={`w-full px-4 py-3 rounded-xl border ${
-                  errors.email
-                    ? "border-red-400 focus:ring-red-500"
-                    : "border-earth-300 focus:ring-bamboo-500"
-                } focus:ring-2 focus:border-transparent outline-none transition-all bg-white text-earth-900 placeholder-earth-400`}
+                className={`w-full px-4 py-3 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all ${
+                  errors.email ? "border-nung-red" : "border-black"
+                }`}
                 placeholder="email@example.com"
                 autoComplete="email"
               />
               {errors.email && (
-                <p className="mt-2 text-sm text-red-500 flex items-center">
+                <p className="mt-2 text-[10px] font-bold text-nung-red uppercase tracking-wider flex items-center">
                   <i className="fa-solid fa-circle-exclamation mr-1" />
                   {errors.email}
                 </p>
@@ -237,9 +233,9 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-earth-700 mb-2"
+                className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2"
               >
-                <i className="fa-solid fa-lock mr-2 text-earth-400" />
+                <i className="fa-solid fa-lock mr-2" />
                 Mật khẩu
               </label>
               <div className="relative">
@@ -248,18 +244,16 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(e) => updateField("password", e.target.value)}
-                  className={`w-full px-4 py-3 pr-12 rounded-xl border ${
-                    errors.password
-                      ? "border-red-400 focus:ring-red-500"
-                      : "border-earth-300 focus:ring-bamboo-500"
-                  } focus:ring-2 focus:border-transparent outline-none transition-all bg-white text-earth-900 placeholder-earth-400`}
+                  className={`w-full px-4 py-3 pr-12 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all ${
+                    errors.password ? "border-nung-red" : "border-black"
+                  }`}
                   placeholder="Tối thiểu 8 ký tự"
                   autoComplete="new-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-earth-400 hover:text-earth-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
                 >
                   <i
                     className={`fa-solid ${
@@ -268,36 +262,29 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                   />
                 </button>
               </div>
-              {/* Password Strength Indicator */}
+              {/* Password Strength Indicator (Lite) */}
               {formData.password && (
                 <div className="mt-2">
                   <div className="flex gap-1 mb-1">
                     {[1, 2, 3, 4, 5].map((level) => (
                       <div
                         key={level}
-                        className={`h-1.5 flex-1 rounded-full transition-all ${
+                        className={`h-1 flex-1 border border-black/10 transition-all ${
                           passwordStrength.score >= level
                             ? passwordStrength.color
-                            : "bg-earth-200"
+                            : "bg-gray-50"
                         }`}
                       />
                     ))}
                   </div>
-                  <p
-                    className={`text-xs ${
-                      passwordStrength.score >= 4
-                        ? "text-bamboo-600"
-                        : passwordStrength.score >= 3
-                        ? "text-yellow-600"
-                        : "text-red-500"
-                    }`}
-                  >
-                    Độ mạnh: {passwordStrength.label}
+                  <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">
+                    Độ mạnh:{" "}
+                    <span className="text-black">{passwordStrength.label}</span>
                   </p>
                 </div>
               )}
               {errors.password && (
-                <p className="mt-2 text-sm text-red-500 flex items-center">
+                <p className="mt-2 text-[10px] font-bold text-nung-red uppercase tracking-wider flex items-center">
                   <i className="fa-solid fa-circle-exclamation mr-1" />
                   {errors.password}
                 </p>
@@ -308,9 +295,9 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-earth-700 mb-2"
+                className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2"
               >
-                <i className="fa-solid fa-lock mr-2 text-earth-400" />
+                <i className="fa-solid fa-lock mr-2" />
                 Xác nhận mật khẩu
               </label>
               <div className="relative">
@@ -321,21 +308,21 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                   onChange={(e) =>
                     updateField("confirmPassword", e.target.value)
                   }
-                  className={`w-full px-4 py-3 pr-12 rounded-xl border ${
+                  className={`w-full px-4 py-3 pr-12 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all ${
                     errors.confirmPassword
-                      ? "border-red-400 focus:ring-red-500"
+                      ? "border-nung-red"
                       : formData.confirmPassword &&
                         formData.password === formData.confirmPassword
-                      ? "border-bamboo-400 focus:ring-bamboo-500"
-                      : "border-earth-300 focus:ring-bamboo-500"
-                  } focus:ring-2 focus:border-transparent outline-none transition-all bg-white text-earth-900 placeholder-earth-400`}
+                      ? "border-green-500"
+                      : "border-black"
+                  }`}
                   placeholder="Nhập lại mật khẩu"
                   autoComplete="new-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-earth-400 hover:text-earth-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
                 >
                   <i
                     className={`fa-solid ${
@@ -343,15 +330,9 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                     }`}
                   />
                 </button>
-                {formData.confirmPassword &&
-                  formData.password === formData.confirmPassword && (
-                    <span className="absolute right-12 top-1/2 -translate-y-1/2 text-bamboo-500">
-                      <i className="fa-solid fa-check" />
-                    </span>
-                  )}
               </div>
               {errors.confirmPassword && (
-                <p className="mt-2 text-sm text-red-500 flex items-center">
+                <p className="mt-2 text-[10px] font-bold text-nung-red uppercase tracking-wider flex items-center">
                   <i className="fa-solid fa-circle-exclamation mr-1" />
                   {errors.confirmPassword}
                 </p>
@@ -365,29 +346,28 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                   type="checkbox"
                   checked={formData.acceptTerms}
                   onChange={(e) => updateField("acceptTerms", e.target.checked)}
-                  className="w-4 h-4 mt-0.5 rounded border-earth-300 text-bamboo-600 focus:ring-bamboo-500 cursor-pointer"
+                  className="w-4 h-4 mt-0.5 border-2 border-black text-black focus:ring-black cursor-pointer"
                 />
-                <span className="ml-2 text-sm text-earth-600 group-hover:text-earth-800 transition-colors">
-                  Tôi đồng ý với{" "}
+                <span className="ml-2 text-[10px] font-bold uppercase tracking-widest text-gray-500 group-hover:text-black transition-colors leading-relaxed">
+                  Đồng ý với{" "}
                   <a
                     href="#"
-                    className="text-bamboo-600 hover:underline font-medium"
+                    className="text-black underline decoration-2 underline-offset-4"
                     onClick={(e) => e.preventDefault()}
                   >
-                    Điều khoản sử dụng
+                    Điều khoản
                   </a>{" "}
                   và{" "}
                   <a
                     href="#"
-                    className="text-bamboo-600 hover:underline font-medium"
-                    onClick={(e) => e.preventDefault()}
+                    className="text-black underline decoration-2 underline-offset-4"
                   >
-                    Chính sách bảo mật
+                    Bảo mật
                   </a>
                 </span>
               </label>
               {errors.acceptTerms && (
-                <p className="mt-2 text-sm text-red-500 flex items-center">
+                <p className="mt-2 text-[10px] font-bold text-nung-red uppercase tracking-wider flex items-center">
                   <i className="fa-solid fa-circle-exclamation mr-1" />
                   {errors.acceptTerms}
                 </p>
@@ -398,20 +378,15 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 px-4 rounded-xl font-semibold text-white shadow-lg transition-all flex items-center justify-center ${
-                loading
-                  ? "bg-earth-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-earth-700 to-earth-800 hover:from-earth-800 hover:to-earth-900 hover:shadow-xl active:scale-[0.98]"
+              className={`w-full py-4 px-4 bg-black text-white border-2 border-black font-bold uppercase tracking-widest text-xs shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex items-center justify-center ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               {loading ? (
-                <>
-                  <i className="fa-solid fa-circle-notch fa-spin mr-2" />
-                  Đang tạo tài khoản...
-                </>
+                <i className="fa-solid fa-circle-notch fa-spin" />
               ) : (
                 <>
-                  Đăng ký
+                  Đăng ký ngay
                   <i className="fa-solid fa-arrow-right ml-2" />
                 </>
               )}
@@ -420,11 +395,11 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
         </div>
 
         {/* Login Link */}
-        <p className="text-center mt-8 text-earth-600 animate-fade-in">
+        <p className="text-center mt-8 text-gray-500 font-bold uppercase text-[10px] tracking-widest">
           Đã có tài khoản?{" "}
           <button
             onClick={() => setRoute(AppRoute.LOGIN)}
-            className="text-bamboo-600 hover:text-bamboo-700 font-semibold transition-colors"
+            className="text-black hover:text-nung-red underline decoration-2 underline-offset-4 transition-colors ml-1"
           >
             Đăng nhập
           </button>

@@ -37,14 +37,16 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({ user }) => {
 
   return (
     <>
-      {/* Floating Action Button */}
+      {/* Floating Action Button (Brutalist Lite) */}
       <div className="fixed bottom-6 right-6 z-40">
         {/* Tooltip */}
         {showTooltip && (
-          <div className="absolute bottom-full right-0 mb-3 animate-fade-in">
-            <div className="bg-earth-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg whitespace-nowrap">
-              Góp ý hoặc báo lỗi cho chúng tôi!
-              <div className="absolute -bottom-1 right-6 w-2 h-2 bg-earth-900 rotate-45" />
+          <div className="absolute bottom-full right-0 mb-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="bg-white border-2 border-black px-4 py-2 shadow-brutal-sm whitespace-nowrap">
+              <p className="text-[10px] font-black uppercase tracking-widest text-black">
+                Góp ý & Báo lỗi
+              </p>
+              <div className="absolute -bottom-1 right-6 w-2 h-2 bg-white border-b-2 border-r-2 border-black rotate-45" />
             </div>
           </div>
         )}
@@ -52,17 +54,7 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({ user }) => {
         {/* Button */}
         <button
           onClick={handleClick}
-          className={`
-            w-14 h-14 rounded-full
-            bg-gradient-to-br from-bamboo-500 to-bamboo-600
-            text-white shadow-lg
-            hover:shadow-xl hover:scale-110
-            active:scale-95
-            transition-all duration-200
-            flex items-center justify-center
-            group
-            ${!hasSeenButton ? "animate-pulse" : ""}
-          `}
+          className="w-14 h-14 bg-black text-white border-2 border-white shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all flex items-center justify-center group"
           title="Góp ý & Báo lỗi"
         >
           <i className="fa-solid fa-comment-dots text-xl group-hover:scale-110 transition-transform" />

@@ -144,108 +144,85 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* Backdrop (Lite) */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={() => !submitting && onClose()}
       />
 
-      {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in">
+      {/* Modal (Lite) */}
+      <div className="relative bg-white border-2 border-black shadow-brutal w-full max-w-lg overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div
-          className={`px-6 py-4 border-b border-earth-200 ${currentTab.bgColor}`}
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold text-earth-900 flex items-center gap-2">
-                <i
-                  className={`fa-solid ${currentTab.icon} ${currentTab.color}`}
-                />
-                Góp ý & Báo lỗi
-              </h2>
-              <p className="text-xs text-earth-500 mt-0.5">
-                {user ? `Đăng nhập với: ${user.email}` : "Gửi ẩn danh"}
-              </p>
-            </div>
-            <button
-              onClick={() => !submitting && onClose()}
-              disabled={submitting}
-              className="w-8 h-8 rounded-full hover:bg-white/50 flex items-center justify-center transition-colors"
-            >
-              <i className="fa-solid fa-xmark text-earth-500" />
-            </button>
+        <div className="bg-black text-white px-6 py-4 flex items-center justify-between border-b-2 border-black">
+          <div>
+            <h2 className="text-xl font-bold uppercase tracking-tight flex items-center gap-3">
+              <i className={`fa-solid ${currentTab.icon}`} />
+              Góp ý & Báo lỗi
+            </h2>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-1">
+              {user ? `Người dùng: ${user.email}` : "Chế độ ẩn danh"}
+            </p>
           </div>
+          <button
+            onClick={() => !submitting && onClose()}
+            disabled={submitting}
+            className="w-10 h-10 border-2 border-white bg-white text-black flex items-center justify-center hover:bg-nung-red hover:text-white transition-colors"
+          >
+            <i className="fa-solid fa-xmark" />
+          </button>
+        </div>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mt-4 -mb-4 -mx-6 px-4 sm:px-6 overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-t-lg font-medium text-xs sm:text-sm transition-colors whitespace-nowrap flex-shrink-0 ${
-                  activeTab === tab.id
-                    ? "bg-white text-earth-900 shadow-sm"
-                    : "text-earth-600 hover:bg-white/50"
-                }`}
-              >
-                <i
-                  className={`fa-solid ${tab.icon} ${
-                    activeTab === tab.id ? tab.color : ""
-                  }`}
-                />
-                <span className="sm:hidden">{tab.shortLabel}</span>
-                <span className="hidden sm:inline">{tab.label}</span>
-              </button>
-            ))}
-          </div>
+        {/* Tabs (Lite) */}
+        <div className="flex border-b-2 border-black bg-gray-50">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-3 px-2 font-black uppercase text-[10px] tracking-widest transition-all border-r-2 border-black last:border-r-0 ${
+                activeTab === tab.id
+                  ? "bg-white text-black translate-y-[2px]"
+                  : "bg-gray-50 text-gray-400 hover:text-black hover:bg-gray-100"
+              }`}
+            >
+              <i className={`fa-solid ${tab.icon} mb-1 block text-sm`} />
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+        <div className="p-8 space-y-6 max-h-[60vh] overflow-y-auto">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-earth-700 mb-1">
-              Tiêu đề <span className="text-red-500">*</span>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+              Tiêu đề <span className="text-nung-red">*</span>
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder={
-                activeTab === "bug"
-                  ? "VD: Lỗi không hiển thị kết quả dịch..."
-                  : activeTab === "feature"
-                  ? "VD: Thêm chức năng dịch giọng nói..."
-                  : "VD: Đề xuất cải thiện giao diện..."
-              }
-              className="w-full px-4 py-2.5 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800"
+              placeholder="VD: Lỗi không hiển thị kết quả..."
+              className="w-full px-4 py-3 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all placeholder:text-gray-300"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-earth-700 mb-1">
-              Mô tả chi tiết <span className="text-red-500">*</span>
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+              Mô tả chi tiết <span className="text-nung-red">*</span>
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={
-                activeTab === "bug"
-                  ? "Mô tả chi tiết lỗi bạn gặp phải, các bước để tái hiện lỗi..."
-                  : activeTab === "feature"
-                  ? "Mô tả chi tiết tính năng bạn mong muốn..."
-                  : "Chia sẻ góp ý của bạn..."
-              }
+              placeholder="Chia sẻ góp ý của bạn..."
               rows={4}
-              className="w-full px-4 py-2.5 border border-earth-200 rounded-lg outline-none focus:ring-2 focus:ring-bamboo-500 focus:border-transparent text-earth-800 resize-none"
+              className="w-full px-4 py-3 border-2 border-black font-bold focus:bg-gray-50 outline-none transition-all resize-none placeholder:text-gray-300"
             />
           </div>
 
-          {/* Category */}
+          {/* Category Selector (Lite) */}
           <div>
-            <label className="block text-sm font-medium text-earth-700 mb-1">
+            <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
               Danh mục
             </label>
             <div className="flex flex-wrap gap-2">
@@ -253,10 +230,10 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
                 <button
                   key={cat}
                   onClick={() => setCategory(category === cat ? "" : cat)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 border-2 border-black font-bold uppercase text-[10px] tracking-widest transition-all ${
                     category === cat
-                      ? "bg-bamboo-600 text-white"
-                      : "bg-earth-100 text-earth-600 hover:bg-earth-200"
+                      ? "bg-black text-white shadow-none"
+                      : "bg-white text-black shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5"
                   }`}
                 >
                   {cat}
@@ -267,19 +244,19 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
           {/* Priority (only for bugs) */}
           {activeTab === "bug" && (
-            <div>
-              <label className="block text-sm font-medium text-earth-700 mb-1">
+            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+              <label className="block text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
                 Mức độ nghiêm trọng
               </label>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {priorityOptions.map((opt) => (
                   <button
                     key={opt.value}
                     onClick={() => setPriority(opt.value as Priority)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                    className={`px-2 py-2 border-2 border-black font-bold uppercase text-[9px] tracking-widest transition-all ${
                       priority === opt.value
-                        ? `${opt.color} ring-2 ring-offset-1 ring-current`
-                        : "bg-earth-100 text-earth-600 hover:bg-earth-200"
+                        ? "bg-black text-white"
+                        : "bg-white text-black shadow-brutal-sm hover:bg-gray-100"
                     }`}
                   >
                     {opt.label}
@@ -289,52 +266,51 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </div>
           )}
 
-          {/* Toast */}
+          {/* Toast Notification (Inside) */}
           {toast && (
             <div
-              className={`px-4 py-3 rounded-lg flex items-center gap-2 ${
+              className={`p-4 border-2 border-black font-bold uppercase text-[10px] tracking-widest flex items-center gap-3 animate-in zoom-in duration-200 ${
                 toast.type === "success"
-                  ? "bg-green-50 text-green-700 border border-green-200"
-                  : "bg-red-50 text-red-700 border border-red-200"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
               }`}
             >
               <i
                 className={`fa-solid ${
                   toast.type === "success"
-                    ? "fa-check-circle"
-                    : "fa-times-circle"
+                    ? "fa-check"
+                    : "fa-triangle-exclamation"
                 }`}
               />
-              <span className="text-sm">{toast.message}</span>
+              {toast.message}
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-earth-200 bg-earth-50 flex justify-between items-center">
-          <p className="text-xs text-earth-400">
+        <div className="px-8 py-6 border-t-2 border-black bg-gray-50 flex justify-between items-center">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
             {!user && (
-              <>
-                <i className="fa-solid fa-info-circle mr-1" />
-                Bạn đang gửi ẩn danh
-              </>
+              <span className="flex items-center gap-1">
+                <i className="fa-solid fa-ghost" /> Ghé thăm
+              </span>
             )}
           </p>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <button
               onClick={onClose}
               disabled={submitting}
-              className="px-4 py-2 text-sm text-earth-600 hover:bg-earth-200 rounded-lg transition-colors"
+              className="px-6 py-2 border-2 border-black bg-white font-bold uppercase text-[10px] tracking-widest shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
             >
               Hủy
             </button>
             <button
               onClick={handleSubmit}
               disabled={!title.trim() || !description.trim() || submitting}
-              className="px-5 py-2 text-sm bg-bamboo-600 text-white rounded-lg hover:bg-bamboo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+              className="px-6 py-2 border-2 border-black bg-black text-white font-bold uppercase text-[10px] tracking-widest shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 transition-all flex items-center gap-2 disabled:opacity-50"
             >
               {submitting && <i className="fa-solid fa-circle-notch fa-spin" />}
-              Gửi phản hồi
+              Gửi ngay
             </button>
           </div>
         </div>
