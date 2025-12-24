@@ -68,6 +68,16 @@ const Footer: React.FC = () => {
             </h4>
             <div className="space-y-4">
               <a
+                href="https://nungdic.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-3 border-2 border-white bg-white text-black transition-all group shadow-brutal-sm hover:translate-x-1 hover:translate-y-1"
+              >
+                <i className="fa-solid fa-house text-2xl" />
+                <span className="font-bold text-sm">Trở về Trang chủ</span>
+              </a>
+
+              <a
                 href="https://github.com/SecondNot2/Nung-Central-VN-Dictionary"
                 target="_blank"
                 rel="noopener noreferrer"

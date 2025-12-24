@@ -28,6 +28,12 @@ const Navigation: React.FC<NavigationProps> = ({
       label: "Đóng góp",
       icon: "fa-hand-holding-heart",
     },
+    {
+      id: "EXTERNAL_LANDING" as any,
+      label: "Trang chủ",
+      icon: "fa-house",
+      url: "https://nungdic.vercel.app",
+    },
   ];
 
   // Admin-only items
@@ -70,7 +76,13 @@ const Navigation: React.FC<NavigationProps> = ({
             {visibleNavItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setRoute(item.id)}
+                onClick={() => {
+                  if ((item as any).url) {
+                    window.open((item as any).url, "_blank");
+                  } else {
+                    setRoute(item.id);
+                  }
+                }}
                 className={`px-4 py-2 border-2 transition-all duration-200 ${
                   currentRoute === item.id
                     ? "bg-nung-blue text-white border-black shadow-brutal-sm"
@@ -217,7 +229,11 @@ const Navigation: React.FC<NavigationProps> = ({
                   <button
                     key={item.id}
                     onClick={() => {
-                      setRoute(item.id);
+                      if ((item as any).url) {
+                        window.open((item as any).url, "_blank");
+                      } else {
+                        setRoute(item.id);
+                      }
                       setIsMobileMenuOpen(false);
                     }}
                     className={`w-full text-left px-5 py-4 border-2 transition-all font-serif font-bold flex items-center shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none ${
