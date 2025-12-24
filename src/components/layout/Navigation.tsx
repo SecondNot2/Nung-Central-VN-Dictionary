@@ -17,8 +17,8 @@ const Navigation: React.FC<NavigationProps> = ({
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Main navigation items (visible to all)
-  const mainNavItems = [
+  // Main navigation items (core app features)
+  const coreNavItems = [
     { id: AppRoute.DICTIONARY, label: "Dịch", icon: "fa-language" },
     { id: AppRoute.DICTIONARY_LIST, label: "Tra cứu", icon: "fa-book-open" },
     { id: AppRoute.IMAGE_ANALYSIS, label: "Phân tích ảnh", icon: "fa-camera" },
@@ -28,61 +28,51 @@ const Navigation: React.FC<NavigationProps> = ({
       label: "Đóng góp",
       icon: "fa-hand-holding-heart",
     },
-    {
-      id: "EXTERNAL_LANDING" as any,
-      label: "Trang chủ",
-      icon: "fa-house",
-      url: "https://nungdic.vercel.app",
-    },
   ];
 
-  // Admin-only items
-  const adminNavItems = [
-    { id: AppRoute.ADMIN_DASHBOARD, label: "Quản lý", icon: "fa-gauge-high" },
-  ];
-
-  const isAdmin = user?.role === "admin";
-
-  // Combined nav items based on user role
-  const getVisibleNavItems = () => {
-    let items = [...mainNavItems];
-    if (isAdmin) {
-      items = [...items, ...adminNavItems];
-    }
-    return items;
+  const landingPageLink = {
+    label: "Trang chủ",
+    icon: "fa-house",
+    url: "https://nungdic.vercel.app",
   };
 
-  const visibleNavItems = getVisibleNavItems();
+  const isAdmin = user?.role === "admin";
 
   return (
     <nav className="sticky top-0 z-50 bg-nung-sand border-b-4 border-black">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <div
-            className="flex items-center cursor-pointer group"
-            onClick={() => setRoute(AppRoute.DICTIONARY)}
-          >
-            <div className="flex items-center bg-nung-red text-white border-2 border-black p-2 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
-              <i className="fa-solid fa-compass text-2xl mr-2" />
-              <span className="font-display text-2xl tracking-tight">
-                NungDic
-              </span>
+          {/* Logo & Home Link */}
+          <div className="flex items-center space-x-4">
+            <div
+              className="flex items-center cursor-pointer group"
+              onClick={() => setRoute(AppRoute.DICTIONARY)}
+            >
+              <div className="flex items-center bg-nung-red text-white border-2 border-black p-2 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
+                <i className="fa-solid fa-compass text-2xl mr-2" />
+                <span className="font-display text-2xl tracking-tight">
+                  NungDic
+                </span>
+              </div>
             </div>
+
+            {/* Desktop Home Icon Link */}
+            <div className="hidden lg:block h-8 w-px bg-black opacity-20 mx-2"></div>
+            <button
+              onClick={() => window.open(landingPageLink.url, "_blank")}
+              className="hidden lg:flex items-center justify-center w-10 h-10 border-2 border-black bg-white shadow-brutal-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
+              title="Về Trang chủ"
+            >
+              <i className={`fa-solid ${landingPageLink.icon} text-lg`} />
+            </button>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-2 font-serif font-bold text-sm">
-            {visibleNavItems.map((item) => (
+            {coreNavItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => {
-                  if ((item as any).url) {
-                    window.open((item as any).url, "_blank");
-                  } else {
-                    setRoute(item.id);
-                  }
-                }}
+                onClick={() => setRoute(item.id)}
                 className={`px-4 py-2 border-2 transition-all duration-200 ${
                   currentRoute === item.id
                     ? "bg-nung-blue text-white border-black shadow-brutal-sm"
@@ -146,6 +136,18 @@ const Navigation: React.FC<NavigationProps> = ({
                           </span>
                         )}
                       </div>
+                      {isAdmin && (
+                        <button
+                          onClick={() => {
+                            setRoute(AppRoute.ADMIN_DASHBOARD);
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-3 text-sm font-bold bg-nung-red/10 hover:bg-nung-red hover:text-white transition-colors flex items-center border-b-2 border-black"
+                        >
+                          <i className="fa-solid fa-gauge-high mr-3" />
+                          Quản trị hệ thống
+                        </button>
+                      )}
                       <button
                         onClick={() => {
                           setRoute(AppRoute.MY_LIBRARY);
@@ -225,29 +227,56 @@ const Navigation: React.FC<NavigationProps> = ({
           <div className="lg:hidden absolute top-full left-0 right-0 border-b-4 border-black py-4 bg-nung-sand z-50 animate-fade-in shadow-brutal-lg max-h-[calc(100vh-5rem)] overflow-y-auto w-full">
             <div className="max-w-7xl mx-auto px-4">
               <div className="space-y-3">
-                {visibleNavItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if ((item as any).url) {
-                        window.open((item as any).url, "_blank");
-                      } else {
+                {/* Core Features Grid */}
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {coreNavItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
                         setRoute(item.id);
-                      }
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`h-24 flex flex-col items-center justify-center p-2 border-2 transition-all font-serif font-bold shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none ${
+                        currentRoute === item.id
+                          ? "bg-nung-blue text-white border-black"
+                          : "bg-white text-nung-dark border-black"
+                      }`}
+                    >
+                      <i className={`fa-solid ${item.icon} mb-2 text-xl`} />
+                      <span className="text-sm">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* System & External Links List */}
+                <div className="space-y-3 pt-4 border-t-2 border-black/10">
+                  <button
+                    onClick={() => {
+                      window.open(landingPageLink.url, "_blank");
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-4 border-2 transition-all font-serif font-bold flex items-center shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none ${
-                      currentRoute === item.id
-                        ? "bg-nung-blue text-white border-black"
-                        : "bg-white text-nung-dark border-black"
-                    }`}
+                    className="w-full text-left px-5 py-4 border-2 border-black bg-white text-nung-dark transition-all font-bold flex items-center shadow-brutal-sm"
                   >
                     <i
-                      className={`fa-solid ${item.icon} mr-4 w-6 text-center text-lg`}
+                      className={`fa-solid ${landingPageLink.icon} mr-4 w-6 text-center text-lg`}
                     />
-                    <span className="text-lg">{item.label}</span>
+                    <span className="text-lg">{landingPageLink.label}</span>
+                    <i className="fa-solid fa-arrow-up-right-from-square ml-auto text-xs opacity-40" />
                   </button>
-                ))}
+
+                  {isAdmin && (
+                    <button
+                      onClick={() => {
+                        setRoute(AppRoute.ADMIN_DASHBOARD);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-left px-5 py-4 border-2 border-black bg-nung-red text-white transition-all font-bold flex items-center shadow-brutal-sm"
+                    >
+                      <i className="fa-solid fa-gauge-high mr-4 w-6 text-center text-lg" />
+                      <span className="text-lg">Quản lý hệ thống</span>
+                    </button>
+                  )}
+                </div>
                 {!user && (
                   <div className="pt-4 mt-6 border-t-4 border-black flex flex-col space-y-3">
                     <button
