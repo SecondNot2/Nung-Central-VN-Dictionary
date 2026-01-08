@@ -12,7 +12,7 @@
   <h3>🌾 Ứng dụng từ điển song ngữ Nùng - Việt với AI Translation</h3>
   <p>Bảo tồn và phát triển ngôn ngữ dân tộc Nùng thông qua công nghệ</p>
   <br/>
-  <a href="https://nung-central-vn-dictionary.vercel.app/">🌐 Live Demo</a>
+  <a href="https://nungdic-app.vercel.app/">🌐 Live Demo</a>
 </div>
 
 ---
