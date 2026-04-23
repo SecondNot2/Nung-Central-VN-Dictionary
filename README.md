@@ -1,7 +1,7 @@
 # 📚 NungDic - Từ điển Văn hóa Nùng & Miền Trung
 
 <div align="center">
-  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react" alt="React" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/Supabase-Database-3FCF8E?style=for-the-badge&logo=supabase" alt="Supabase" />
@@ -21,7 +21,7 @@
 
 ### 🔤 Từ điển & Dịch thuật
 
-- **Dịch song ngữ**: Hỗ trợ dịch Việt ↔ Nùng với AI (MegaLLM/Gemini API)
+- **Dịch song ngữ**: Hỗ trợ dịch Việt ↔ Nùng với AI qua 9Router
 - **Engine dịch thuật thông minh**: Tự động ưu tiên khớp cụm từ dài nhất, ngăn chặn lặp từ và khớp sai chuỗi con
 - **Suy luận từ vựng (Inference)**: Tự động suy luận nghĩa từ đơn từ các cụm từ có sẵn khi không tìm thấy kết quả trực tiếp
 - **Từ điển chuẩn hóa (Enhanced Data)**: Dữ liệu được tái cấu trúc định kỳ để đảm bảo tính nhất quán (Chuẩn hóa phát âm/script, bóc tách loại từ, tích hợp ví dụ minh họa)
@@ -95,10 +95,10 @@ Tạo file `.env.local` với nội dung:
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# AI Translation API (chọn 1 trong 2)
-VITE_MEGA_LLM_API_KEY=your_megallm_api_key
-# hoặc
-VITE_GEMINI_API_KEY=your_gemini_api_key
+# LLM keys được cấu hình ở server (Vercel Project Settings), không đặt trong .env.local
+# ROUTER_API_KEY=your_9router_api_key
+# ROUTER_BASE_URL=http://localhost:20128/v1
+# ROUTER_MODEL=gc/gemini-2.5-pro
 ```
 
 ### Chạy ứng dụng
@@ -133,7 +133,7 @@ src/
 │   └── auth/            # Login, Register
 ├── services/            # Business logic & API
 │   ├── api/             # Supabase services (auth, saved, suggestions, reports)
-│   ├── ai/              # AI translation (MegaLLM, Gemini)
+│   ├── ai/              # AI translation via 9Router
 │   ├── dictionary/      # Dictionary & vocab services
 │   └── utils/           # Helper functions
 ├── types/               # TypeScript definitions
@@ -147,10 +147,10 @@ src/
 
 | Category | Technology                                   |
 | -------- | -------------------------------------------- |
-| Frontend | React 18, TypeScript, Vite 6                 |
+| Frontend | React 19, TypeScript, Vite 6                 |
 | Styling  | TailwindCSS, Custom Design Tokens            |
 | Backend  | Supabase (Auth, Database, Storage, RLS)      |
-| AI       | MegaLLM API / Google Gemini API              |
+| AI       | 9Router (OpenAI-compatible local gateway)    |
 | State    | React Hooks, LocalStorage, Supabase Realtime |
 | Icons    | Font Awesome 6                               |
 | Deploy   | Vercel                                       |

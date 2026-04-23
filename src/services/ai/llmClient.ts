@@ -1,58 +1,44 @@
 /**
- * LLM API Client
- * Shared wrapper for calling LLM APIs (MegaLLM, etc.)
+ * 9Router client helpers
+ * Shared wrappers for calling the local server proxy.
  */
 
-export interface LLMMessage {
+export interface RouterMessage {
   role: "system" | "user" | "assistant";
   content: string;
 }
 
-export interface LLMConfig {
-  apiKey: string;
-  baseUrl: string;
-  model: string;
+export interface RouterConfig {
+  apiKey?: string;
+  baseUrl?: string;
+  model?: string;
 }
 
-export interface LLMCallOptions {
+export interface RouterChatOptions {
   temperature?: number;
   responseFormat?: { type: string };
   maxTokens?: number;
+  model?: string;
 }
 
-// Default MegaLLM configuration
-const DEFAULT_MEGA_LLM_CONFIG: LLMConfig = {
-  apiKey: import.meta.env.VITE_MEGA_LLM_API_KEY || "",
-  baseUrl: "https://ai.megallm.io/v1",
-  model: "deepseek-ai/deepseek-v3.1",
-};
+export interface RouterPromptPayload {
+  prompt: string;
+  temperature?: number;
+  model?: string;
+  systemInstruction?: string;
+  history?: { role: "user" | "model"; text: string }[];
+  image?: { base64: string; mimeType: string };
+}
 
-/**
- * Call MegaLLM API with messages
- * @param messages - Array of chat messages
- * @param options - Optional parameters (temperature, response format)
- * @param config - Optional custom LLM configuration
- */
-export async function callMegaLLM(
-  messages: LLMMessage[],
-  options: LLMCallOptions = {},
-  config: LLMConfig = DEFAULT_MEGA_LLM_CONFIG
+export async function callRouterChat(
+  messages: RouterMessage[],
+  options: RouterChatOptions = {},
+  _config?: RouterConfig
 ): Promise<string> {
-  const { temperature = 0.7, responseFormat, maxTokens } = options;
-
-  const response = await fetch(`${config.baseUrl}/chat/completions`, {
+  const response = await fetch("/api/llm-proxy", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${config.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: config.model,
-      messages,
-      temperature,
-      ...(responseFormat && { response_format: responseFormat }),
-      ...(maxTokens && { max_tokens: maxTokens }),
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages, options }),
   });
 
   if (!response.ok) {
@@ -61,7 +47,25 @@ export async function callMegaLLM(
   }
 
   const data = await response.json();
-  return data.choices[0].message.content;
+  return data.content;
+}
+
+export async function callRouterPrompt(
+  payload: RouterPromptPayload
+): Promise<string> {
+  const response = await fetch("/api/llm-proxy", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`9Router API Error: ${response.status} - ${errorText}`);
+  }
+
+  const data = await response.json();
+  return data.content;
 }
 
 /**

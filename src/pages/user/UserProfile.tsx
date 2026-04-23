@@ -82,6 +82,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
       if (data) {
         setProfile(data);
         setDisplayName(data.display_name || "");
+        if (onProfileUpdate) {
+          onProfileUpdate({
+            name: data.display_name || user.name,
+            avatar: data.avatar_url || undefined,
+          });
+        }
         hasLoadedOnce.current = true; // Mark as loaded
       } else {
         // Fallback to user prop if profile fetch fails

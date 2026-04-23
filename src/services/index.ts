@@ -21,12 +21,13 @@ export {
 
 // LLM client utilities
 export {
-  callMegaLLM,
+  callRouterChat,
+  callRouterPrompt,
   cleanJsonResponse,
   parseJsonResponse,
-  type LLMMessage,
-  type LLMConfig,
-  type LLMCallOptions,
+  type RouterMessage,
+  type RouterConfig,
+  type RouterChatOptions,
 } from "./ai/llmClient";
 
 // Translation rules and prompts
@@ -147,8 +148,8 @@ export {
   type WordBreakdown,
 } from "./dictionary/tieredTranslationService";
 
-// MegaLLM AI service - additional exports for tiered translation
+// 9Router AI service - additional exports for tiered translation
 export {
   translateMissingWords,
   saveApiDiscoveredWord,
-} from "./ai/megaLlmService";
+} from "./ai/routerService";

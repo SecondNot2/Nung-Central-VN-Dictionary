@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { analyzeImage } from "../../services/ai/megaLlmService";
+import { analyzeImage } from "../../services/ai/routerService";
 
 const ImageAnalyzer: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);

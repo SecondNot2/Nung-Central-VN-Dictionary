@@ -7,17 +7,31 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
+# Build and Production
+dist/
+dist-ssr/
+.vercel/
+.output/
 
-# Environment files (local keys) are now handled by .git/info/exclude
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -25,5 +39,15 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local files (handled by .git/info/exclude)
+# Testing and Coverage
+coverage/
+__pycache__/
 
+# Tooling and Caches
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# Project specific
+project-upgrade/
+.agent/

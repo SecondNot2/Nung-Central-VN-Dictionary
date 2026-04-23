@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { ToastContainer, useToast } from "../../components";
-import { generateSpeech } from "../../services/ai/megaLlmService";
+import { generateSpeech } from "../../services/ai/routerService";
 import {
   getDictionaryEntries,
   getDictionaryStats,

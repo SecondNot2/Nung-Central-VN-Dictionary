@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { generateSpeech } from "../../services/ai/megaLlmService";
+import { generateSpeech } from "../../services/ai/routerService";
 import {
   smartTranslateText,
   type TieredTranslationResult,

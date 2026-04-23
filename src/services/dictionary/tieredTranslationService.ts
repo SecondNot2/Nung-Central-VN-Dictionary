@@ -3,7 +3,7 @@
  * Tối ưu tốc độ dịch bằng cách tra cứu 3 tầng:
  * 1. Local Dictionary - CỤM TỪ trước (sử dụng smartLookup)
  * 2. Database Contributions (Supabase)
- * 3. MegaLLM API (chỉ cho từ thực sự không tìm thấy)
+ * 3. 9Router API (chỉ cho từ thực sự không tìm thấy)
  */
 
 import { NUNG_DICTIONARY, type NungWord } from "../../data";
@@ -20,7 +20,7 @@ import {
 import {
   translateMissingWords,
   saveApiDiscoveredWord,
-} from "../ai/megaLlmService";
+} from "../ai/routerService";
 
 // ==================== Types ====================
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { sendChatMessage } from "../../services/ai/megaLlmService";
+import { sendChatMessage } from "../../services/ai/routerService";
 import { ChatMessage } from "../../types";
 
 const ChatBot: React.FC = () => {

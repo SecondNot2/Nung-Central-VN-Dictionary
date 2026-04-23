@@ -7,8 +7,6 @@ import {
   supabase,
   isSupabaseConfigured,
   getAccessToken,
-  supabaseUrl,
-  supabaseAnonKey,
 } from "./supabaseClient";
 import type {
   User as SupabaseUser,
@@ -21,6 +19,8 @@ export interface UserProfile {
   id: string;
   email: string;
   display_name: string | null;
+  avatar_url?: string | null;
+  email_verified?: boolean;
   role: "contributor" | "admin";
   created_at: string;
   updated_at: string;
@@ -87,7 +87,7 @@ export async function signIn(
     if (data.user) {
       // Fetch user profile with timeout
       const profile = await withTimeout(
-        getUserProfile(data.user.id),
+        getUserProfile(data.user.id, data.session?.access_token),
         10000,
         "Lỗi tải hồ sơ"
       );
@@ -276,37 +276,39 @@ export async function getCurrentUser(): Promise<SupabaseUser | null> {
  */
 /**
  * Get user profile from database
- * Uses direct Fetch to avoid Client hangs on tab switch
+ * Uses Supabase client query to avoid noisy REST failures during session recovery
  */
 export async function getUserProfile(
-  userId: string
+  userId: string,
+  accessToken?: string | null
 ): Promise<UserProfile | null> {
-  if (!isSupabaseConfigured() || !supabaseUrl || !supabaseAnonKey) {
+  if (!isSupabaseConfigured()) {
     return null;
   }
 
   try {
-    const token = await getAccessToken();
-    if (!token) return null;
-
-    const response = await fetch(
-      `${supabaseUrl}/rest/v1/user_profiles?id=eq.${userId}&select=*`,
-      {
-        method: "GET",
-        headers: {
-          apikey: supabaseAnonKey,
-          Authorization: `Bearer ${token}`,
-          Accept: "application/vnd.pgrst.object+json",
-        },
-      }
-    );
-
-    if (!response.ok) {
+    const token = accessToken ?? (await getAccessToken());
+    if (!token) {
       return null;
     }
 
-    const data = await response.json();
-    return data as UserProfile;
+    const { data, error } = await withTimeout(
+      Promise.resolve(
+        supabase
+          .from("user_profiles")
+          .select("*")
+          .eq("id", userId)
+          .maybeSingle()
+      ),
+      8000,
+      "Load profile timeout"
+    );
+
+    if (error) {
+      return null;
+    }
+
+    return (data as UserProfile | null) ?? null;
   } catch {
     return null;
   }
@@ -370,19 +372,18 @@ export async function createProfileForOAuthUser(
           display_name: displayName || email.split("@")[0],
           role: "contributor",
         },
-        { onConflict: "id", ignoreDuplicates: true }
+        { onConflict: "id" }
       )
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
-      // Ignore duplicate key errors (profile already exists)
-      if (error.code === "23505") {
-        console.log("Profile already exists for user:", userId);
-        return null;
-      }
       console.error("Error creating OAuth profile:", error);
       return null;
+    }
+
+    if (!data) {
+      return await getUserProfile(userId);
     }
 
     console.log("Created profile for OAuth user:", userId);
@@ -415,7 +416,10 @@ export function onAuthStateChange(
 
   const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
     if (session?.user) {
-      const profile = await getUserProfile(session.user.id);
+      const profile = await getUserProfile(
+        session.user.id,
+        session.access_token
+      );
       callback(session.user, profile);
     } else {
       callback(null, null);

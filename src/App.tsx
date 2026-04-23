@@ -138,7 +138,7 @@ const App: React.FC = () => {
 
           // Attempt to create profile in database (will fail silently if exists)
           try {
-            await createProfileForOAuthUser(
+            userProfile = await createProfileForOAuthUser(
               supabaseUser.id,
               supabaseUser.email || "",
               displayName
@@ -159,8 +159,9 @@ const App: React.FC = () => {
             "User",
           role: userProfile?.role === "admin" ? "admin" : "user",
           avatar:
-            (userProfile as any)?.avatar_url ||
-            supabaseUser.user_metadata?.avatar_url,
+            userProfile?.avatar_url ||
+            supabaseUser.user_metadata?.avatar_url ||
+            supabaseUser.user_metadata?.picture,
         };
 
         console.log("Setting user:", newUser.name);
