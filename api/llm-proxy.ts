@@ -10,9 +10,10 @@ type RouterMessage = {
 };
 
 function getRouterConfig() {
-  const baseUrl =
-    process.env.ROUTER_BASE_URL?.replace(/\/$/, "") ||
-    "http://localhost:20128/v1";
+  const isProduction =
+    process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+  const configuredBaseUrl = process.env.ROUTER_BASE_URL?.replace(/\/$/, "");
+  const baseUrl = configuredBaseUrl || (isProduction ? "" : "http://localhost:20128/v1");
   const model =
     process.env.ROUTER_MODEL ||
     process.env.ROUTER_TEXT_MODEL ||
@@ -119,25 +120,44 @@ async function callRouterChatCompletion(payload: {
   const router = getRouterConfig();
 
   if (!router.apiKey) {
-    throw new Error("Missing ROUTER_API_KEY");
+    throw new Error("Missing ROUTER_API_KEY in server environment");
   }
 
-  const response = await fetch(`${router.baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${router.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: payload.model || router.model,
-      messages: payload.messages,
-      temperature: payload.temperature ?? 0.7,
-      ...(payload.responseFormat
-        ? { response_format: payload.responseFormat }
-        : {}),
-      ...(payload.maxTokens ? { max_tokens: payload.maxTokens } : {}),
-    }),
-  });
+  if (!router.baseUrl) {
+    throw new Error(
+      "Missing ROUTER_BASE_URL in production server environment"
+    );
+  }
+
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(router.baseUrl)) {
+    throw new Error(
+      "ROUTER_BASE_URL cannot point to localhost in production. Set it to a reachable 9Router endpoint for Vercel."
+    );
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${router.baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${router.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: payload.model || router.model,
+        messages: payload.messages,
+        temperature: payload.temperature ?? 0.7,
+        ...(payload.responseFormat
+          ? { response_format: payload.responseFormat }
+          : {}),
+        ...(payload.maxTokens ? { max_tokens: payload.maxTokens } : {}),
+      }),
+    });
+  } catch (error: any) {
+    throw new Error(
+      `Unable to reach 9Router at ${router.baseUrl}. Check ROUTER_BASE_URL and confirm the endpoint is reachable from Vercel.${error?.cause?.message ? ` ${error.cause.message}` : ""}`
+    );
+  }
 
   if (!response.ok) {
     const text = await response.text();
