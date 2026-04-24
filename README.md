@@ -95,11 +95,25 @@ Tạo file `.env.local` với nội dung:
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
-# LLM keys được cấu hình ở server (Vercel Project Settings), không đặt trong .env.local
+# Local dev với 9Router
 # ROUTER_API_KEY=your_9router_api_key
 # ROUTER_BASE_URL=http://localhost:20128/v1
+# Có thể dùng root URL khi deploy 9Router riêng, code sẽ tự chuẩn hóa thành /v1 nếu cần
+# Ví dụ: ROUTER_BASE_URL=https://9router-production-b8ba.up.railway.app
 # ROUTER_MODEL=gc/gemini-2.5-pro
+#
+# Production trên Vercel phải dùng endpoint public/reachable
+# LLM_API_KEY=your_remote_llm_api_key
+# LLM_BASE_URL=https://your-reachable-llm-endpoint/v1
+# LLM_MODEL=gc/gemini-2.5-pro
 ```
+
+Lưu ý: `9Router` chạy trên `localhost` của máy bạn không thể được Vercel Serverless truy cập. Muốn deploy production có 2 hướng đúng:
+
+1. Chạy `9Router` trên một server/container public rồi cấu hình `LLM_BASE_URL` tới endpoint đó.
+2. Dùng một provider/gateway OpenAI-compatible từ xa và cấu hình `LLM_*` trên Vercel.
+
+Code hiện tại ưu tiên `LLM_*` cho production và vẫn giữ `ROUTER_*` để local dev không bị ảnh hưởng.
 
 ### Chạy ứng dụng
 

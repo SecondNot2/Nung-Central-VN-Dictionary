@@ -86,6 +86,10 @@ function llmProxyDevPlugin() {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, ".", "");
   for (const key of [
+    "LLM_API_KEY",
+    "LLM_BASE_URL",
+    "LLM_MODEL",
+    "LLM_VISION_MODEL",
     "ROUTER_API_KEY",
     "ROUTER_BASE_URL",
     "ROUTER_MODEL",

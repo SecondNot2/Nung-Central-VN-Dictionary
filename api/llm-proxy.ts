@@ -9,21 +9,51 @@ type RouterMessage = {
   content: string | RouterContentPart[];
 };
 
+function normalizeRouterBaseUrl(baseUrl?: string) {
+  if (!baseUrl) {
+    return baseUrl;
+  }
+
+  const trimmed = baseUrl.replace(/\/$/, "");
+
+  try {
+    const parsed = new URL(trimmed);
+    const pathname = parsed.pathname.replace(/\/$/, "");
+
+    if (!pathname || pathname === "") {
+      parsed.pathname = "/v1";
+      return parsed.toString().replace(/\/$/, "");
+    }
+
+    if (pathname === "/v1") {
+      return parsed.toString().replace(/\/$/, "");
+    }
+
+    return trimmed;
+  } catch {
+    return trimmed;
+  }
+}
+
 function getRouterConfig() {
   const isProduction =
     process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
-  const configuredBaseUrl = process.env.ROUTER_BASE_URL?.replace(/\/$/, "");
+  const configuredBaseUrl = process.env.LLM_BASE_URL
+    ? process.env.LLM_BASE_URL.replace(/\/$/, "")
+    : normalizeRouterBaseUrl(process.env.ROUTER_BASE_URL);
   const baseUrl = configuredBaseUrl || (isProduction ? "" : "http://localhost:20128/v1");
   const model =
+    process.env.LLM_MODEL ||
     process.env.ROUTER_MODEL ||
     process.env.ROUTER_TEXT_MODEL ||
     "gc/gemini-2.5-pro";
 
   return {
-    apiKey: process.env.ROUTER_API_KEY,
+    apiKey: process.env.LLM_API_KEY || process.env.ROUTER_API_KEY,
     baseUrl,
     model,
-    visionModel: process.env.ROUTER_VISION_MODEL || model,
+    visionModel:
+      process.env.LLM_VISION_MODEL || process.env.ROUTER_VISION_MODEL || model,
   };
 }
 
@@ -120,18 +150,20 @@ async function callRouterChatCompletion(payload: {
   const router = getRouterConfig();
 
   if (!router.apiKey) {
-    throw new Error("Missing ROUTER_API_KEY in server environment");
+    throw new Error(
+      "Missing LLM_API_KEY or ROUTER_API_KEY in server environment"
+    );
   }
 
   if (!router.baseUrl) {
     throw new Error(
-      "Missing ROUTER_BASE_URL in production server environment"
+      "Missing LLM_BASE_URL or ROUTER_BASE_URL in production server environment"
     );
   }
 
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(router.baseUrl)) {
     throw new Error(
-      "ROUTER_BASE_URL cannot point to localhost in production. Set it to a reachable 9Router endpoint for Vercel."
+      "LLM_BASE_URL/ROUTER_BASE_URL cannot point to localhost in production. Use a reachable HTTPS endpoint, or run 9Router on a public/self-hosted server that Vercel can access."
     );
   }
 
@@ -155,13 +187,13 @@ async function callRouterChatCompletion(payload: {
     });
   } catch (error: any) {
     throw new Error(
-      `Unable to reach 9Router at ${router.baseUrl}. Check ROUTER_BASE_URL and confirm the endpoint is reachable from Vercel.${error?.cause?.message ? ` ${error.cause.message}` : ""}`
+      `Unable to reach the configured LLM gateway at ${router.baseUrl}. Check LLM_BASE_URL/ROUTER_BASE_URL and confirm the endpoint is reachable from Vercel.${error?.cause?.message ? ` ${error.cause.message}` : ""}`
     );
   }
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || "9Router call failed");
+    throw new Error(text || "LLM gateway call failed");
   }
 
   const rawText = await response.text();
