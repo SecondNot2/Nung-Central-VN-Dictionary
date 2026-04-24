@@ -9,6 +9,13 @@ type RouterMessage = {
   content: string | RouterContentPart[];
 };
 
+type RouterConfig = {
+  apiKey?: string;
+  baseUrl?: string;
+  model: string;
+  visionModel: string;
+};
+
 function normalizeRouterBaseUrl(baseUrl?: string) {
   if (!baseUrl) {
     return baseUrl;
@@ -35,6 +42,64 @@ function normalizeRouterBaseUrl(baseUrl?: string) {
   }
 }
 
+function parseNestedJson(value: string) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+function formatUpstreamError(rawText: string, router: RouterConfig) {
+  const trimmed = rawText.trim();
+  if (!trimmed) {
+    return "LLM gateway call failed";
+  }
+
+  const parsed = parseNestedJson(trimmed);
+  const topLevelError = parsed?.error;
+  const nestedMessage =
+    typeof topLevelError?.message === "string"
+      ? parseNestedJson(topLevelError.message)
+      : null;
+  const nestedError = nestedMessage?.error;
+
+  const message =
+    nestedError?.message ||
+    topLevelError?.message ||
+    parsed?.message ||
+    trimmed;
+  const type = nestedError?.type || topLevelError?.type;
+  const code = nestedError?.code || topLevelError?.code;
+
+  if (
+    typeof message === "string" &&
+    /No active credentials for provider:\s*gemini-cli/i.test(message)
+  ) {
+    return [
+      `${message}.`,
+      `Current model: ${router.model}.`,
+      "In 9Router, connect the provider backing this model, or set LLM_MODEL/ROUTER_MODEL to a model alias with active credentials such as NungDic.",
+    ].join(" ");
+  }
+
+  if (
+    typeof code === "string" &&
+    code === "model_not_found" &&
+    typeof message === "string"
+  ) {
+    return `${message}. Current model: ${router.model}. Check that LLM_MODEL/ROUTER_MODEL exists in 9Router and that its provider has active credentials.`;
+  }
+
+  if (typeof message === "string") {
+    const suffix =
+      type || code ? ` (${[type, code].filter(Boolean).join(", ")})` : "";
+    return `${message}${suffix}`;
+  }
+
+  return trimmed;
+}
+
 function getRouterConfig() {
   const isProduction =
     process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
@@ -42,18 +107,25 @@ function getRouterConfig() {
     ? process.env.LLM_BASE_URL.replace(/\/$/, "")
     : normalizeRouterBaseUrl(process.env.ROUTER_BASE_URL);
   const baseUrl = configuredBaseUrl || (isProduction ? "" : "http://localhost:20128/v1");
-  const model =
+  const configuredModel =
     process.env.LLM_MODEL ||
     process.env.ROUTER_MODEL ||
-    process.env.ROUTER_TEXT_MODEL ||
-    "gc/gemini-2.5-pro";
+    process.env.ROUTER_TEXT_MODEL;
+  const model = configuredModel || (isProduction ? "" : "NungDic");
+  const visionModel =
+    process.env.LLM_VISION_MODEL || process.env.ROUTER_VISION_MODEL || model;
+
+  if (!model) {
+    throw new Error(
+      "Missing LLM_MODEL or ROUTER_MODEL in production. Set it to a 9Router model alias with active provider credentials, for example NungDic."
+    );
+  }
 
   return {
     apiKey: process.env.LLM_API_KEY || process.env.ROUTER_API_KEY,
     baseUrl,
     model,
-    visionModel:
-      process.env.LLM_VISION_MODEL || process.env.ROUTER_VISION_MODEL || model,
+    visionModel,
   };
 }
 
@@ -193,7 +265,7 @@ async function callRouterChatCompletion(payload: {
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(text || "LLM gateway call failed");
+    throw new Error(formatUpstreamError(text, router));
   }
 
   const rawText = await response.text();
