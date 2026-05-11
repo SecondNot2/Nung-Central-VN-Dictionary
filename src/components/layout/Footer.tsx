@@ -20,8 +20,8 @@ const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="col-span-1 md:col-span-2 space-y-6">
             <div className="flex items-center">
-              <div className="bg-nung-red p-3 border-2 border-white shadow-[4px_4px_0px_0px_#fff]">
-                <i className="fa-solid fa-compass text-2xl text-white" />
+              <div className="bg-white p-1 border-2 border-white shadow-[4px_4px_0px_0px_#fff] overflow-hidden w-14 h-14">
+                <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-full h-full object-cover" />
               </div>
               <span className="ml-4 font-display font-bold text-4xl tracking-tight">
                 NungDic

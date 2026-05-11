@@ -48,8 +48,8 @@ const Navigation: React.FC<NavigationProps> = ({
               className="flex items-center cursor-pointer group"
               onClick={() => setRoute(AppRoute.DICTIONARY)}
             >
-              <div className="flex items-center bg-nung-red text-white border-2 border-black p-2 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
-                <i className="fa-solid fa-compass text-2xl mr-2" />
+              <div className="flex items-center bg-white text-nung-dark border-2 border-black p-1 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
+                <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-10 h-10 mr-2" />
                 <span className="font-display text-2xl tracking-tight">
                   NungDic
                 </span>

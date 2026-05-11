@@ -159,8 +159,8 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
       <div className="w-full max-w-md relative">
         {/* Logo & Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white border-2 border-black mb-4 shadow-brutal-sm">
-            <i className="fa-solid fa-user-plus text-2xl" />
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white border-2 border-black mb-4 shadow-brutal-sm overflow-hidden">
+            <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-3xl font-bold uppercase tracking-tight text-black mb-1">
             Đăng ký
