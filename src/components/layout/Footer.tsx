@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
             </div>
             <p className="text-gray-400 max-w-md text-lg leading-relaxed font-serif">
               Dự án được tạo ra với tình yêu dành cho việc bảo tồn và phát huy
-              ngôn ngữ cùng văn hóa Nùng. Hãy cùng chúng tôi gìn giữ di sản quý
+              ngôn ngữ cùng văn hóa Tày - Nùng. Hãy cùng chúng tôi gìn giữ di sản quý
               giá này.
             </p>
             <div className="flex items-center gap-4">
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-serif font-bold text-xl mb-8 relative inline-block">
               <span className="relative z-10">Điều hướng</span>
-              <span className="absolute bottom-1 left-0 w-full h-3 bg-nung-red -z-0 transform -rotate-1"></span>
+              <span className="absolute bottom-1 left-0 w-full h-3 bg-nung-red z-0 transform -rotate-1"></span>
             </h4>
             <ul className="space-y-4 text-gray-400 font-bold">
               {quickLinks.map((link) => (
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-serif font-bold text-xl mb-8 relative inline-block">
               <span className="relative z-10">Kết nối</span>
-              <span className="absolute bottom-1 left-0 w-full h-3 bg-nung-blue -z-0 transform rotate-1"></span>
+              <span className="absolute bottom-1 left-0 w-full h-3 bg-nung-blue z-0 transform rotate-1"></span>
             </h4>
             <div className="space-y-4">
               <a

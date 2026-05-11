@@ -22,9 +22,9 @@ const languageOptions = [
     icon: "fa-mountain",
   },
   {
-    value: "central",
-    label: "Phương ngữ miền Trung",
-    shortLabel: "Miền Trung",
+    value: "tay",
+    label: "Tiếng Tày",
+    shortLabel: "Tày",
     icon: "fa-wheat-awn",
   },
 ];
@@ -37,8 +37,6 @@ const regionOptions = [
   { value: "tuyen-quang", label: "Tuyên Quang" },
   { value: "thai-nguyen", label: "Thái Nguyên" },
   { value: "quang-ninh", label: "Quảng Ninh" },
-  { value: "nghe-an", label: "Nghệ An" },
-  { value: "ha-tinh", label: "Hà Tĩnh" },
   { value: "other", label: "Khác" },
 ];
 
@@ -298,7 +296,7 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
           <p className="text-gray-600 font-serif font-bold text-lg max-w-2xl mx-auto leading-relaxed">
             Mỗi đóng góp của bạn là một viên gạch quý báu để bảo tồn{" "}
             <br className="hidden md:block" />
-            hồn thiêng ngôn ngữ Nùng và văn hóa xứ Lạng.
+            hồn thiêng ngôn ngữ Tày - Nùng và văn hóa xứ Lạng.
           </p>
         </div>
 
@@ -487,7 +485,7 @@ const Contribute: React.FC<ContributeProps> = ({ user, setRoute }) => {
           </button>
 
           {showHistory && (
-            <div className="mt-8 space-y-6 max-h-[1000px] overflow-y-auto pr-2 custom-scrollbar animate-fade-in">
+            <div className="mt-8 space-y-6 max-h-250 overflow-y-auto pr-2 custom-scrollbar animate-fade-in">
               {loading ? (
                 <div className="text-center py-12 bg-white border-2 border-dashed border-black">
                   <i className="fa-solid fa-circle-notch fa-spin text-4xl text-nung-red mb-4"></i>

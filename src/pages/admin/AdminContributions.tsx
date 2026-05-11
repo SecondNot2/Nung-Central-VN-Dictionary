@@ -19,7 +19,7 @@ import { Contribution, AppRoute } from "../../types";
 const languageOptions = [
   { value: "vi", label: "Tiếng Việt" },
   { value: "nung", label: "Tiếng Nùng (Lạng Sơn)" },
-  { value: "central", label: "Tiếng Nghệ An / Hà Tĩnh" },
+  { value: "tay", label: "Tiếng Tày" },
 ];
 
 type StatusFilter = "all" | "pending" | "approved" | "rejected";
@@ -303,7 +303,7 @@ const AdminContributions: React.FC<AdminContributionsProps> = ({
               Quản lý đóng góp
             </h1>
             <p className="text-gray-500 text-sm font-medium mt-1">
-              Phê duyệt nội dung từ cộng đồng Nùng Lexicon
+              Phê duyệt nội dung từ cộng đồng Tày - Nùng Lexicon
             </p>
           </div>
           <div className="flex items-center gap-4">

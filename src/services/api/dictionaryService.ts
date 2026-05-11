@@ -11,7 +11,7 @@ export interface DictionaryEntryDB {
   word: string;
   translation: string;
   phonetic: string | null;
-  language: "nung" | "central";
+  language: "nung" | "tay";
   example: string | null;
   notes: string | null;
   status: "approved" | "pending" | "rejected";
@@ -25,7 +25,7 @@ export interface DictionaryEntryInput {
   word: string;
   translation: string;
   phonetic?: string;
-  language?: "nung" | "central";
+  language?: "nung" | "tay";
   example?: string;
   notes?: string;
   status?: "approved" | "pending" | "rejected";
@@ -39,7 +39,7 @@ const CACHE_TIMESTAMP_KEY = "dictionary_entries_cache_timestamp";
  * Get all dictionary entries from Supabase
  */
 export async function getDictionaryEntriesFromDB(options?: {
-  language?: "nung" | "central";
+  language?: "nung" | "tay";
   status?: "approved" | "pending" | "rejected";
   search?: string;
 }): Promise<{ data: DictionaryEntryDB[] | null; error: string | null }> {

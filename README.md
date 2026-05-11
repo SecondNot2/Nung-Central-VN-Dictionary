@@ -1,4 +1,4 @@
-# 📚 NungDic - Từ điển Văn hóa Nùng & Miền Trung
+# 📚 NungDic - Từ điển Văn hóa Tày & Nùng
 
 <div align="center">
   <img src="https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react" alt="React" />

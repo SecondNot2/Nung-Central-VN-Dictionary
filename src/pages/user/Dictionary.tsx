@@ -87,11 +87,11 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       description: "Dân tộc Nùng",
     },
     {
-      value: "central",
-      label: "Phương ngữ miền Trung",
-      shortLabel: "Miền Trung",
+      value: "tay",
+      label: "Tiếng Tày",
+      shortLabel: "Tày",
       icon: "fa-wheat-awn",
-      description: "Phương ngữ miền Trung",
+      description: "Tiếng Tày",
     },
   ];
 
@@ -104,11 +104,11 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
       description: "Dân tộc Nùng",
     },
     {
-      value: "central",
-      label: "Phương ngữ miền Trung",
-      shortLabel: "Miền Trung",
+      value: "tay",
+      label: "Tiếng Tày",
+      shortLabel: "Tày",
       icon: "fa-wheat-awn",
-      description: "Phương ngữ miền Trung",
+      description: "Tiếng Tày",
     },
     {
       value: "vi",
@@ -472,7 +472,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
 
         <div className="relative">
           <textarea
-            className="w-full p-4 md:p-6 border-2 border-black font-medium text-lg md:text-xl outline-none transition-all min-h-[140px] md:min-h-[160px] bg-gray-50 text-black placeholder-gray-400 focus:bg-white"
+            className="w-full p-4 md:p-6 border-2 border-black font-medium text-lg md:text-xl outline-none transition-all min-h-35 md:min-h-40 bg-gray-50 text-black placeholder-gray-400 focus:bg-white"
             placeholder="Nhập nội dung cần tra cứu..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -621,7 +621,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">
                       Văn bản gốc / Chữ viết
                     </label>
-                    <p className="text-3xl font-black break-words leading-tight">
+                    <p className="text-3xl font-black wrap-break-word leading-tight">
                       {trans.script}
                     </p>
                   </div>
@@ -629,7 +629,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 block">
                       Phiên âm / Cách đọc
                     </label>
-                    <p className="text-xl text-nung-red italic font-bold break-words">
+                    <p className="text-xl text-nung-red italic font-bold wrap-break-word">
                       {trans.phonetic || "Chưa có phiên âm"}
                     </p>
                   </div>
@@ -745,7 +745,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                             ? "Tiếng Việt"
                             : item.sourceLang === "nung"
                             ? "Tiếng Nùng"
-                            : "Nghệ An/Hà Tĩnh"}
+                            : "Tiếng Tày"}
                         </span>
                         <span className="text-[10px] font-bold text-gray-400">
                           {new Date(item.timestamp).toLocaleTimeString(
@@ -754,7 +754,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                           )}
                         </span>
                       </div>
-                      <p className="text-black font-bold break-words">
+                      <p className="text-black font-bold wrap-break-word">
                         {item.original}
                       </p>
                     </div>
@@ -765,14 +765,14 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                         <span className="text-[10px] font-black text-nung-red uppercase tracking-widest">
                           {item.targetLang === "nung"
                             ? "Tiếng Nùng"
-                            : item.targetLang === "central"
-                            ? "Nghệ An/Hà Tĩnh"
+                            : item.targetLang === "tay"
+                            ? "Tiếng Tày"
                             : item.targetLang === "vi"
                             ? "Tiếng Việt"
                             : "Tất cả"}
                         </span>
                       </div>
-                      <p className="text-black break-words">
+                      <p className="text-black wrap-break-word">
                         {item.result.translations[0]?.script}
                       </p>
                     </div>

@@ -13,7 +13,7 @@ const DictionaryList: React.FC = () => {
   const [entries, setEntries] = useState<DictionaryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"all" | "nung" | "central">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "nung" | "tay">("all");
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [ttsLoading, setTtsLoading] = useState<string | null>(null);
@@ -90,7 +90,7 @@ const DictionaryList: React.FC = () => {
     return {
       all: entries.length,
       nung: entries.filter((e) => e.language === "nung").length,
-      central: entries.filter((e) => e.language === "central").length,
+      tay: entries.filter((e) => e.language === "tay").length,
     };
   }, [entries]);
 
@@ -122,7 +122,7 @@ const DictionaryList: React.FC = () => {
             Tra cứu Từ điển
           </h1>
           <p className="text-gray-600 font-serif font-bold text-xl italic underline decoration-nung-red decoration-2 underline-offset-4">
-            Khám phá kho tàng ngôn ngữ Nùng và phương ngữ đặc sắc
+            Khám phá kho tàng ngôn ngữ Tày và Nùng đặc sắc
           </p>
         </div>
       </div>
@@ -195,25 +195,25 @@ const DictionaryList: React.FC = () => {
         </button>
         <button
           onClick={() => {
-            setActiveTab("central");
+            setActiveTab("tay");
             setActiveLetter(null);
           }}
           className={`px-8 py-3 border-2 border-black font-black uppercase tracking-widest transition-all flex items-center gap-3 ${
-            activeTab === "central"
+            activeTab === "tay"
               ? "bg-nung-blue text-white shadow-none translate-x-1 translate-y-1"
               : "bg-white text-nung-blue shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
           }`}
         >
           <i className="fa-solid fa-wheat-awn" />
-          Miền Trung
+          Tiếng Tày
           <span
             className={`ml-1 text-[10px] px-2 py-0.5 border-2 border-black font-black ${
-              activeTab === "central"
+              activeTab === "tay"
                 ? "bg-white text-nung-blue"
                 : "bg-gray-100"
             }`}
           >
-            {counts.central}
+            {counts.tay}
           </span>
         </button>
       </div>
@@ -313,7 +313,7 @@ const DictionaryList: React.FC = () => {
                           : "fa-wheat-awn"
                       } mr-1`}
                     />
-                    {entry.language === "nung" ? "Nùng" : "Miền Trung"}
+                    {entry.language === "nung" ? "Nùng" : "Tày"}
                   </span>
 
                   <button
@@ -460,7 +460,7 @@ const DictionaryList: React.FC = () => {
           </div>
           <div className="group">
             <p className="text-5xl font-display font-black text-nung-blue mb-2">
-              {counts.central}
+              {counts.tay}
             </p>
             <p className="text-xs font-black text-gray-500 uppercase tracking-widest">
               Phương ngữ

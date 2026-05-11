@@ -26,7 +26,7 @@ const STORAGE_KEY = "admin_dictionary_entries";
 const languageOptions: SelectOption[] = [
   { value: "all", label: "Tất cả ngôn ngữ", icon: "fa-globe" },
   { value: "nung", label: "Tiếng Nùng", icon: "fa-mountain" },
-  { value: "central", label: "Tiếng Miền Trung", icon: "fa-wheat-awn" },
+  { value: "tay", label: "Tiếng Tày", icon: "fa-wheat-awn" },
 ];
 
 const statusOptions: SelectOption[] = [
@@ -55,7 +55,7 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
     word: "",
     translation: "",
     phonetic: "",
-    language: "nung" as "nung" | "central",
+    language: "nung" as "nung" | "tay",
     example: "",
     notes: "",
     status: "pending" as "approved" | "pending" | "rejected",
@@ -445,7 +445,7 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
                       <span className="text-[10px] font-black uppercase tracking-tight text-gray-500 bg-gray-100 px-2 py-1 border border-gray-200">
-                        {entry.language === "nung" ? "Nùng" : "Miền Trung"}
+                        {entry.language === "nung" ? "Nùng" : "Tày"}
                       </span>
                     </td>
                     <td className="px-3 lg:px-6 py-3 lg:py-4 text-center">
@@ -624,13 +624,13 @@ const AdminDictionary: React.FC<AdminDictionaryProps> = ({ setRoute }) => {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        language: e.target.value as "nung" | "central",
+                        language: e.target.value as "nung" | "tay",
                       })
                     }
                     className="w-full px-3 py-2 border-2 border-black bg-white font-bold text-[10px] lg:text-xs appearance-none outline-none"
                   >
                     <option value="nung">Tiếng Nùng</option>
-                    <option value="central">Tiếng Miền Trung</option>
+                    <option value="tay">Tiếng Tày</option>
                   </select>
                 </div>
                 <div>

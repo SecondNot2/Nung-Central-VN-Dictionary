@@ -12,7 +12,7 @@ interface EditContributionModalProps {
 const languageOptions = [
   { value: "vi", label: "Tiếng Việt" },
   { value: "nung", label: "Tiếng Nùng (Lạng Sơn)" },
-  { value: "central", label: "Tiếng Nghệ An / Hà Tĩnh" },
+  { value: "tay", label: "Tiếng Tày" },
 ];
 
 const regionOptions = [
@@ -23,8 +23,6 @@ const regionOptions = [
   { value: "tuyen-quang", label: "Tuyên Quang" },
   { value: "thai-nguyen", label: "Thái Nguyên" },
   { value: "quang-ninh", label: "Quảng Ninh" },
-  { value: "nghe-an", label: "Nghệ An" },
-  { value: "ha-tinh", label: "Hà Tĩnh" },
   { value: "other", label: "Khác" },
 ];
 

@@ -1,6 +1,6 @@
 /**
  * Translation Rules & Prompts
- * Shared translation rules for Nùng and Central Vietnamese dialects
+ * Shared translation rules for Tày and Nùng languages
  */
 
 import { smartLookup, reverseNungLookup, type InferredWord } from "../dictionary/nungVocab";
@@ -9,10 +9,10 @@ import { smartLookup, reverseNungLookup, type InferredWord } from "../dictionary
 // LANGUAGE DESCRIPTIONS
 // ============================================================
 
-export const LANGUAGE_DESCRIPTIONS: Record<string, string> = {
+const LANGUAGE_DESCRIPTIONS: Record<string, string> = {
   vi: "Tiếng Việt",
-  nung: "Tiếng Nùng (Lạng Sơn)",
-  central: "Tiếng Nghệ An / Hà Tĩnh",
+  nung: "Tiếng Nùng",
+  tay: "Tiếng Tày",
 };
 
 export function getLanguageDescription(code: string): string {
@@ -151,12 +151,12 @@ export function buildNungToViRules(text: string): string {
 }
 
 /**
- * Build translation rules for Central Vietnamese dialect
+ * Build translation rules for Tày language
  */
-export function buildCentralVietnameseRules(): string {
+export function buildTayRules(): string {
   return `
-    === QUY TẮC CHO TIẾNG NGHỆ AN / HÀ TĨNH ===
-    1. **Từ vựng**: mô, tê, răng, rứa, nì, nớ, chư, bầy tui, choa...
+    === QUY TẮC CHO TIẾNG TÀY ===
+    1. Tiếng Tày có nhiều nét tương đồng với tiếng Nùng nhưng có một số khác biệt về từ vựng và ngữ điệu vùng miền.
     `;
 }
 
@@ -185,22 +185,22 @@ export function getTranslationRules(
   }
   // Vietnamese → Nùng
   else if (targetCode === "nung") {
-    targetLangDesc = "Tiếng Nùng (Lạng Sơn)";
+    targetLangDesc = "Tiếng Nùng";
     specificRules = buildViToNungRules(text);
   }
-  // Central Vietnamese dialect
-  else if (targetCode === "central") {
-    targetLangDesc = "Tiếng Việt phương ngữ Nghệ An / Hà Tĩnh";
-    specificRules = buildCentralVietnameseRules();
+  // Tày language
+  else if (targetCode === "tay") {
+    targetLangDesc = "Tiếng Tày";
+    specificRules = buildTayRules();
   }
   // Standard Vietnamese
   else if (targetCode === "vi") {
     targetLangDesc = "Tiếng Việt phổ thông";
     specificRules = buildStandardVietnameseRules();
   }
-  // Both Nùng and Central
+  // Both Tày and Nùng
   else {
-    targetLangDesc = "Cả Tiếng Nùng và Tiếng Nghệ An/Hà Tĩnh";
+    targetLangDesc = "Cả Tiếng Tày và Tiếng Nùng";
     specificRules = "Áp dụng quy tắc của cả hai ngôn ngữ trên.";
   }
 
@@ -212,9 +212,8 @@ export function getTranslationRules(
 // ============================================================
 
 export const SYSTEM_PROMPT_TRANSLATION = `Bạn là chuyên gia ngôn ngữ học Việt Nam, chuyên sâu về:
-- Tiếng Nùng (Lạng Sơn) - ngôn ngữ Tày-Thái
-- Phương ngữ Miền Trung (Nghệ An, Hà Tĩnh)
-- Ngữ pháp, từ vựng và văn hóa địa phương
+- Tiếng Nùng & Tiếng Tày - nhóm ngôn ngữ Tày-Thái
+- Ngữ pháp, từ vựng và văn hóa dân tộc thiểu số miền núi phía Bắc
 
 NHIỆM VỤ: Dịch chính xác, giữ nguyên ý nghĩa và sắc thái văn hóa.
 BẮT BUỘC TRẢ VỀ ĐẦY ĐỦ 4 PHẦN:
@@ -228,13 +227,13 @@ VÍ DỤ DỊCH TIẾNG NÙNG:
 - Input: "Bạn có rảnh không?"
   Output: {"translations":[{"language":"Tiếng Nùng (Lạng Sơn)","script":"Pì váng mí?","phonetic":"Pi vaŋ mi"}],"definitions":[{"word":"váng","definition":"rảnh rỗi, không bận","example":"Khỏi váng lai (Tôi rảnh lắm)"}],"culturalNote":"Trong văn hóa Nùng, khi hỏi thăm thường dùng từ 'váng' để thể hiện sự quan tâm nhẹ nhàng, không suống sã."}
 
-VÍ DỤ DỊCH TIẾNG NGHỆ AN:
+VÍ DỤ DỊCH TIẾNG TÀY:
 - Input: "Anh ấy đi đâu vậy?"
-  Output: {"translations":[{"language":"Tiếng Nghệ An","script":"Chư ấy đi mô rứa?","phonetic":"Chư ấy đi mô rứa"}],"definitions":[{"word":"mô","definition":"đâu (hỏi địa điểm)","example":"Đi mô rứa?"},{"word":"rứa","definition":"thế, vậy","example":"Làm chi rứa?"}],"culturalNote":"'Mô', 'tê', 'răng', 'rứa' là những từ đặc trưng tạo nên sắc thái thân thương của người Nghệ Tĩnh."}
+  Output: {"translations":[{"language":"Tiếng Tày","script":"Pe nớ pây mô lổ?","phonetic":"Pe no pay mo lo"}],"definitions":[{"word":"pây","definition":"đi","example":"Pây chơ (Đi chợ)"}],"culturalNote":"Tiếng Tày và Nùng có nhiều điểm tương đồng nhưng ngữ điệu tiếng Tày thường nhẹ nhàng hơn."}
 `;
 
 export const SYSTEM_PROMPT_CHAT =
-  "Bạn là trợ lý ảo am hiểu văn hóa Nùng và Miền Trung. Hãy trả lời thân thiện, chính xác và đậm đà bản sắc.";
+  "Bạn là trợ lý ảo am hiểu văn hóa Tày và Nùng. Hãy trả lời thân thiện, chính xác và đậm đà bản sắc.";
 
 export const SYSTEM_PROMPT_SPELL_CHECK = `Bạn là công cụ kiểm tra chính tả Tiếng Việt.
 Nhiệm vụ: Kiểm tra xem văn bản sau có lỗi chính tả không.

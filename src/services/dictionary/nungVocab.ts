@@ -197,7 +197,7 @@ export function smartLookup(text: string): {
 
   for (const phrase of sortedPhrases) {
     // Optimization: simple check first
-    if (!lowerText.includes(phrase)) continue;
+    if (!lowerText.includes(phrase.toLowerCase())) continue;
 
     const phraseTokens = phrase
       .toLowerCase()

@@ -10,7 +10,7 @@ export interface DictionaryEntry {
   word: string; // Tiếng Việt
   translation: string; // Tiếng Nùng (script)
   phonetic: string;
-  language: "nung" | "central";
+  language: "nung" | "tay";
   example?: string;
   notes?: string;
   status: "approved" | "pending" | "rejected";
@@ -51,7 +51,7 @@ export function getDictionaryStats() {
   return {
     total: entries.length,
     nung: entries.filter((e) => e.language === "nung").length,
-    central: entries.filter((e) => e.language === "central").length,
+    tay: entries.filter((e) => e.language === "tay").length,
     approved: entries.filter((e) => e.status === "approved").length,
     pending: entries.filter((e) => e.status === "pending").length,
     rejected: entries.filter((e) => e.status === "rejected").length,
@@ -63,7 +63,7 @@ export function getDictionaryStats() {
  */
 export function searchDictionary(
   query: string,
-  language?: "nung" | "central" | "all"
+  language?: "nung" | "tay" | "all"
 ): DictionaryEntry[] {
   const entries = getDictionaryEntries();
   const lowerQuery = query.toLowerCase().trim();

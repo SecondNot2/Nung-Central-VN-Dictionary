@@ -5718,6 +5718,13 @@ export const NUNG_DICTIONARY: Record<string, NungWord> = {
     phonetic: "",
     notes: "",
   },
+  "tháng tư gieo mạ, tháng năm cấy lúa": {
+    script: "Bươn slí lồng chả, bươn hả đăm nà",
+    category: "phrase",
+    isRoot: false,
+    phonetic: "",
+    notes: "Ca dao",
+  },
   "tháo vát": {
     script: "rjảo roạc",
     category: "phrase",
