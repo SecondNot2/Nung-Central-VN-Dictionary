@@ -21,7 +21,11 @@ const Footer: React.FC = () => {
           <div className="col-span-1 md:col-span-2 space-y-6">
             <div className="flex items-center">
               <div className="bg-white p-1 border-2 border-white shadow-[4px_4px_0px_0px_#fff] overflow-hidden w-14 h-14">
-                <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-full h-full object-cover" />
+                <img
+                  src="./assets/logo.png"
+                  alt="NungDic Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="ml-4 font-display font-bold text-4xl tracking-tight">
                 NungDic
@@ -29,8 +33,8 @@ const Footer: React.FC = () => {
             </div>
             <p className="text-gray-400 max-w-md text-lg leading-relaxed font-serif">
               Dự án được tạo ra với tình yêu dành cho việc bảo tồn và phát huy
-              ngôn ngữ cùng văn hóa Tày - Nùng. Hãy cùng chúng tôi gìn giữ di sản quý
-              giá này.
+              ngôn ngữ cùng văn hóa Tày - Nùng. Hãy cùng chúng tôi gìn giữ di
+              sản quý giá này.
             </p>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 bg-nung-green text-white px-4 py-2 border-2 border-white shadow-brutal-sm font-bold text-xs uppercase">

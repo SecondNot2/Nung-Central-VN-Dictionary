@@ -109,7 +109,7 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
       const result = await signUp(
         formData.email,
         formData.password,
-        formData.name
+        formData.name,
       );
 
       if (result.success && result.user) {
@@ -160,7 +160,11 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
         {/* Logo & Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white border-2 border-black mb-4 shadow-brutal-sm overflow-hidden">
-            <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-full h-full object-cover" />
+            <img
+              src="./assets/logo.png"
+              alt="NungDic Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           <h1 className="text-3xl font-bold uppercase tracking-tight text-black mb-1">
             Đăng ký
@@ -312,9 +316,9 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
                     errors.confirmPassword
                       ? "border-nung-red"
                       : formData.confirmPassword &&
-                        formData.password === formData.confirmPassword
-                      ? "border-green-500"
-                      : "border-black"
+                          formData.password === formData.confirmPassword
+                        ? "border-green-500"
+                        : "border-black"
                   }`}
                   placeholder="Nhập lại mật khẩu"
                   autoComplete="new-password"

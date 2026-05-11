@@ -20,7 +20,7 @@ const Login: React.FC<LoginProps> = ({ setRoute, onLogin }) => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
+    {},
   );
   const [showPassword, setShowPassword] = useState(false);
 
@@ -121,7 +121,11 @@ const Login: React.FC<LoginProps> = ({ setRoute, onLogin }) => {
         {/* Logo & Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white border-2 border-black mb-4 shadow-brutal-sm overflow-hidden">
-            <img src="/src/assets/logo.png" alt="NungDic Logo" className="w-full h-full object-cover" />
+            <img
+              src="./assets/logo.png"
+              alt="NungDic Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           <h1 className="text-3xl font-bold uppercase tracking-tight text-black mb-1">
             Đăng nhập
