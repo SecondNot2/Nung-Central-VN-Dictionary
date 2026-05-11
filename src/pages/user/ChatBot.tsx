@@ -7,7 +7,7 @@ const ChatBot: React.FC = () => {
     {
       id: "init",
       role: "model",
-      text: "Xin chào! Tôi là trợ lý ngôn ngữ và văn hóa. Bạn có thể hỏi tôi về tiếng Nùng, phong tục tập quán, hoặc tiếng địa phương miền Trung. Tôi có thể giúp gì cho bạn hôm nay?",
+      text: "Xin chào! Tôi là trợ lý ngôn ngữ và văn hóa. Bạn có thể hỏi tôi về tiếng Tày, tiếng Nùng, và phong tục tập quán của đồng bào. Tôi có thể giúp gì cho bạn hôm nay?",
       timestamp: new Date(),
     },
   ]);

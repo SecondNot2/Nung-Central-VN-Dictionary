@@ -10,9 +10,9 @@ import { smartLookup, reverseNungLookup, type InferredWord } from "../dictionary
 // ============================================================
 
 const LANGUAGE_DESCRIPTIONS: Record<string, string> = {
-  vi: "Tiếng Việt",
-  nung: "Tiếng Nùng",
-  tay: "Tiếng Tày",
+  vi: "Tiếng Phổ Thông",
+  nung: "Tiếng Tày & Nùng",
+  tay: "Tiếng Tày & Nùng",
 };
 
 export function getLanguageDescription(code: string): string {
@@ -180,7 +180,7 @@ export function getTranslationRules(
 
   // Nùng → Vietnamese
   if (sourceCode === "nung" && targetCode === "vi") {
-    targetLangDesc = "Tiếng Việt phổ thông";
+    targetLangDesc = "Tiếng Phổ Thông";
     specificRules = buildNungToViRules(text);
   }
   // Vietnamese → Nùng
@@ -195,7 +195,7 @@ export function getTranslationRules(
   }
   // Standard Vietnamese
   else if (targetCode === "vi") {
-    targetLangDesc = "Tiếng Việt phổ thông";
+    targetLangDesc = "Tiếng Phổ Thông";
     specificRules = buildStandardVietnameseRules();
   }
   // Both Tày and Nùng

@@ -1,5 +1,7 @@
 {
-  "name": "Nung & Central VN Dictionary",
-  "description": "A cultural dictionary and translation tool for Vietnamese, Nung, and Central Dialects featuring AI-powered translation, image analysis, and text-to-speech.",
-  "requestFramePermissions": []
+  "name": "NungDic - Tày & Nùng Cultural Dictionary",
+  "description": "A cultural dictionary and translation tool for Vietnamese, Tày, and Nùng ethnic groups featuring AI-powered translation, image analysis, and text-to-speech.",
+  "version": "2.0.0",
+  "author": "SecondNot2",
+  "tags": ["Nung", "Tay", "Dictionary", "Culture", "AI", "Translation"]
 }

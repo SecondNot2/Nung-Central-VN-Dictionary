@@ -50,7 +50,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         return "bg-nung-red text-white";
       case "nung":
         return "bg-nung-green text-white";
-      case "central":
+      case "tay":
         return "bg-nung-blue text-white";
       default:
         return "bg-black text-white";

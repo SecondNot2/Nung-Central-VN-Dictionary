@@ -161,7 +161,7 @@ const Register: React.FC<RegisterProps> = ({ setRoute, onLogin }) => {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-white border-2 border-black mb-4 shadow-brutal-sm overflow-hidden">
             <img
-              src="./assets/logo.png"
+              src="/logo.png"
               alt="NungDic Logo"
               className="w-full h-full object-cover"
             />

@@ -74,55 +74,34 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
   const sourceLanguageOptions: SelectOption[] = [
     {
       value: "vi",
-      label: "Tiếng phổ thông",
+      label: "Tiếng Phổ Thông",
       shortLabel: "Phổ thông",
       icon: "fa-flag",
       description: "Ngôn ngữ phổ thông",
     },
     {
       value: "nung",
-      label: "Tiếng Nùng (Lạng Sơn)",
-      shortLabel: "Nùng",
+      label: "Tiếng Tày & Nùng",
+      shortLabel: "Tày & Nùng",
       icon: "fa-mountain",
-      description: "Dân tộc Nùng",
-    },
-    {
-      value: "tay",
-      label: "Tiếng Tày",
-      shortLabel: "Tày",
-      icon: "fa-wheat-awn",
-      description: "Tiếng Tày",
+      description: "Ngôn ngữ Tày - Nùng",
     },
   ];
 
   const allTargetLanguageOptions: SelectOption[] = [
     {
       value: "nung",
-      label: "Tiếng Nùng (Lạng Sơn)",
-      shortLabel: "Nùng",
+      label: "Tiếng Tày & Nùng",
+      shortLabel: "Tày & Nùng",
       icon: "fa-mountain",
-      description: "Dân tộc Nùng",
-    },
-    {
-      value: "tay",
-      label: "Tiếng Tày",
-      shortLabel: "Tày",
-      icon: "fa-wheat-awn",
-      description: "Tiếng Tày",
+      description: "Ngôn ngữ Tày - Nùng",
     },
     {
       value: "vi",
-      label: "Tiếng phổ thông",
+      label: "Tiếng Phổ Thông",
       shortLabel: "Phổ thông",
       icon: "fa-flag",
       description: "Ngôn ngữ phổ thông",
-    },
-    {
-      value: "all",
-      label: "Cả hai (Nùng & MT)",
-      shortLabel: "Tất cả",
-      icon: "fa-layer-group",
-      description: "Dịch sang tất cả",
     },
   ];
 
@@ -291,8 +270,7 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         original: tieredResult.original,
         translations: [
           {
-            language:
-              targetLang === "nung" ? "Tiếng Nùng (Lạng Sơn)" : "Phương ngữ",
+            language: "Tiếng Tày & Nùng",
             script: tieredResult.translation,
             phonetic: tieredResult.translation, // Use same for now
           },
@@ -363,9 +341,8 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         <h1 className="text-3xl md:text-6xl font-bold text-black mb-2 tracking-tight">
           Từ điển{" "}
           <span className="bg-nung-red text-white px-3 py-0.5 border-2 border-black inline-block transform rotate-1 shadow-brutal-sm ">
-            Nùng
-          </span>{" "}
-          & Miền Trung
+            Tày & Nùng
+          </span>
         </h1>
         <p className="text-gray-400 font-bold text-xs md:text-lg uppercase tracking-[0.2em] mt-4 md:mt-6">
           Gìn giữ ngôn ngữ - Kết nối cội nguồn
@@ -742,10 +719,8 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                       <div className="flex justify-between items-start mb-2">
                         <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                           {item.sourceLang === "vi"
-                            ? "Tiếng Việt"
-                            : item.sourceLang === "nung"
-                            ? "Tiếng Nùng"
-                            : "Tiếng Tày"}
+                            ? "Tiếng Phổ Thông"
+                            : "Tiếng Tày & Nùng"}
                         </span>
                         <span className="text-[10px] font-bold text-gray-400">
                           {new Date(item.timestamp).toLocaleTimeString(
@@ -763,13 +738,9 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
                     <div className="flex-1 p-4 bg-white pr-12">
                       <div className="flex justify-between items-start mb-2">
                         <span className="text-[10px] font-black text-nung-red uppercase tracking-widest">
-                          {item.targetLang === "nung"
-                            ? "Tiếng Nùng"
-                            : item.targetLang === "tay"
-                            ? "Tiếng Tày"
-                            : item.targetLang === "vi"
-                            ? "Tiếng Việt"
-                            : "Tất cả"}
+                          {item.targetLang === "vi"
+                            ? "Tiếng Phổ Thông"
+                            : "Tiếng Tày & Nùng"}
                         </span>
                       </div>
                       <p className="text-black wrap-break-word">

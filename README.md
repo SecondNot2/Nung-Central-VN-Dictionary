@@ -9,8 +9,8 @@
 </div>
 
 <div align="center">
-  <h3>🌾 Ứng dụng từ điển song ngữ Nùng - Việt với AI Translation</h3>
-  <p>Bảo tồn và phát triển ngôn ngữ dân tộc Nùng thông qua công nghệ</p>
+  <h3>🌾 Ứng dụng từ điển song ngữ Tày - Nùng - Việt với AI Translation</h3>
+  <p>Bảo tồn và phát triển ngôn ngữ dân tộc Tày & Nùng thông qua công nghệ</p>
   <br/>
   <a href="https://nungdic-app.vercel.app/">🌐 Live Demo</a>
 </div>
@@ -21,7 +21,7 @@
 
 ### 🔤 Từ điển & Dịch thuật
 
-- **Dịch song ngữ**: Hỗ trợ dịch Việt ↔ Nùng với AI qua 9Router
+- **Dịch song ngữ**: Hỗ trợ dịch Việt ↔ Tày & Nùng với AI qua 9Router
 - **Engine dịch thuật thông minh**: Tự động ưu tiên khớp cụm từ dài nhất, ngăn chặn lặp từ và khớp sai chuỗi con
 - **Suy luận từ vựng (Inference)**: Tự động suy luận nghĩa từ đơn từ các cụm từ có sẵn khi không tìm thấy kết quả trực tiếp
 - **Từ điển chuẩn hóa (Enhanced Data)**: Dữ liệu được tái cấu trúc định kỳ để đảm bảo tính nhất quán (Chuẩn hóa phát âm/script, bóc tách loại từ, tích hợp ví dụ minh họa)
@@ -224,5 +224,5 @@ Dự án được phát hành dưới giấy phép MIT. Xem file [LICENSE](LICEN
 
 <div align="center">
   <p>🌟 Nếu dự án hữu ích, hãy cho tôi một Star! 🌟</p>
-  <p>Made with ❤️ for preserving Nung language and culture</p>
+  <p>Made with ❤️ for preserving Tày & Nùng language and culture</p>
 </div>

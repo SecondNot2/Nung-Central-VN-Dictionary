@@ -50,7 +50,7 @@ const Navigation: React.FC<NavigationProps> = ({
             >
               <div className="flex items-center bg-white text-nung-dark border-2 border-black p-1 shadow-brutal transform group-hover:-translate-y-1 transition-transform">
                 <img
-                  src="./assets/logo.png"
+                  src="/logo.png"
                   alt="NungDic Logo"
                   className="w-10 h-10 mr-2"
                 />

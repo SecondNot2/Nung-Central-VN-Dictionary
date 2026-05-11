@@ -30,19 +30,6 @@ export {
   type RouterChatOptions,
 } from "./ai/llmClient";
 
-// Translation rules and prompts
-export {
-  LANGUAGE_DESCRIPTIONS,
-  getLanguageDescription,
-  buildViToNungRules,
-  buildNungToViRules,
-  buildCentralVietnameseRules,
-  buildStandardVietnameseRules,
-  getTranslationRules,
-  SYSTEM_PROMPT_TRANSLATION,
-  SYSTEM_PROMPT_CHAT,
-  SYSTEM_PROMPT_SPELL_CHECK,
-  FEW_SHOT_EXAMPLES,
   buildTranslationPrompt,
   buildSpellCheckPrompt,
 } from "./dictionary/translationRules";

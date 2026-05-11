@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center">
               <div className="bg-white p-1 border-2 border-white shadow-[4px_4px_0px_0px_#fff] overflow-hidden w-14 h-14">
                 <img
-                  src="./assets/logo.png"
+                  src="/logo.png"
                   alt="NungDic Logo"
                   className="w-full h-full object-cover"
                 />
