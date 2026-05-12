@@ -124,6 +124,9 @@ const DictionaryList: React.FC = () => {
           <p className="text-gray-600 font-serif font-bold text-xl italic underline decoration-nung-red decoration-2 underline-offset-4">
             Khám phá kho tàng ngôn ngữ Tày và Nùng đặc sắc
           </p>
+          <p className="text-gray-400 font-medium text-[10px] md:text-xs italic mt-4 max-w-lg mx-auto leading-relaxed">
+            * Lưu ý: Hệ thống dữ liệu đang trong giai đoạn hoàn thiện và chuẩn hóa, một số từ vựng hoặc ngữ nghĩa có thể chưa đầy đủ hoặc chính xác tuyệt đối.
+          </p>
         </div>
       </div>
 

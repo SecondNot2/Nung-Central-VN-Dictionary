@@ -347,6 +347,9 @@ const Dictionary: React.FC<DictionaryProps> = ({ user, setRoute }) => {
         <p className="text-gray-400 font-bold text-xs md:text-lg uppercase tracking-[0.2em] mt-4 md:mt-6">
           Gìn giữ ngôn ngữ - Kết nối cội nguồn
         </p>
+        <p className="text-gray-400 font-medium text-[10px] md:text-xs italic mt-3 max-w-lg mx-auto leading-relaxed">
+          * Lưu ý: Hệ thống dữ liệu đang trong giai đoạn hoàn thiện và chuẩn hóa, một số từ vựng hoặc ngữ nghĩa có thể chưa đầy đủ hoặc chính xác tuyệt đối.
+        </p>
       </div>
 
       {/* Confirm Dialog */}

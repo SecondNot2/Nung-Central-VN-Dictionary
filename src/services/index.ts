@@ -30,6 +30,8 @@ export {
   type RouterChatOptions,
 } from "./ai/llmClient";
 
+// Translation prompt builders
+export {
   buildTranslationPrompt,
   buildSpellCheckPrompt,
 } from "./dictionary/translationRules";
